@@ -3,12 +3,11 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ page import="java.util.*,manager.*,bean.*,java.text.*"%>
 <%
-	Admin admin = null;
-	List<StudentProject> listsproject = new Vector<>();
-	String keyword = "";
-	
-	try {
-		admin = (Admin) session.getAttribute("admin");
+	Student student = null;
+ 	List<StudentProject> listsproject = new Vector<>();
+ 	
+ 	try {
+ 		student = (Student) session.getAttribute("student");
 	} catch (Exception e) {
 		e.printStackTrace();
 	}
@@ -18,17 +17,6 @@
 	} catch (Exception e) {
 		e.printStackTrace();
 	}
-	
-	try {
-		keyword = (String) request.getAttribute("keyword");
-	} catch (Exception e) {
-		e.printStackTrace();
-	}
-	
-	if (keyword == null) {
-		keyword = "";
-	}
-
 	
 %>
 <!DOCTYPE html>
@@ -51,66 +39,57 @@
 </head>
 <body style="background-image: url('./image/hero-bg.png')">
 
-	<jsp:include page="common/navbar.jsp"></jsp:include>
+<jsp:include page="common/navbar.jsp"></jsp:include>
 
 	<div class="container" style="margin-top: 35px;">
 	
-		<form action="searchproject" method="post" class="row g-3" >
-			<div class="col-auto">
-				<h3><i class="fa-solid fa-clipboard-list">&nbsp;</i>Import Project Data</h3>			
-			</div>	
-			<div class="col-auto text-center" style="margin-left : 639px;">
-					<input type="text" class="form-control" name="keyword" value="<%=keyword%>" placeholder="ค้นหาโครงงานวิทยาศาสตร์....." title="Projects">
-			</div>
-			<div class="col-auto text-left">
-				<button type="submit" class="btn btn-success"> <i class="fa fa-search">&nbsp;</i>ค้นหา</button>
-			</div>
-		</form>	
-		
+		<h3><i class="fa-solid fa-clipboard-list">&nbsp;</i>รายการโครงงานวิทยาศาสตร์</h3>
 		<hr class="colorgraph">
-		
-		<form action="ImportExcel" name="frm" method="post" enctype="multipart/form-data">
-			<div class="form-group row">
-				<div class="col-sm-4">
-					<input class="form-control" type="file" name="fileexcel" id="fileexcel" accept=".csv, application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet">
-				</div>		
-				<div class="col-sm-3" >
-					<button type="submit" name="upload" class="btn btn-success"><i class="fa-solid fa-file-excel">&nbsp;</i>Import Project Data</button>
-				</div>
-			</div>
-		</form>
-		<%
-				if (listsproject.size() != 0) {
-		%>
-		<table class="table table-bordered  table-hover" id=myTable > 
-			<thead class="table-info">
+		<br>
+		<table class="table table-bordered  table-hover" id=myTable>
+			<thead class="table-info" align="center">
 				<tr>
-					<th style="white-space: nowrap">รหัสโครงงานวิทยาศาสตร์</th>
-					<th style="white-space: nowrap">ชื่อโครงงานวิทยาศาสตร์</th>
-					<th style="white-space: nowrap">ข้อมูลโครงงานวิทยาศาสตร์</th>
+					<th width="200">รหัสโครงงานวิทยาศาสตร์</th>
+					<th>ชื่อโครงงานวิทยาศาสตร์</th>
+					<th width="125" colspan="2">อัปโหลด / ดูรายละเอียด</th>				
 				</tr>
 			</thead>
-			<tbody>
-				
+			<tbody align="center">
 				<%
-					for (StudentProject studentProject : listsproject) {
-						Project project = studentProject.getProject();
+					if (listsproject != null) {
+				%>
+				<%
+				for (StudentProject studentProject : listsproject) {
+					Project project = studentProject.getProject();	
 				%>
 				<tr>
 					<td><%=project.getProject_id()%></td>
-					<td ><%=project.getProjectname()%></td>
-					<td align="center"><a href="ViewStudentProjectDetail?project_id=<%=project.getProject_id()%>">
-							<button name="button" class="btn btn-warning">
-								<i class="fa fa-eye"></i>&nbsp;ดูรายละเอียด
-							</button></a>
+					<td><%=project.getProjectname()%></td>
+					<td>
+						<button name="button" class="btn btn-success" 
+							onclick="window.location.href='doViewUploadReport?project_id=<%=project.getProject_id()%>';">
+							<i class="fa fa-upload"></i>
+						</button>
 					</td>
+					<td>
+						<button name="button" class="btn btn-warning" 
+							onclick="window.location.href='ViewProjectDetail?project_id=<%=project.getProject_id()%>';">
+							<i class="fa fa-eye"></i>
+						</button>				
+					</td>					
 				</tr>
 				<%
 					}
 				%>
 				<%
-					} 
-				%>		
+					} else {
+				%>
+				<tr align="center">
+					<td colspan="5"><h2>ไม่มีข้อมูล</h2></td>
+				</tr>
+				<%
+					}
+				%>
 			</tbody>
 		</table>
 	</div>
@@ -121,8 +100,8 @@
 		$(document).ready(
 				function() {
 					$('#myTable').after(
-							'<div id="nav" class="pagination" align="center"></div>');
-					var rowsShown = 10;
+							'<div id="nav" class="pagination"></div>');
+					var rowsShown = 30;
 					var rowsTotal = $('#myTable tbody tr').length;
 					var numPages = rowsTotal / rowsShown;
 					for (i = 0; i < numPages; i++) {

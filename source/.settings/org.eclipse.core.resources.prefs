@@ -1,0 +1,11 @@
+eclipse.preferences.version=1
+encoding//WebContent/WEB-INF/jsp/ReviewProject.jsp=UTF-8
+encoding//WebContent/WEB-INF/jsp/common/navbar.jsp=UTF-8
+encoding//src/controller/AddNewsController.java=UTF-8
+encoding//src/controller/AddReviewerController.java=UTF-8
+encoding//src/controller/IsEditProfileReviewerController.java=UTF-8
+encoding//src/controller/ListNewsController.java=UTF-8
+encoding//src/controller/SummaryOfReviewsController.java=UTF-8
+encoding//src/controller/ViewProjectDetailController.java=UTF-8
+encoding/<project>=UTF-8
+separateDerivedEncodings=true

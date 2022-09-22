@@ -194,6 +194,40 @@ public class ImportExcelManager {
 		return result;
 	}
 	
+	public Student getStudentByID(Integer student_id) throws Exception {
+		ConnectionDB condb = new ConnectionDB();
+		Connection con = condb.getConnection();
+		Statement stmt = null;
+		Student student = new Student();
+		
+		try {
+			stmt = con.createStatement();
+			String sql = "SELECT * FROM student WHERE student_id = '"+ student_id +"' " ;
+			ResultSet rs = stmt.executeQuery(sql);
+
+			while (rs.next()) {	
+					
+				student.setStudent_id(rs.getInt("student.student_id"));
+				student.setPrefix(rs.getString("student.prefix"));
+				student.setFirstname(rs.getString("student.firstname"));
+				student.setLastname(rs.getString("student.lastname"));
+				student.setGrade(rs.getString("student.grade"));
+				student.setMobileno(rs.getString("student.mobileno"));		
+				student.setEmail(rs.getString("student.email"));	
+				student.setPassword(rs.getString("student.password"));
+				
+			}
+
+			con.close();
+			stmt.close();
+			rs.close();
+		} catch (SQLException e) {
+			System.out.println("catch");
+			e.printStackTrace();
+		}
+		return student;
+	}
+	
 	public School getSchoolByID(Integer school_id) throws Exception {
 		ConnectionDB condb = new ConnectionDB();
 		Connection con = condb.getConnection();

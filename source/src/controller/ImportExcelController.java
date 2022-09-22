@@ -141,6 +141,7 @@ public class ImportExcelController {
 							project.setProjecttype(projecttype);
 														
 							School schoolTemp = importExcelManager.getSchoolByID(school_id);
+							Student studentTemp = importExcelManager.getStudentByID(student_id);
 							ProjectType projectTypeTemp = importExcelManager.getProjectTypeByID(projecttype_id);
 							Project projectTemp = importExcelManager.getProjectByID(project_id);
 							Advisor advisorTemp = importExcelManager.getAdvisorByID(advisor_id);
@@ -149,7 +150,9 @@ public class ImportExcelController {
 								importExcelManager.isImportSchool(school);
 							};
 							
-							importExcelManager.isImportStudent(student);
+							if (studentTemp.getStudent_id() != student_id) {
+								importExcelManager.isImportStudent(student);
+							};
 							
 							if (projectTypeTemp.getProjecttype_id() != projecttype_id) {
 								importExcelManager.isImportProjectType(projecttype);
