@@ -11,7 +11,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import bean.Admin;
+import bean.Report;
 import bean.StudentProject;
+import manager.ReviewProjectManager;
 import manager.ViewStudentProjectDetailManager;
 
 @Controller
@@ -23,10 +25,13 @@ public class ViewStudentProjectDetailController {
 		if (admin != null) {
 			String project_id = request.getParameter("project_id");
 			ViewStudentProjectDetailManager viewStudentProjectDetailManager = new ViewStudentProjectDetailManager();
+			ReviewProjectManager reviewProjectManager = new ReviewProjectManager();
 			StudentProject sproject = viewStudentProjectDetailManager.getStudentProjectByID(project_id);
+			Report report = reviewProjectManager.getReportByProjectID(project_id);
 			List<StudentProject> listsproject = viewStudentProjectDetailManager.getListStudent(project_id);
 			ModelAndView mav = new ModelAndView("ViewStudentProjectDetail");
 			mav.addObject("sproject",sproject);
+			session.setAttribute("report", report);
 			mav.addObject("listsproject",listsproject);
 			return mav;
 		} else {

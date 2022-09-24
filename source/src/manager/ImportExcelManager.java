@@ -122,15 +122,14 @@ public class ImportExcelManager {
 		Boolean result = false;
 
 		try {
-			CallableStatement stmt = con.prepareCall("{call isImportProject(?,?,?,?,?,?,?)}");
+			CallableStatement stmt = con.prepareCall("{call isImportProject(?,?,?,?,?,?)}");
 		
 			stmt.setString(1, project.getProject_id());
-			stmt.setString(2, project.getClassproject());
-			stmt.setString(3, project.getProjectname());
-			stmt.setString(4, project.getVideo());
-			stmt.setString(5, project.getAward());
-			stmt.setDouble(6, project.getAvgscore());	
-			stmt.setInt(7, project.getProjecttype().getProjecttype_id());
+			stmt.setString(2, project.getProjectname());
+			stmt.setString(3, project.getVideo());
+			stmt.setString(4, project.getAward());
+			stmt.setDouble(5, project.getAvgscore());	
+			stmt.setInt(6, project.getProjecttype().getProjecttype_id());
 
 					
 			stmt.execute();
@@ -299,7 +298,6 @@ public class ImportExcelManager {
 			while (rs.next()) {	
 					
 				project.setProject_id(rs.getString("project.project_id"));
-				project.setClassproject(rs.getString("project.classproject"));
 				project.setProjectname(rs.getString("project.projectname"));		
 				project.setVideo(rs.getString("project.video"));
 				project.setAward(rs.getString("project.award"));

@@ -12,6 +12,13 @@
 	} catch (Exception e) {
 
 	}
+	
+	boolean error_msg = false;
+	try {
+		error_msg = (boolean) request.getAttribute("error_msg");
+	} catch (Exception e) {
+		
+	}
 %>
 <!DOCTYPE html>
 <html>
@@ -32,19 +39,97 @@
 <link href='https://fonts.googleapis.com/css?family=Kanit' rel='stylesheet' type='text/css'>
 <link rel="stylesheet" href="./css/web_css.css">
 </head> 
+<script type="text/javascript">
+
+	function validateForm(frm) {
+		
+		var regexp =/^[ก-์|]{2,50}$/;
+		var regex_password =/^[A-Za-z|0-9]{8,16}$/;
+		
+	// prefix
+		if (frm.prefix.value == "") {
+			alert("<!-- กรุณาเลือกคำหน้าชื่อ --> ");
+			return false;
+		}
+	// firstname
+		if (frm.firstname.value == "") {
+			alert("<!-- กรุณากรอกชื่อ -->");
+			return false;
+		}
+		if (regexp.test(frm.firstname.value) == false) {
+			alert("<!-- กรุณากรอกชื่อเป็นภาษาไทยเท่านั้น -->");
+			frm.firstname.value = "" ;
+			return false;
+		} 		
+	// lastname	
+		if (frm.lastname.value == "") {
+			alert("<!-- กรุณากรอกนามสกุล -->");
+			return false;
+		} 	
+		if (regexp.test(frm.lastname.value) == false) {
+			alert("<!-- กรุณากรอกนามสกุลเป็นภาษาไทยเท่านั้น -->");
+			frm.lastname.value = "" ;
+			return false;
+		}
+	// faculty
+		if (frm.faculty.value == "") {
+			alert("<!-- กรุณากรอกคณะ -->");
+			return false;
+		}
+		if (regexp.test(frm.faculty.value) == false) {
+			alert("<!-- กรุณากรอกคณะเป็นภาษาไทยเท่านั้น -->");
+			return false;
+		} 
+	// position	
+		if (frm.position.value == "") {
+			alert("<!-- กรุณาเลือกตำแหน่ง --> ");
+			return false;
+		}
+		
+	// line
+		if (frm.line.value == "") {
+			alert("<!-- ถ้าไม่มีกรุณากรอก ' - ' --> ");
+			return false;
+		}
+	// facebook
+		if (frm.facebook.value == "") {
+			alert("<!-- ถ้าไม่มีกรุณากรอก ' - ' --> ");
+			return false;
+		}
+	// email
+		if(frm.email.value == "") {
+			alert('<!-- กรุณากรอกอีเมล -->');
+			return false;
+		}
+		if(regex_email.test(frm.email.value) == false) {
+			alert("<!-- กรุณากรอกอีเมลให้ถูกต้อง -->");
+			return false ;
+		}
+	// password
+		if(frm.password.value == "") {
+			alert('<!-- กรุณากรอกรหัสผ่าน -->');
+			return false;
+		}
+		if(regex_password.test(frm.password.value) == false) {
+			alert("<!-- กรุณากรอกรหัสผ่าน มีความยาวอย่างน้อย 8 - 16 ตัวอักษร --> \n <!-- กรุณากรอกรหัสผ่าน ต้องเป็นตัวอักษรภาษาอังกฤษกับตัวเลขเท่านั้น -->");
+			return false ;
+		}
+		
+	}
+</script>
 <body style="background-image: url('./image/hero-bg.png')">
 	
 	<jsp:include page="common/navbar.jsp"></jsp:include>
 
 	<div class="container" style="margin-top: 35px;">
 
-		<form action="doEditProfileReviewer" name="frm" method="post">
+		<form action="doEditProfileReviewer" name="frm" id="frm"method="post">
 			<section id="content">
 				<div class="container" style="margin-top: -20px">
 					<div class="row">
 						<div class="col-lg-12">
 							<div class="container">
-								<h3>แก้ไขข้อมูลส่วนตัว</h3>
+								<h3><i class="fa-solid fa-pen-to-square">&nbsp;</i>แก้ไขข้อมูลส่วนตัว</h3>
 								<hr class="colorgraph">
 								<h5>ข้อมูล</h5>
 								<br>
@@ -82,11 +167,11 @@
 										</div>
 										<label class="col-form-label">ชื่อ</label>
 										<div class="col-sm-2">
-											<input type="text" name="firstname" id="firstname" class="form-control data" pattern="^[ก-๏\s]+$" title="กรุณากรอกชื่อเป็นภาษาไทยเท่านั้น" value="<%=reviewer.getFirstname()%>">
+											<input type="text" name="firstname" id="firstname" class="form-control data" value="<%=reviewer.getFirstname()%>">
 										</div>
 										<label class="col-form-label">นามสกุล</label>
 										<div class="col-sm-2">
-											<input type="text" name="lastname" id="lastname" class="form-control data" pattern="^[ก-๏\s]+$" title="กรุณากรอกนามสกุลเป็นภาษาไทยเท่านั้น" value="<%=reviewer.getLastname()%>">
+											<input type="text" name="lastname" id="lastname" class="form-control data" value="<%=reviewer.getLastname()%>">
 										</div>
 									</div>
 								</div>
@@ -208,7 +293,7 @@
 								<br>
 								<div class="form-group row">
 									<div class="col-sm-12 text-center">
-										<button type="submit" class="btn btn-success">บันทึก</button>
+										<button type="submit" class="btn btn-success" OnClick ="return validateForm(frm)">บันทึก</button>
 										<a class="btn btn-danger" href="index" role="button">ยกเลิก</a>	
 									</div>
 								</div>
@@ -228,5 +313,6 @@
 			alert(msg);
 		</script>
 	</c:if>
+	
 </body>
 </html>

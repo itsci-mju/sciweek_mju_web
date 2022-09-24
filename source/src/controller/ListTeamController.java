@@ -22,9 +22,9 @@ public class ListTeamController {
 		Admin admin = (Admin) session.getAttribute("admin");
 		if (admin != null) {
 			ListTeamManager vtem = new ListTeamManager();
-			List<Team> listteam = vtem.getListTeam();
+			List<Team> teamList = vtem.getListTeam();
 			ModelAndView mav = new ModelAndView("ListTeam");
-			mav.addObject("listteam", listteam);
+			mav.addObject("teamList", teamList);
 			return mav;
 		} else {
 			ModelAndView mav = new ModelAndView("LoginPage");

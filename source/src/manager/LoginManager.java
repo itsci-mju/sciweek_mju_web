@@ -51,7 +51,9 @@ public class LoginManager {
 
 		try {
 			stmt = con.createStatement();
-			String sql = "SELECT * FROM reviewer left join team on reviewer.team_id = team.team_id WHERE email = '" + reviewer.getEmail() + "' and password = '" + reviewer.getPassword() + "'";
+			String sql = "SELECT * FROM reviewer "
+					+ "LEFT JOIN team ON reviewer.team_id = team.team_id "
+					+ "WHERE email = '" + reviewer.getEmail() + "' and password = '" + reviewer.getPassword() + "'";
 			ResultSet rs = stmt.executeQuery(sql);
 			if (rs.next() && rs.getRow() == 1) {
 				rev = resultSetToClass.setResultSetToReviewer(rs);

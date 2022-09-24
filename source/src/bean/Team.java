@@ -10,8 +10,8 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Team {
-
-	private int team_id;
-	private String team_name;
 	
+	private int team_id ;
+	private String team_name;
+
 }

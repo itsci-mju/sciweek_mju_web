@@ -49,12 +49,12 @@
 		<table class="table table-bordered  table-hover" id=myTable>
 			<thead class="table-info" align="center">
 				<tr>
-					<th width="200">รหัสโครงงานวิทยาศาสตร์</th>
-					<th>ชื่อโครงงานวิทยาศาสตร์</th>
-					<th width="125" colspan="2">อัปโหลด / ดูรายละเอียด</th>				
+					<th width="17%">รหัสโครงงานวิทยาศาสตร์</th>
+					<th width="65%">ชื่อโครงงานวิทยาศาสตร์</th>
+					<th width="15%" colspan="2">อัปโหลด / ดูรายละเอียด</th>				
 				</tr>
 			</thead>
-			<tbody align="center">
+			<tbody >
 				<%
 					if (listsproject != null) {
 				%>
@@ -63,15 +63,15 @@
 					Project project = studentProject.getProject();	
 				%>
 				<tr>
-					<td><%=project.getProject_id()%></td>
+					<td align="center" ><%=project.getProject_id()%></td>
 					<td><%=project.getProjectname()%></td>
-					<td>
+					<td align="center">
 						<button name="button" class="btn btn-success" 
 							onclick="window.location.href='doViewUploadReport?project_id=<%=project.getProject_id()%>';">
 							<i class="fa fa-upload"></i>
 						</button>
 					</td>
-					<td>
+					<td align="center">
 						<button name="button" class="btn btn-warning" 
 							onclick="window.location.href='ViewProjectDetail?project_id=<%=project.getProject_id()%>';">
 							<i class="fa fa-eye"></i>

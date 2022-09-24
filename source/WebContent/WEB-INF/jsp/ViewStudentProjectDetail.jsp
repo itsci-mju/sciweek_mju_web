@@ -4,8 +4,15 @@
 <%@ page import="java.util.*,manager.*,bean.*,java.text.*"%>
 <%
 	Admin admin = null;
+	Report report = null;
 	StudentProject sproject = null;
 	List<StudentProject> listsproject = new Vector<>();
+	
+	try {
+		report = (Report) session.getAttribute("report");
+	} catch (Exception e) {
+		e.printStackTrace();
+	}
 	
 	try {
 		sproject = (StudentProject) request.getAttribute("sproject");
@@ -15,13 +22,13 @@
 	}
 
 	try {
-		admin = (Admin) session.getAttribute("admin");
+		listsproject = (List<StudentProject>) request.getAttribute("listsproject");
 	} catch (Exception e) {
 		e.printStackTrace();
 	}
 	
 	try {
-		listsproject = (List<StudentProject>) request.getAttribute("listsproject");
+		admin = (Admin) session.getAttribute("admin");
 	} catch (Exception e) {
 		e.printStackTrace();
 	}
@@ -44,6 +51,10 @@
 <link href='https://fonts.googleapis.com/css?family=Kanit' rel='stylesheet' type='text/css'>
 <link rel="stylesheet" href="./css/web_css.css">
 </head>
+<script type="text/javascript">
+
+</script>
+
 <body style="background-image: url('./image/hero-bg.png')">
 	<jsp:include page="common/navbar.jsp"></jsp:include>
 	
@@ -54,7 +65,7 @@
 					<div class="row">
 						<div class="col-lg-12">
 							<div class="container">
-								<h3>ข้อมูลโครงงานวิทยาศาสตร์</h3>
+								<h3><i class="fa-solid fa-clipboard">&nbsp;</i>ข้อมูลโครงงานวิทยาศาสตร์</h3>
 								<hr class="colorgraph">
 								<h5>ข้อมูล</h5>
 								<br>
@@ -62,38 +73,59 @@
 								<div class="form-group row">
 									<label class="col-sm-2 col-form-label text-right">รหัสโครงงานวิทยาศาสตร์</label>
 									<div class="col-sm-2">
-										<input type="text" name="project_id" id="project_id" class="form-control data" value="<%=sproject.getProject().getProject_id()%>" readonly>
+										<input type="text" name="project_id" id="project_id" class="form-control data" value="<%=sproject.getProject().getProject_id()%>" style="background-color: white" readonly>
 									</div>
 								</div>
 								
 								<div class="form-group row">
 									<label class="col-sm-2 col-form-label text-right">ชื่อโครงงานวิทยาศาสตร์</label>
 									<div class="col-sm-8">
-										<input type="text" name="projectname" id="projectname" class="form-control data" value="<%=sproject.getProject().getProjectname()%>" readonly>
+										<input type="text" name="projectname" id="projectname" class="form-control data" value="<%=sproject.getProject().getProjectname()%>" style="background-color: white" readonly>
 									</div>
 								</div>
 								
 								<div class="form-group row">
-									<label class="col-sm-2 col-form-label text-right">ระดับโครงงานวิทยาศาสตร์</label>
-									<div class="col-sm-3">
-										<input type="text" name="classproject" id="classproject" class="form-control data" value="<%=sproject.getProject().getClassproject()%>" readonly>
-									</div>
 									<label class="col-sm-2 col-form-label text-right">ประเภทโครงงานวิทยาศาสตร์</label>
-									<div class="col-sm-3">
-										<input type="text" name="projecttype_name" id="projecttype_name" class="form-control data" value="<%=sproject.getProject().getProjecttype().getProjecttype_name()%>" readonly>
+									<div class="col-sm-4">
+										<input type="text" name="projecttype_name" id="projecttype_name" class="form-control data" value="<%=sproject.getProject().getProjecttype().getProjecttype_name()%>" style="background-color: white" readonly>
 									</div>									
 								</div>
+								
+								<% 
+									String video = null ;
+									String vname = null;
+									String fname = null;
+									String disabled = null ;
+
+									if (sproject.getProject().getVideo().equals("-") || sproject.getProject().getVideo() == null) {
+										video = "#";
+										vname = "ยังไม่ได้อัปโหลดวิดีโอ" ;
+										disabled = "disabled" ;
+									} else {
+										video = sproject.getProject().getVideo();
+										vname = "วิดีโอ" ;
+									}
+									
+									String file = null ;
+
+									if (report.getReportname() == null) {
+										file = "#";
+										fname = "ยังไม่ได้อัปโหลดเอกสาร" ;
+										disabled = "disabled" ;
+									} else {
+										file = "./report/"+report.getReportname()+".pdf";
+										fname = "เอกสารรายงาน" ;
+									}
+								%>
 								
 								<div class="form-group row">
 									<label class="col-sm-2 col-form-label text-right">ไฟล์วีดิโอ</label>
 									<div class="col-sm-4">
-										<a href="<%=sproject.getProject().getVideo()%>" target="_blank"
-										class="btn btn-link" role="button" style="margin-left: -13px;"><i
-										class="fa fa-file-video-o" aria-hidden="true">&nbsp;&nbsp;</i>วิดีโอ</a>
+										<a href="<%=video%>" target="_blank" class="btn btn-link" type="button" style="margin-left: -13px;" ><i class="fa fa-file-video-o">&nbsp;&nbsp;</i><%=vname%></a>
 									</div>
 									<label class="col-sm-2 col-form-label text-right">ไฟล์รายงาน</label>
-									<div class="col-sm-4">
-										<a href="./report/1_18072565145229.pdf" target="_blank" class="btn btn-link" role="button" style="margin-left: -13px;"><i class="fa-solid fa-file-pdf">&nbsp;&nbsp;</i>เอกสารรายงาน</a>
+									<div class="col-sm-4">							
+										<a href="<%=file%>" target="_blank" class="btn btn-link" type="button" style="margin-left: -13px ; "><i class="fa-solid fa-file-pdf">&nbsp;&nbsp;</i><%=fname%></a>
 									</div>
 								</div>
 								
@@ -109,7 +141,7 @@
 								<div class="form-group row">
 									<label class="col-sm-2 col-form-label text-right">รางวัล</label>
 									<div class="col-sm-4">
-										<input type="text" name="award" id="award" class="form-control data" value="<%=award%>" readonly>
+										<input type="text" name="award" id="award" class="form-control data" value="<%=award%>" style="background-color: white" readonly>
 									</div>
 								</div>
 								
@@ -123,7 +155,7 @@
 							<div class="form-group row">
 									<label class="col-sm-2 col-form-label text-right">ชื่อ - นามสกุล</label>
 									<div class="col-sm-3">
-										<input type="text" name="fullname" id="fullname" class="form-control data" value="<%=listsproject.get(i).getStudent().getPrefix() +" "+ listsproject.get(i).getStudent().getFirstname() +" "+ listsproject.get(i).getStudent().getLastname()%>" readonly>
+										<input type="text" name="fullname" id="fullname" class="form-control data" value="<%=listsproject.get(i).getStudent().getPrefix() +" "+ listsproject.get(i).getStudent().getFirstname() +" "+ listsproject.get(i).getStudent().getLastname()%>" style="background-color: white" readonly>
 									</div>
 									<input type="hidden" name="prefix" id="prefix" class="form-control data" value="<%=listsproject.get(i).getStudent().getPrefix()%>" readonly>
 									<input type="hidden" name="firstname" id="firstname" class="form-control data" value="<%=listsproject.get(i).getStudent().getFirstname()%>" readonly>
@@ -133,18 +165,18 @@
 							<div class="form-group row">
 								<label class="col-sm-2 col-form-label text-right">เบอร์โทรศัพท์</label>
 								<div class="col-sm-3">
-									<input type="text" name="mobileno" id="mobileno" class="form-control data" value="<%=listsproject.get(i).getStudent().getMobileno()%>" readonly>
+									<input type="text" name="mobileno" id="mobileno" class="form-control data" value="<%=listsproject.get(i).getStudent().getMobileno()%>" style="background-color: white" readonly>
 								</div>
 							</div>
 
 							<div class="form-group row">
 								<label class="col-sm-2 col-form-label text-right">ระดับชั้น</label>
 								<div class="col-sm-3">
-									<input type="text" name="grade" id="grade" class="form-control data" value="<%=listsproject.get(i).getStudent().getGrade()%>" readonly>
+									<input type="text" name="grade" id="grade" class="form-control data" value="<%=listsproject.get(i).getStudent().getGrade()%>" style="background-color: white" readonly>
 								</div>
 								<label class="col-sm-2 col-form-label text-right">โรงเรียน</label>
-								<div class="col-sm-4">
-									<input type="text" name="school_name" id="school_name" class="form-control data" value="<%=listsproject.get(i).getStudent().getSchool().getSchool_name()%>" readonly>
+								<div class="col-sm-3">
+									<input type="text" name="school_name" id="school_name" class="form-control data" value="<%=listsproject.get(i).getStudent().getSchool().getSchool_name()%>" style="background-color: white" readonly>
 								</div>
 							</div>
 							<br>
@@ -157,7 +189,7 @@
 								<div class="form-group row">
 									<label class="col-sm-2 col-form-label text-right">อาจารย์ที่ปรึกษา</label>
 										<div class="col-sm-4">
-											<input type="text" name="advisorname" id="advisorname" class="form-control data" value="<%=sproject.getAdvisor().getPrefix() +" "+ sproject.getAdvisor().getFirstname() +" "+ sproject.getAdvisor().getLastname()%>" readonly>
+											<input type="text" name="advisorname" id="advisorname" class="form-control data" value="<%=sproject.getAdvisor().getPrefix() +" "+ sproject.getAdvisor().getFirstname() +" "+ sproject.getAdvisor().getLastname()%>" style="background-color: white" readonly>
 										</div>								
 								</div>
 								<br>

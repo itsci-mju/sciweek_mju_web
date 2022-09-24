@@ -100,19 +100,19 @@
 							</div>
 						</div>
 						<%
-							String team_name = null;
+							String projecttype_name = null;
 					
-							if (reviewer.getTeam().getTeam_name() == null) {
-								team_name = "ไม่มีกลุ่ม";
+							if (reviewer.getProjecttype().getProjecttype_name() == null) {
+								projecttype_name = "ไม่มีกลุ่ม";
 							} else {
-								team_name = reviewer.getTeam().getTeam_name();
+								projecttype_name = reviewer.getProjecttype().getProjecttype_name();
 							}
 						%>
 						<div class="form-group row">
 							<label class="col-sm-2 col-form-label text-right">กลุ่ม</label>
 							<div class="col-sm-3">
-								<input type="hidden" id="team_id" name="team_id" class="form-control data" value="<%=reviewer.getTeam().getTeam_id()%>"> 
-								<input type="text" id="team_name" name="team_name" class="form-control data" value="<%=team_name%>" readonly>
+								<input type="hidden" id="projecttype_id" name="projecttype_id" class="form-control data" value="<%=reviewer.getProjecttype().getProjecttype_id()%>">
+								<input type="text" id="projecttype_name" name="projecttype_name" class="form-control data" value="<%=projecttype_name%>" readonly>
 							</div>
 						</div>
 
@@ -156,11 +156,21 @@
 												List<Reviews> reviewList = listScienceProjectManager
 													.getListReviewsByProjectIDAndReviewerID(listsproject.get(i).getProject().getProject_id(), reviewer.getReviewer_id());
 
-												if (reviewList.size() != 0) {
+												if (reviewList.size() != 0) {																					
 
 													for (Reviews reviews : reviewList) {
-
-														if (reviews.getStatus().equals("ประเมินสำเร็จ")) {
+														
+														Date date = new Date();  
+										                Timestamp timestamp = new Timestamp(date.getTime());  
+										                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); 
+									               
+																											
+														if (timestamp.after(reviews.getEnddate())) {
+															error = "disabled";
+															bug = "disabled";
+															status = "หมดเวลา";
+														}								
+														else if (reviews.getStatus().equals("ประเมินสำเร็จ")) {
 															error = "disabled";
 															klass = "btn btn-success";
 															status = reviews.getStatus();
@@ -222,9 +232,7 @@
 								<%
 									}
 								%>
-								
-								
-							
+
 							</tbody>
 						</table>
 					</div>

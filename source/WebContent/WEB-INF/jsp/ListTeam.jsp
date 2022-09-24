@@ -4,7 +4,8 @@
 <%@ page import="java.util.*,manager.*,bean.*,java.text.*"%>
 <%
 	Admin admin = null;
-	List<Team> listteam = new Vector<>();
+	List<Team> teamList = new Vector<>();
+	List<Reviewer> reviewerList = new Vector<>();
 	String keyword = "";
 
 	try {
@@ -14,7 +15,13 @@
 	}
 	
 	try {
-		listteam = (List<Team>) request.getAttribute("listteam");
+		reviewerList = (List<Reviewer>) request.getAttribute("reviewerList");
+	} catch (Exception e) {
+		e.printStackTrace();
+	}
+	
+	try {
+		teamList = (List<Team>) request.getAttribute("teamList");
 	} catch (Exception e) {
 		e.printStackTrace();
 	}
@@ -56,8 +63,11 @@
 			<div class="col-auto">
 				<h3><i class="fa-solid fa-clipboard-list">&nbsp;</i>รายการทีม</h3>		
 			</div>	
-			<div class="col-auto">
-				<button name="button" class="btn btn-warning mb-3" onclick="window.location.href='doCreateTeam';" style="margin-left : 999px;">
+			<div class="col-auto text-center" style="margin-left: 74%;">
+				
+			</div>
+			<div class="col-auto text-left" >
+				<button name="button" class="btn btn-warning mb-3" onclick="window.location.href='doCreateTeam';">
 					<i class="fa fa-plus">&nbsp;</i>สร้างทีม
 				</button>
 			</div>
@@ -75,23 +85,24 @@
 			</thead>
 			<tbody align="center">
 				<%
-					if (listteam.size() != 0) {
+					if (teamList.size() != 0) {
 				%>
 				<%
-					for (int i = 0 ; i < listteam.size() ; i++) {
+					for (Team team : teamList) {
 				%>
 				<tr>
-					<td><%=listteam.get(i).getTeam_id()%></td>
-					<td><%=listteam.get(i).getTeam_name()%></td>
-					<td><a href="ViewTeamDetail?team_id=<%=listteam.get(i).getTeam_id()%>">
+					<td><%=team.getTeam_id()%></td>
+					<td><%=team.getTeam_name()%></td>
+					<td><a href="ViewTeamDetail?team_id=<%=team.getTeam_id()%>">
 							<button name="button" class="btn btn-warning">
 								<i class="fa fa-eye"></i>&nbsp;ดูรายละเอียด
 							</button>
 					</a>
 				</tr>
-				<%
-					}
-				%>
+				
+					<%
+						}
+					%>			
 				<%
 					} else {
 				%>

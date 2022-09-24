@@ -29,8 +29,10 @@ public class CreateTeamController {
 		if (admin != null) {
 			ViewTeamDetailManager viewTeamDetailManager = new ViewTeamDetailManager();
 			List<Reviewer> listreviewer = viewTeamDetailManager.getListReviewer();		
+			List<Project> listproject = viewTeamDetailManager.getListProject();
 			ModelAndView mav = new ModelAndView("CreateTeam");
 			mav.addObject("listreviewer", listreviewer);
+			mav.addObject("listproject", listproject);
 			return mav;
 		} else {
 			ModelAndView mav = new ModelAndView("LoginPage");

@@ -11,6 +11,13 @@
 	} catch (Exception e) {
 
 	}
+	
+	boolean error_msg = false;
+	try {
+		error_msg = (boolean) request.getAttribute("error_msg");
+	} catch (Exception e) {
+		
+	}
 
 %>
 <!DOCTYPE html>
@@ -31,17 +38,82 @@
 <link href='https://fonts.googleapis.com/css?family=Kanit' rel='stylesheet' type='text/css'>
 <link rel="stylesheet" href="./css/web_css.css">
 </head>
+<script type="text/javascript">
+
+	function validateForm(frm) {
+		
+		var regex_phoneno = /^[0]{1}[8|9|6]{1}[0-9]{8}/;
+		var regex_name = /^[ก-์|]{2,50}$/;
+		var regex_email = /^[_a-zA-Z0-9-]+(.[_a-zA-Z0-9-]+)@[a-zA-Z0-9-]+(.[a-zA-Z0-9-]+)(.([a-zA-Z]){2,4})$/;
+		var regex_password = /^[A-Za-z|0-9]{8,16}$/;
+		
+	// prefix
+		if (frm.prefix.value == "") {
+			alert("<!-- กรุณาเลือกคำหน้าชื่อ --> ");
+			return false;
+		}
+	// firstname
+		if (frm.firstname.value == "") {
+			alert("<!-- กรุณากรอกชื่อ -->");
+			return false;
+		}
+		if (regex_name.test(frm.firstname.value) == false) {
+			alert("<!-- กรุณากรอกชื่อเป็นภาษาไทยเท่านั้น -->");
+			frm.firstname.value = "";
+			return false;
+		} 		
+	// lastname	
+		if (frm.lastname.value == "") {
+			alert("<!-- กรุณากรอกนามสกุล -->");
+			return false;
+		} 	
+		if (regex_name.test(frm.lastname.value) == false) {
+			alert("<!-- กรุณากรอกนามสกุลเป็นภาษาไทยเท่านั้น -->");
+			frm.lastname.value = "";
+			return false;
+		}
+	// phone
+		if (frm.mobileno.value == "") {
+			alert('<!-- กรุณากรอกเบอร์โทรศัพท์ให้ถูกต้อง -->');
+		return false;
+		}
+		if (!regex_phoneno.test(frm.mobileno.value)) {
+			alert("<!-- กรุณากรอกเบอร์โทรศัพท์เริ่มต้นด้วย 06,08,09 เเละ กรอกให้ครบ 10 ตัว");
+		return false ;
+		}
+	// email
+		if(frm.email.value == "") {
+			alert('<!-- กรุณากรอกอีเมล -->');
+			return false;
+		}
+		if(regex_email.test(frm.email.value) == false) {
+			alert("<!-- กรุณากรอกอีเมลให้ถูกต้อง -->");
+			return false ;
+		}
+	// password
+		if(frm.password.value == "") {
+			alert('<!-- กรุณากรอกรหัสผ่าน -->');
+			return false;
+		}
+		if(regex_password.test(frm.password.value) == false) {
+			alert("<!-- กรุณากรอกรหัสผ่าน มีความยาวอย่างน้อย 8 - 16 ตัวอักษร --> \n <!-- กรุณากรอกรหัสผ่าน ต้องเป็นตัวอักษรภาษาอังกฤษกับตัวเลขเท่านั้น -->");
+			return false ;
+		}
+		
+	}
+</script>
 <body style="background-image: url('./image/hero-bg.png')">
+
 	<jsp:include page="common/navbar.jsp"></jsp:include>
 
 	<div class="container" style="margin-top: 35px;">
-		<form action="doEditProfileStudent" name="frm" method="post">
+		<form action="doEditProfileStudent" name="frm" id="frm" method="post">
 			<section id="content">
 				<div class="container" style="margin-top: -20px">
 					<div class="row">
 						<div class="col-lg-12">
-							<div class="container">
-								<h3>แก้ไขข้อมูลส่วนตัว</h3>
+							<div class="container">						
+								<h3><i class="fa-solid fa-pen-to-square">&nbsp;</i>แก้ไขข้อมูลส่วนตัว</h3>
 								<hr class="colorgraph">
 
 								<h5>ข้อมูล</h5>
@@ -57,7 +129,7 @@
 								<div class="input-group" >
 									<label class="col-sm-2 col-form-label text-right">คำนำหน้าชื่อ</label>
 									<div class="col-sm-2" style="margin-left: -10px">
-										<select class="form-select" name="prefix" id="prefix" required>
+										<select class="form-select" name="prefix" id="prefix" >
 											<option value="นาย" <%if (student.getPrefix().equals("นาย")) {%> selected <%}%>>นาย</option>
 											<option value="นางสาว" <%if (student.getPrefix().equals("นางสาว")) {%> selected <%}%>>นางสาว</option>
 											<option value="เด็กหญิง" <%if (student.getPrefix().equals("เด็กหญิง")) {%> selected  <%}%>>เด็กหญิง</option>
@@ -66,11 +138,11 @@
 									</div>
 									<label class="col-form-label">ชื่อ</label>
 									<div class="col-sm-2">
-										<input type="text" name="firstname" id="firstname" class="form-control data" value="<%=student.getFirstname()%>" pattern="^[ก-๏\s]+$" title="กรุณากรอกชื่อเป็นภาษาไทยเท่านั้น" required>
+										<input type="text" name="firstname" id="firstname" class="form-control data" value="<%=student.getFirstname()%>" >
 									</div>
 									<label class="col-form-label">นามสกุล</label>
 									<div class="col-sm-2">
-										<input type="text" name="lastname" id="lastname" class="form-control data" value="<%=student.getLastname()%>" pattern="^[ก-๏\s]+$" title="กรุณากรอกนามสกุลเป็นภาษาไทยเท่านั้น" required>
+										<input type="text" name="lastname" id="lastname" class="form-control data" value="<%=student.getLastname()%>" >
 									</div>
 								</div>
 							</div>					
@@ -78,14 +150,14 @@
 								<div class="form-group row">
 									<label class="col-sm-2 col-form-label text-right">เบอร์โทรศัพท์</label>
 									<div class="col-sm-4">
-										<input type="text" name="mobileno" id="mobileno" class="form-control data" value="<%=student.getMobileno()%>"  maxlength="10" pattern="/((\+66|0)(\d{1,2}\-?\d{3}\-?\d{3,4}))|((\+๖๖|๐)([๐-๙]{1,2}\-?[๐-๙]{3}\-?[๐-๙]{3,4}))" title="กรุณากรอกเบอร์โทรศัพท์เป็นตัวเลขเท่านั้น" required>
+										<input type="text" name="mobileno" id="mobileno" class="form-control data" value="<%=student.getMobileno()%>"  maxlength="10">
 									</div>
 								</div>
 								
 								<div class="form-group row">
 									<label class="col-sm-2 col-form-label text-right">ระดับชั้น</label>
 									<div class="col-sm-3">
-										<select class="form-control" name="grade" id="grade" required>
+										<select class="form-control" name="grade" id="grade" >
 											<option value="มัธยมศึกษาตอนต้น" <%if (student.getGrade().equals("มัธยมศึกษาตอนต้น")) {%> selected <%}%>>มัธยมศึกษาตอนต้น</option>
 											<option value="มัธยมศึกษาตอนปลาย" <%if (student.getGrade().equals("มัธยมศึกษาตอนปลาย")) {%> selected <%}%>>มัธยมศึกษาตอนปลาย</option>
 	
@@ -96,20 +168,20 @@
 								<div class="form-group row">
 									<label class="col-sm-2 col-form-label text-right">อีเมล</label>
 									<div class="col-sm-3">
-										<input type="email" name="email" id="email" class="form-control data" value="<%=student.getEmail()%>" pattern="/^[_a-zA-Z0-9-]+(\.[_a-zA-Z0-9-]+)*\@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*(\.([a-zA-Z]){2,4})$/" title="กรุณากรอกอีเมลให้ถูกต้อง" required>
+										<input type="email" name="email" id="email" class="form-control data" value="<%=student.getEmail()%>"  required>
 									</div>
 								</div>
 								
 								<div class="form-group row">								
 									<label class="col-sm-2 col-form-label text-right">รหัสผ่าน</label>
 									<div class="col-sm-3">
-										<input type="password" name="password" id="password" class="form-control data" value="<%=student.getPassword()%>" color: black;" required>
+										<input type="password" name="password" id="password" class="form-control data" value="<%=student.getPassword()%>" required>
 									</div>
 								</div>
 								
 								
 								<h5>โรงเรียน</h5>
-								<hr>
+								<hr class="colorgraph">
 								<div class="form-group row">
 									<label class="col-sm-2 col-form-label text-right"></label>
 									<div class="col-sm-2">
@@ -119,14 +191,14 @@
 								<div class="form-group row">						
 									<label class="col-sm-2 col-form-label text-right">ชื่อโรงเรียน</label>
 									<div class="col-sm-4">										
-										<input type="text" name="school_name" id="school_name" class="form-control data" value="<%=student.getSchool().getSchool_name()%>" readonly>
+										<input type="text" name="school_name" id="school_name" class="form-control data" value="<%=student.getSchool().getSchool_name()%>" >
 									</div>
 								</div>
 								
 								<div class="form-group row">						
 									<label class="col-sm-2 col-form-label text-right">ที่อยู่โรงเรียน</label>
 									<div class="col-sm-8">													
-										<textarea id="school_address" name="school_address" rows="5" cols="60" class="form-control data" readonly><%=student.getSchool().getSchool_address()%></textarea>
+										<textarea id="school_address" name="school_address" rows="4" cols="50" class="form-control data" ><%=student.getSchool().getSchool_address()%></textarea>
 									</div>
 								</div>
 								<br>
@@ -134,7 +206,7 @@
 								<br>
 								<div class="form-group row">
 									<div class="col-sm-12 text-center">
-										<button type="submit" class="btn btn-success">บันทึก</button>
+										<button type="submit" class="btn btn-success" OnClick ="return validateForm(frm)">บันทึก</button>
 										<a href="index" class="btn btn-danger" role="button">ยกเลิก</a>									
 									</div>
 								</div>
@@ -154,5 +226,6 @@
 			alert(msg);
 		</script>
 	</c:if>
+	
 </body>
 </html>

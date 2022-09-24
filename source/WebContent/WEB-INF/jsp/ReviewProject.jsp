@@ -56,19 +56,66 @@
 <link href='https://fonts.googleapis.com/css?family=Kanit' rel='stylesheet' type='text/css'>
 <link rel="stylesheet" href="./css/web_css.css">
 </head>
+<script type="text/javascript">
+
+	function validateForm(frm) {
+		
+		var regexp = /^[ก-์|A-Za-z|0-9]{3,250}$/;
+		if (frm.comments.value == "") {
+			alert("<!-- กรุณากรอกคำอธิบาย -->");
+			return false;
+		}
+		if (regexp.test(frm.comments.value) == false) {
+			alert("<!-- กรุณากรอกคำอธิบายเป็นภาษาไทย หรือภาษาอังกฤษ ความยาว 3 - 250 ตัวอักษร -->");
+			return false;
+		}
+		
+	}
+		
+		function  checkNumber40(elm){			
+			if (elm.value.match(/[^\d|.]/)) {
+				alert("<!-- กรุณากรอกคะแนนให้ถูกต้อง -->");
+				elm.value = "";
+			} else if(elm.value > 40) {
+				alert("<!-- กรุณากรอกคะแนนไม่เกิน 40 คะแนน -->");
+				elm.value = "";
+			}
+		}
+		
+		function  checkNumber15(elm){			
+			if (elm.value.match(/[^\d|.]/)) {
+				alert("<!-- กรุณากรอกคะแนนให้ถูกต้อง -->");
+				elm.value = "";
+			} else if(elm.value > 15) {
+				alert("<!-- กรุณากรอกคะแนนไม่เกิน 15 คะแนน -->");
+				elm.value = "";
+			}
+		}
+		
+		function  checkNumber45(elm) {			
+			if (elm.value.match(/[^\d|.]/)) {
+				alert("<!-- กรุณากรอกคะแนนให้ถูกต้อง -->");
+				elm.value = "";
+			} else if(elm.value > 45 ) {
+				alert("<!-- กรุณากรอกคะแนนไม่เกิน 45 คะแนน -->");
+				elm.value = "";
+			}
+		}
+		
+</script>
 <body style="background-image: url('./image/hero-bg.png')">
 
 	<jsp:include page="common/navbar.jsp"></jsp:include>
 
 		<div class="container" style="margin-top: 35px;">
-		<form name="frm" action=isReviewProject method="post">
+		<form id="frm"  name="frm" action=isReviewProject method="post">
 		
 		<section id="content">
 			<div class="container" style="margin-top: 35px">
 				<div class="row">
 					<div class="col-lg-12">
 						<div class="container">
-							<h3>ข้อมูลโครงงานวิทยาศาสตร์</h3>
+							<h3><i class="fa-solid fa-clipboard">&nbsp;</i>ข้อมูลโครงงานวิทยาศาสตร์</h3>
 							<hr class="colorgraph">
 							<h5>ข้อมูล</h5>
 							<br>
@@ -168,17 +215,17 @@
 								<%
 								
 									for (int i = 0 ; i < listquestion.size() ; i++) {
-					
+																
 								%>
-								
+												
 								<input type="hidden"  id="question_id"  name="question_id" class="form-control data" value="<%=listquestion.get(i).getQuestion_id()%>">
 								
 								<tbody>
 									<tr>
 										<td align="center"><%=listquestion.get(i).getQuestion_id()%></td>
 										<td><%=listquestion.get(i).getQuestion()%></td>
-										<td width="50px"><input type="text" name="answer" id="answer" class="form-control data" style="width: 100px" maxlength="4" ></td>	
-										<td align="center" width="130px">&nbsp;&nbsp;/&nbsp; <%=listquestion.get(i).getFullscore()%></td>						
+										<td width="50px"><input type="text" name="answer" id="answer" class="form-control data" style="width: 100px" maxlength="5"  onkeyup="checkNumber<%=listquestion.get(i).getFullscore()%>(this)"></td>	
+										<td align="center" width="130px">&nbsp;&nbsp;/&nbsp;<%=listquestion.get(i).getFullscore()%></td>						
 									</tr>
 								</tbody>
 								
@@ -195,7 +242,7 @@
 							<br>
 							<div class="form-group row">
 									<div class="col-sm-12 text-left">
-										<button type="submit" class="btn btn-success">ส่งผลประเมิน</button>									
+										<button type="submit" class="btn btn-success" onclick ="return validateForm(frm)">ส่งผลประเมิน</button>									
 										<a class="btn btn-danger" href="doListScienceProject" role="button">ยกเลิก</a>	
 									</div>
 								</div>
@@ -209,5 +256,11 @@
 
 	<jsp:include page="common/footer.jsp"></jsp:include>
 
+	<c:if test="${msg != null }">
+		<script type="text/javascript">
+			var msg = '${msg}';
+			alert(msg);
+		</script>
+	</c:if>
 </body>
 </html>

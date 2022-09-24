@@ -60,10 +60,10 @@ try {
 					<div class="row">
 						<div class="col-lg-12">
 							<br>
-							<h3>ข้อมูลโครงงานวิทยาศาสตร์</h3>
+							<h3><i class="fa-solid fa-clipboard">&nbsp;</i>ข้อมูลโครงงานวิทยาศาสตร์</h3>
 							<hr class="colorgraph">				
 							<h5>ข้อมูลคณะกรรมการ</h5>
-							<hr>			
+							<br>			
 								<div class="form-group row">
 									<label class="col-sm-2 col-form-label text-right">ชื่อ - นามสกุล</label>
 									<div class="col-sm-3">

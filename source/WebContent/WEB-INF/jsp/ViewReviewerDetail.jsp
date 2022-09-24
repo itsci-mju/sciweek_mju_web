@@ -46,7 +46,7 @@
 					<div class="row">
 						<div class="col-lg-12">
 							<div class="container">
-								<h3>ข้อมูลคณะกรรมการ</h3>
+								<h3><i class="fa-solid fa-clipboard">&nbsp;</i>ข้อมูลคณะกรรมการ</h3>
 								<hr class="colorgraph">
 								<h5>ข้อมูล</h5>
 								<br>					

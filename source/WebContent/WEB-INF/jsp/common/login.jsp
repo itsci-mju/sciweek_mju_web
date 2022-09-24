@@ -6,6 +6,7 @@
 	try {
 		error_msg = (boolean) request.getAttribute("error_msg");
 	} catch (Exception e) {
+		
 	}
 %>
 <!DOCTYPE html>
@@ -155,13 +156,32 @@ input[type=submit]:hover {
 }
 </style>
 </head>
+<script type="text/javascript">
+
+	function validateForm(frm) {
+		
+		var regex_email = /^[_a-zA-Z0-9-]+(.[_a-zA-Z0-9-]+)@[a-zA-Z0-9-]+(.[a-zA-Z0-9-]+)(.([a-zA-Z]){2,4})$/;
+		var regex_password = /^[A-Za-z|0-9]{8,16}$/;
+		
+	// email
+		if(frm.floatingInput.value == "") {
+			alert('<!-- กรุณากรอกอีเมล -->');
+			return false;
+		}
+		if(regex_email.test(frm.floatingInput.value) == false) {
+			alert("<!-- กรุณากรอกอีเมลให้ถูกต้อง -->");
+			return false ;
+		}
+		
+	}
+</script>
 <body <%if (error_msg) {%> onload="return result()" <%}%> style="background-image: url('./image/hero-bg.png')">
 
 	<div class="container" style="margin-top: 50px;">	
 		<div class="row2">
 			<h2 style="text-align: center">เข้าสู่ระบบ</h2>
 			<br>
-			<form action="verifylogin" name="frm" method="post">	
+			<form action="verifylogin" name="frm" id="frm" method="post">	
 				<div class="form-group row" style="margin-left: 5px;">
 				
 					<div class="col-sm-5" align="center">
@@ -189,7 +209,7 @@ input[type=submit]:hover {
 							</div>
 						</div>			 
 					<label style="color: red; text-align: center; ">${error_msg}</label>
-					<button type="submit" class="btn btn-success">เข้าสู่ระบบ</button>				
+					<button type="submit" class="btn btn-success" OnClick ="return validateForm(frm)">เข้าสู่ระบบ</button>				
 					</div>
 																
 				</div>
@@ -205,5 +225,6 @@ input[type=submit]:hover {
 			alert(msg);
 		</script>
 	</c:if>
+	
 </body>
 </html>

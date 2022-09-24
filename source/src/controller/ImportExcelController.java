@@ -94,13 +94,12 @@ public class ImportExcelController {
 							val advemail= data[i][15];
 							val advmobileno= data[i][16];
 							val project_id= data[i][17];
-							val classproject= data[i][18];
-							val projectname= data[i][19];
-							val video = data[i][20];
-							val award = data[i][21];
-							val avgscore = Double.parseDouble(data[i][22]);
-							val projecttype_id = Integer.parseInt(data[i][23]);
-							val projecttype_name = data[i][24];
+							val projectname= data[i][18];
+							val video = data[i][19];
+							val award = data[i][20];
+							val avgscore = Double.parseDouble(data[i][21]);
+							val projecttype_id = Integer.parseInt(data[i][22]);
+							val projecttype_name = data[i][23];
 							
 							Student student = new Student();
 							School school = new School();
@@ -133,7 +132,6 @@ public class ImportExcelController {
 							projecttype.setProjecttype_name(projecttype_name);
 													
 							project.setProject_id(project_id);
-							project.setClassproject(classproject);
 							project.setProjectname(projectname);
 							project.setVideo(video);
 							project.setAward(award);

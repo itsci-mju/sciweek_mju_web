@@ -59,7 +59,7 @@
 								<div class="form-group row">
 									<label class="col-sm-2 col-form-label text-right">ประเภท</label>
 									<div class="col-sm-8">
-										<select class="form-control" name="type" id="type" required>
+										<select class="form-select" name="type" id="type" required>
 											<option selected disabled >--กรุณาเลือกประเภท--</option>
 											<option value="ข่าวกิจกรรม.">ข่าวกิจกรรม</option>
 											<option value="ข่าวจากแหล่งอื่น">ข่าวจากแหล่งอื่น</option>
@@ -103,6 +103,13 @@
 	</div>
 
 	<jsp:include page="common/footer.jsp"></jsp:include>
-	
+
+	<c:if test="${msg != null }">
+		<script type="text/javascript">
+			var msg = '${msg}';
+			alert(msg);
+		</script>
+	</c:if>
+
 </body>
 </html>

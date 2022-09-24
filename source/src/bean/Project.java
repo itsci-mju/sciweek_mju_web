@@ -12,7 +12,6 @@ import lombok.Setter;
 public class Project {
 
 	private String project_id;
-	private String classproject;
 	private String projectname;
 	private String video;
 	private String award;

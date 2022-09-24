@@ -4,7 +4,7 @@
 <%@ page import="java.util.*,manager.*,bean.*,java.text.*"%>
 <%
 	Admin admin = null;
-	Team team = null;
+	ProjectType projecttype = null;
 	List<Project> listproject = new Vector<>();
 	List<Reviewer> listreviewer = new Vector<>();
 
@@ -15,8 +15,8 @@
 	}
 	
 	try {
-		team = (Team) request.getAttribute("team");
-		session.setAttribute("key",team.getTeam_id()); 
+		projecttype = (ProjectType) request.getAttribute("projecttype");
+		session.setAttribute("key",projecttype.getProjecttype_id()); 
 	} catch (Exception e) {
 		e.printStackTrace();
 	}
@@ -67,14 +67,14 @@
 								<div class="form-group row">
 									<label class="col-sm-2 col-form-label text-right">รหัสทีม</label>
 									<div class="col-sm-4">
-										<input type="text" name="team_id" id="team_id" class="form-control data" value="<%=team.getTeam_id()%>" disabled="disabled">
+										<input type="text" name="team_id" id="team_id" class="form-control data" value="<%=projecttype.getProjecttype_id()%>" disabled="disabled">
 									</div>
 								</div>
 								
 								<div class="form-group row">
 									<label class="col-sm-2 col-form-label text-right">ชื่อทีม</label>
 									<div class="col-sm-4">
-										<input type="text" name="team_name" id="team_name" class="form-control data" value="<%=team.getTeam_name()%>" disabled="disabled">
+										<input type="text" name="team_name" id="team_name" class="form-control data" value="<%=projecttype.getProjecttype_name()%>" disabled="disabled">
 									</div>
 								</div>
 								<br>
@@ -189,7 +189,6 @@
 									<thead class="table-info" align="center">
 										<tr>										
 											<th width="125px">รหัสโครงงาน</th>
-											<th width="135px">ระดับชั้น</th>
 											<th>ชื่อโครงงาน</th>
 											<th width="205px">ประเภทโครงงาน</th>													
 										</tr>
@@ -203,7 +202,6 @@
 										%>
 										<tr>									
 											<td align="center"><%=listproject.get(i).getProject_id()%></td>
-											<td align="center"><%=listproject.get(i).getClassproject()%></td>
 											<td><%=listproject.get(i).getProjectname()%></td>	
 											<td align="center"><%=listproject.get(i).getProjecttype().getProjecttype_name()%></td>													
 										</tr>
@@ -232,7 +230,7 @@
 								</div>
 								<div class="form-group row">
 									<div class="col-sm-12 text-center">									
-										<a href="doDeleteTeam?team_id=<%=team.getTeam_id()%>"> 
+										<a href="doDeleteTeam?projecttype_id=<%=projecttype.getProjecttype_id()%>"> 
 											<input type="button" name="delete" id="delete" value="ลบข้อมูล"
 											class="btn btn-danger" disabled="disabled" onclick="return confirm('คุณต้องการลบโครงงานวิทยาศาสตร์นี้หรือไม่ ');">
 										</a>

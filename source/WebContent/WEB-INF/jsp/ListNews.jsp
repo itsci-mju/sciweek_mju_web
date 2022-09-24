@@ -142,7 +142,7 @@
 										
 										<label class="col-sm-2 col-form-label text-right">ประเภทข่าว</label>
 										<div class="col-sm-4">
-											<select class="form-control" name="type" id="type" required>
+											<select class="form-select" name="type" id="type" required>
 												<option value="ข่าวกิจกรรม." <%if (listnews.get(i).getType().equals("ข่าวกิจกรรม")) {%> selected
 												<%}%>>ข่าวกิจกรรม</option>
 												<option value="ข่าวจากแหล่งอื่น" <%if (listnews.get(i).getType().equals("ข่าวจากแหล่งอื่น")) {%> selected
@@ -200,8 +200,8 @@
 					} else {
 				%>
 
-				<tr>
-					<td colspan="5">ไม่มีข้อมูล</td>
+				<tr align="center">
+					<td colspan="3"><h2>ไม่มีข้อมูล</h2></td>
 				</tr>
 				<%
 					}

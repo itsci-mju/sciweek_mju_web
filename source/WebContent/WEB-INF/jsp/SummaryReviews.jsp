@@ -87,23 +87,24 @@
 										<input type="text" id="major" name="major" class="form-control data" value="<%=reviewer.getMajor()%>" readonly>
 									</div>
 								</div>
-								<%	String team_name = null ;
-								
-										if (reviewer.getTeam().getTeam_name() == null) {
-											team_name = "ไม่มีกลุ่ม" ;
-										} else { 
-											team_name = reviewer.getTeam().getTeam_name();
-										}					
-								%>
-								<div class="form-group row">									
-									<label class="col-sm-2 col-form-label text-right">กลุ่ม</label>
-									<div class="col-sm-3">
-										<input type="hidden" id="team_id" name="team_id" class="form-control data" value="<%=reviewer.getTeam().getTeam_id()%>">
-										<input type="text" id="team_name" name="team_name" class="form-control data" value="<%=team_name%>" readonly>
-									</div>				
-								</div>
-								
-								<div class="form-group row">																
+						<%
+							String projecttype_name = null;
+
+							if (reviewer.getProjecttype().getProjecttype_name() == null) {
+								projecttype_name = "ไม่มีกลุ่ม";
+							} else {
+								projecttype_name = reviewer.getProjecttype().getProjecttype_name();
+							}
+						%>
+						<div class="form-group row">
+							<label class="col-sm-2 col-form-label text-right">กลุ่ม</label>
+							<div class="col-sm-3">
+								<input type="hidden" id="projecttype_id" name="projecttype_id" class="form-control data" value="<%=reviewer.getProjecttype().getProjecttype_id()%>">
+								<input type="text" id="projecttype_name" name="projecttype_name" class="form-control data" value="<%=projecttype_name%>" readonly>
+							</div>
+						</div>
+
+						<div class="form-group row">																
 									<label class="col-sm-2 col-form-label text-right">ตำแหน่ง</label>
 									<div class="col-sm-3">								
 										<input type="text" id="position" name="position" class="form-control data" value="<%=reviewer.getPosition()%>" readonly>

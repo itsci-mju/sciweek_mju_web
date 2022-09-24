@@ -191,7 +191,7 @@
 			<ol class="carousel-indicators"></ol>
 			<div class="carousel-inner">
 				<div class="carousel-item active">
-					<img class="d-block w-100" src="./image/banner.png" alt="First slide" width="100%" height="100%" >
+					<img class="d-block w-100" src="./image/banner.png" alt="First slide" width="100%" height="75%" >
 				</div>
 			</div>
 		</div>

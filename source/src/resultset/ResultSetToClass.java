@@ -60,7 +60,6 @@ public class ResultSetToClass {
 		Project project = new Project();
 		
 		project.setProject_id(rs.getString("project.project_id"));
-		project.setClassproject(rs.getString("project.classproject"));
 		project.setProjectname(rs.getString("project.projectname"));		
 		project.setVideo(rs.getString("project.video"));
 		project.setAward(rs.getString("project.award"));
@@ -97,6 +96,7 @@ public class ResultSetToClass {
 		report.setReport_id(rs.getInt("report.report_id"));
 		report.setReportname(rs.getString("report.reportname"));
 		report.setUploaddate(rs.getTimestamp("report.uploaddate"));
+		report.setExpdate(rs.getTimestamp("report.expdate"));
 		
 		report.setProject(this.setResultSetToProject(rs));
 		
@@ -108,9 +108,11 @@ public class ResultSetToClass {
 		
 		reviews.setReviews_id(rs.getString("reviews.reviews_id"));
 		reviews.setReviewdate(rs.getTimestamp("reviews.reviewdate"));
+		reviews.setEnddate(rs.getTimestamp("reviews.enddate"));
 		reviews.setComments(rs.getString("reviews.comments"));
 		reviews.setTotalscore(rs.getDouble("reviews.totalscore"));
 		reviews.setStatus(rs.getString("reviews.status"));
+		
 		reviews.setReviewer(this.setResultSetToReviewer(rs));
 		reviews.setProject(this.setResultSetToProject(rs));
 		
@@ -179,8 +181,9 @@ public class ResultSetToClass {
 		
 		team.setTeam_id(rs.getInt("team.team_id"));
 		team.setTeam_name(rs.getString("team.team_name"));
-		
+			
 		return team;
 	}
-
+	
+	
 }
