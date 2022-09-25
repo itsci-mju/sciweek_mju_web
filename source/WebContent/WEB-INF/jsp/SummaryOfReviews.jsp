@@ -74,12 +74,13 @@
 	</div>
 	
 	
-
+<form action="chooseproject" name="frm" id="chooseproject" method="post" >
 	<div style="margin-left: 6%; margin-right: 6%;">
 		<br>
 		<table class="table table-bordered  table-hover" id=myTable>
 			<thead class="table-info" align="center">
 				<tr>
+					<th style="white-space: nowrap"></th>
 					<th style="white-space: nowrap">ลำดับ</th>
 					<th style="white-space: nowrap">วันเวลาประเมิน</th>
 					<th style="white-space: nowrap">ชื่อโครงงาน/สิ่งประดิษฐ์</th>
@@ -110,6 +111,7 @@
 			
 			<tbody>
 				<tr>
+					<td><input type="checkbox" id="chkproject" name="chkproject" value="<%=projectResponseList.get(i).getProjectID()%>"></td>
 					<td align="center" width="50px"><%=i + 1%></td>
 					<td align="center" width="190px" ><%=projectResponseList.get(i).getReviewDate()%></td>
 					<td align="left"><%=projectResponseList.get(i).getProjectName()%></td>
@@ -150,10 +152,16 @@
 			<%
 				}
 			%>
-
-
 		</table>
+		<br>
+		<div class="form-group row">
+			<div class="col-sm-12 text-center">
+				<button type="submit" class="btn btn-success" OnClick ="return validateForm(frm)">เลือก</button>
+				<a class="btn btn-danger" href="index" role="button">ยกเลิก</a>	
+			</div>
+		</div>
 	</div>
+</form>
 
 	<jsp:include page="common/footer.jsp"></jsp:include>
 </body>

@@ -136,7 +136,7 @@
 								<div class="form-group row">
 									<!-- <label class="col-sm-2 col-form-label text-right">รหัสคณะกรรมการ</label> -->
 									<div class="col-sm-4">
-										<input type="hidden" name="reviewer_id" id="reviewer_id" class="form-control data" value="<%=reviewer.getReviewer_id()%>" readonly>
+										<input type="hidden" name="reviewer_id" id="reviewer_id" class="form-control data" value="<%=reviewer.getReviewer_id()%>" style="background-color: white" readonly>
 									</div>																								
 								</div>
 
@@ -167,11 +167,11 @@
 										</div>
 										<label class="col-form-label">ชื่อ</label>
 										<div class="col-sm-2">
-											<input type="text" name="firstname" id="firstname" class="form-control data" value="<%=reviewer.getFirstname()%>">
+											<input type="text" name="firstname" id="firstname" class="form-control data" value="<%=reviewer.getFirstname()%>" style="background-color: white">
 										</div>
 										<label class="col-form-label">นามสกุล</label>
 										<div class="col-sm-2">
-											<input type="text" name="lastname" id="lastname" class="form-control data" value="<%=reviewer.getLastname()%>">
+											<input type="text" name="lastname" id="lastname" class="form-control data" value="<%=reviewer.getLastname()%>" style="background-color: white">
 										</div>
 									</div>
 								</div>
@@ -194,7 +194,7 @@
 								<div class="form-group row">
 									<label class="col-sm-2 col-form-label text-right">คณะ</label>
 									<div class="col-sm-3">
-										<input type="text" name="faculty" id="faculty" class="form-control data" value="<%=reviewer.getFaculty()%>" >
+										<input type="text" name="faculty" id="faculty" class="form-control data" value="<%=reviewer.getFaculty()%>" style="background-color: white">
 									</div>
 									<label class="col-sm-2 col-form-label text-right">สาขา </label>
 									<div class="col-sm-3">
@@ -252,22 +252,22 @@
 								<div class="form-group row">
 									<label class="col-sm-2 col-form-label text-right"><i class="fab fa-line" style="color : #33FF00">&nbsp;</i>Line</label>
 									<div class="col-sm-3">
-										<input type="text" name="line" id="line" class="form-control data" value="<%=line%>" >									
+										<input type="text" name="line" id="line" class="form-control data" value="<%=line%>" style="background-color: white">									
 									</div>		
 									<label class="col-sm-2 col-form-label text-right"><i class="fa fa-facebook-official" style="color : #0066FF">&nbsp;</i>Facebook</label>
 									<div class="col-sm-3">
-										<input type="text" name="facebook" id="facebook" class="form-control data" value="<%=facebook%>" >
+										<input type="text" name="facebook" id="facebook" class="form-control data" value="<%=facebook%>" style="background-color: white">
 									</div>																			
 								</div>	
 								
 								<div class="form-group row">
 									<label class="col-sm-2 col-form-label text-right">อีเมล</label>
 									<div class="col-sm-3">
-										<input type="text" name="email" id="email" class="form-control data" value="<%=reviewer.getEmail()%>" required>
+										<input type="text" name="email" id="email" class="form-control data" value="<%=reviewer.getEmail()%>" style="background-color: white" required>
 									</div>
 									<label class="col-sm-2 col-form-label text-right">รหัสผ่าน</label>
 									<div class="col-sm-3">
-										<input type="password" name="password" id="password" class="form-control data" value="<%=reviewer.getPassword()%>" required>								
+										<input type="password" name="password" id="password" class="form-control data" value="<%=reviewer.getPassword()%>" style="background-color: white" required>								
 									</div>
 								</div>
 								

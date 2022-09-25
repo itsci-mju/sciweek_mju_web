@@ -11,6 +11,7 @@ import java.util.Vector;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import bean.Project;
 import lombok.val;
 import model.ProjectResponse;
 import model.ReviewerResponse;
@@ -82,6 +83,25 @@ public class SummaryOfReviewsManager {
 				er.printStackTrace();
 			}
 		
+		return result;
+	}
+	
+	public boolean isChooseProject(Project project) {
+		ConnectionDB condb = new ConnectionDB();
+		Connection con = condb.getConnection();
+		
+		Boolean result = false;
+
+		try {
+			CallableStatement stmt = con.prepareCall("{call isChooseProject(?)}");
+			stmt.setString(1, project.getProject_id());		
+			stmt.execute();
+			result = true;
+			  
+			stmt.close();
+		} catch (SQLException er) {
+			er.printStackTrace();
+		}
 		return result;
 	}
 

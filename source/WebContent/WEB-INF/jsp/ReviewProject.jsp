@@ -5,8 +5,8 @@
 	Report report = null;
 	Reviewer reviewer = null ;
 	StudentProject sproject = null;
+	Question question = null;
 	List<StudentProject> listsproject = new Vector<>();
-	List<Question> listquestion = new Vector<>();
 	
 	try {
 		reviewer = (Reviewer) session.getAttribute("reviewer");
@@ -21,7 +21,7 @@
 	}
 	
 	try {
-		listquestion = (List<Question>) request.getAttribute("listquestion");
+		question = (Question) request.getAttribute("question");
 	} catch (Exception e) {
 		e.printStackTrace();
 	}
@@ -60,7 +60,7 @@
 
 	function validateForm(frm) {
 		
-		var regexp = /^[ก-์|A-Za-z|0-9]{3,250}$/;
+		var regexp = /^[ก-์|A-Za-z|0-9| ]{3,250}$/;
 		if (frm.comments.value == "") {
 			alert("<!-- กรุณากรอกคำอธิบาย -->");
 			return false;
@@ -72,35 +72,45 @@
 		
 	}
 		
-		function  checkNumber40(elm){			
-			if (elm.value.match(/[^\d|.]/)) {
-				alert("<!-- กรุณากรอกคะแนนให้ถูกต้อง -->");
-				elm.value = "";
-			} else if(elm.value > 40) {
-				alert("<!-- กรุณากรอกคะแนนไม่เกิน 40 คะแนน -->");
-				elm.value = "";
-			}
+	function  checkNumber40(elm){			
+		if (elm.value.match(/[^\d|.]/)) {
+			alert("<!-- กรุณากรอกคะแนนให้ถูกต้อง -->");
+			elm.value = "";
+		} else if(elm.value > 40) {
+			alert("<!-- กรุณากรอกคะแนนไม่เกิน 40 คะแนน -->");
+			elm.value = "";
 		}
-		
-		function  checkNumber15(elm){			
-			if (elm.value.match(/[^\d|.]/)) {
-				alert("<!-- กรุณากรอกคะแนนให้ถูกต้อง -->");
-				elm.value = "";
-			} else if(elm.value > 15) {
-				alert("<!-- กรุณากรอกคะแนนไม่เกิน 15 คะแนน -->");
-				elm.value = "";
-			}
+	}
+	
+	function  checkNumber15(elm){			
+		if (elm.value.match(/[^\d|.]/)) {
+			alert("<!-- กรุณากรอกคะแนนให้ถูกต้อง -->");
+			elm.value = "";
+		} else if(elm.value > 15) {
+			alert("<!-- กรุณากรอกคะแนนไม่เกิน 15 คะแนน -->");
+			elm.value = "";
 		}
-		
-		function  checkNumber45(elm) {			
-			if (elm.value.match(/[^\d|.]/)) {
-				alert("<!-- กรุณากรอกคะแนนให้ถูกต้อง -->");
-				elm.value = "";
-			} else if(elm.value > 45 ) {
-				alert("<!-- กรุณากรอกคะแนนไม่เกิน 45 คะแนน -->");
-				elm.value = "";
-			}
+	}
+	
+	function  checkNumber25(elm) {			
+		if (elm.value.match(/[^\d|.]/)) {
+			alert("<!-- กรุณากรอกคะแนนให้ถูกต้อง -->");
+			elm.value = "";
+		} else if(elm.value > 25 ) {
+			alert("<!-- กรุณากรอกคะแนนไม่เกิน 25 คะแนน -->");
+			elm.value = "";
 		}
+	}
+	
+	function  checkNumber20(elm) {			
+		if (elm.value.match(/[^\d|.]/)) {
+			alert("<!-- กรุณากรอกคะแนนให้ถูกต้อง -->");
+			elm.value = "";
+		} else if(elm.value > 20 ) {
+			alert("<!-- กรุณากรอกคะแนนไม่เกิน 20 คะแนน -->");
+			elm.value = "";
+		}
+	}
 		
 </script>
 <body style="background-image: url('./image/hero-bg.png')">
@@ -126,14 +136,14 @@
 								<div class="form-group row">
 									<label class="col-sm-3 col-form-label text-left">รหัสโครงงานวิทยาศาสตร์</label>
 									<div class="col-sm-3" style="margin-left: -105px">
-										<input type="text" id="project_id" name="project_id" class="form-control data" value="<%=sproject.getProject().getProject_id()%>" readonly>
+										<input type="text" id="project_id" name="project_id" class="form-control data" value="<%=sproject.getProject().getProject_id()%>" style="background-color: white" readonly>
 									</div>
 								</div>
 										
 								<div class="form-group row">
 									<label class="col-sm-3 col-form-label text-left">ชื่อโครงงานวิทยาศาสตร์</label>
 									<div class="col-sm-7" style="margin-left: -105px">
-										<input type="text" id="projectname" name="projectname" class="form-control data" value="<%=sproject.getProject().getProjectname()%>" readonly>
+										<input type="text" id="projectname" name="projectname" class="form-control data" value="<%=sproject.getProject().getProjectname()%>" style="background-color: white" readonly>
 									</div>
 								</div>
 								
@@ -144,7 +154,7 @@
 									%>		
 									<div class="col-sm-3 text-left">
 										<input type="hidden" id="student_id" name="student_id" class="form-control data" value="<%=listsproject.get(i).getStudent().getStudent_id()%>">
-										<input type="text" id="studentname" name="studentname" class="form-control data" value="<%=listsproject.get(i).getStudent().getPrefix() +" "+listsproject.get(i).getStudent().getFirstname() +" "+ listsproject.get(i).getStudent().getLastname()%>" readonly>																																
+										<input type="text" id="studentname" name="studentname" class="form-control data" value="<%=listsproject.get(i).getStudent().getPrefix() +" "+listsproject.get(i).getStudent().getFirstname() +" "+ listsproject.get(i).getStudent().getLastname()%>" style="background-color: white" readonly>																																
 									</div>
 									<%
 									}
@@ -154,18 +164,18 @@
 								<div class="form-group row">
 									<label class="col-sm-2 col-form-label text-right">โรงเรียน</label>
 									<div class="col-sm-3">
-										<input type="text" id="schoolname" name="schoolname" class="form-control data" value="<%=sproject.getStudent().getSchool().getSchool_name()%>" readonly>
+										<input type="text" id="schoolname" name="schoolname" class="form-control data" value="<%=sproject.getStudent().getSchool().getSchool_name()%>" style="background-color: white" readonly>
 									</div>
 								</div>
 								
 								<div class="form-group row">
 									<label class="col-sm-2 col-form-label text-right">ที่ปรึกษา</label>
 									<div class="col-sm-3">
-										<input type="text" id="advisorname" name="advisorname" class="form-control data" value="<%=sproject.getAdvisor().getPrefix() +" "+ sproject.getAdvisor().getFirstname() +" "+ sproject.getAdvisor().getLastname()%>" readonly>
+										<input type="text" id="advisorname" name="advisorname" class="form-control data" value="<%=sproject.getAdvisor().getPrefix() +" "+ sproject.getAdvisor().getFirstname() +" "+ sproject.getAdvisor().getLastname()%>" style="background-color: white" readonly>
 									</div>
 									<label class="col-sm-2 col-form-label text-right">เบอร์โทรศัพท์</label>
 									<div class="col-sm-3">
-										<input type="text" id="advisorno" name="advisorno" class="form-control data" value="<%=sproject.getAdvisor().getMobileno()%>" readonly>
+										<input type="text" id="advisorno" name="advisorno" class="form-control data" value="<%=sproject.getAdvisor().getMobileno()%>" style="background-color: white" readonly>
 									</div>
 								</div>
 								
@@ -211,26 +221,18 @@
 										<th colspan="2">คะแนน</th>								
 									</tr>
 								</thead>
-								
-								<%
-								
-									for (int i = 0 ; i < listquestion.size() ; i++) {
-																
-								%>
-												
-								<input type="hidden"  id="question_id"  name="question_id" class="form-control data" value="<%=listquestion.get(i).getQuestion_id()%>">
+																								
+								<input type="hidden"  id="question_id"  name="question_id" class="form-control data" value="<%=question.getQuestion_id()%>">
 								
 								<tbody>
 									<tr>
-										<td align="center"><%=listquestion.get(i).getQuestion_id()%></td>
-										<td><%=listquestion.get(i).getQuestion()%></td>
-										<td width="50px"><input type="text" name="answer" id="answer" class="form-control data" style="width: 100px" maxlength="5"  onkeyup="checkNumber<%=listquestion.get(i).getFullscore()%>(this)"></td>	
-										<td align="center" width="130px">&nbsp;&nbsp;/&nbsp;<%=listquestion.get(i).getFullscore()%></td>						
+										<td align="center"><%=question.getQuestion_id()%></td>
+										<td><%=question.getQuestion()%></td>
+										<td width="50px"><input type="text" name="answer" id="answer" class="form-control data" style="width: 100px" maxlength="5"  onkeyup="checkNumber<%=question.getFullscore()%>(this)"></td>	
+										<td align="center" width="130px">&nbsp;&nbsp;/&nbsp;<%=question.getFullscore()%></td>						
 									</tr>
 								</tbody>
-								
-								<% } %>
-								
+															
 							</table>
 			
 							<div class="form-group row">
@@ -262,5 +264,6 @@
 			alert(msg);
 		</script>
 	</c:if>
+	
 </body>
 </html>

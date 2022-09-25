@@ -22,6 +22,7 @@ import bean.Report;
 import bean.Student;
 import bean.StudentProject;
 import manager.IsUploadReportManager;
+import manager.ViewProjectDetailManager;
 
 @Controller
 public class UploadReportController {
@@ -50,6 +51,8 @@ public class UploadReportController {
 	public ModelAndView uploadReport(HttpServletRequest request, HttpSession session) throws Exception {
 		Student student = (Student) session.getAttribute("student");
 		if (student != null) {
+			Project project = new Project();
+			Report report = new Report();
 			if (ServletFileUpload.isMultipartContent(request)) {
 				request.setCharacterEncoding("UTF-8");
 				try {
@@ -57,41 +60,45 @@ public class UploadReportController {
 					IsUploadReportManager isUploadReportManager = new IsUploadReportManager();
 					int id = isUploadReportManager.getnextreportid();
 					String report_id = String.valueOf(id);
-					
-					isUploadReportManager.isDeleteUpload(report_id);
-					
-					Date dd = new Date();
-				    Calendar c1 = Calendar.getInstance();
-				    c1.setTime(dd);
-				    c1.add(Calendar.YEAR,543);
-				    dd = c1.getTime();
-				    String date1 = new SimpleDateFormat("ddMMyyyyHHmmss").format(dd);
-									
-					Project project = new Project();
+								
+					Date date = new Date();
+				    Calendar calendar = Calendar.getInstance();
+				    calendar.setTime(date);
+				    calendar.add(Calendar.YEAR,543);
+				    date = calendar.getTime();
+				    String date1 = new SimpleDateFormat("ddMMyyyyHHmmss").format(date);
+													
 					project.setProject_id(data.get(0).getString("UTF-8"));
-					project.setVideo(data.get(3).getString("UTF-8"));
+					project.setVideo(data.get(1).getString("UTF-8"));
 					
 					isUploadReportManager.isUploadVideo(project);
-													
-					Report report = new Report();
+																	
+					isUploadReportManager.isDeleteUpload(report.getReport_id());
+					
 					report.setReport_id(id);
 					report.setReportname(report_id +"_"+ date1);
 					report.setProject(new Project(data.get(0).getString("UTF-8")));
 		
 					boolean result = isUploadReportManager.isUploadReport(report);
-
-					String path = request.getSession().getServletContext().getRealPath("/") + "//WEB-INF/report//";
+		
+					String path = request.getSession().getServletContext().getRealPath("/") + "WEB-INF/report";
 
 					if (result) {
-						data.get(4).write(new File(path + File.separator + report.getReportname() +".pdf"));
+						data.get(2).write(new File(path + File.separator + report.getReportname() +".pdf"));
 					}
 
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
-			}
-			ModelAndView mav = new ModelAndView("Index");
-			request.setAttribute("student", student);
+			}		
+			ViewProjectDetailManager viewProjectDetailManager = new ViewProjectDetailManager();
+			Report reports = viewProjectDetailManager.getReportByProjectID(project.getProject_id());
+			StudentProject studentProject = viewProjectDetailManager.getStudentProjectByID(project.getProject_id());
+			List<StudentProject> listsproject = viewProjectDetailManager.getListStudentProjectByProjectID(project.getProject_id());
+			ModelAndView mav = new ModelAndView("ViewProjectDetail");
+			session.setAttribute("report", reports);
+			mav.addObject("listsproject", listsproject);
+			mav.addObject("studentProject", studentProject);
 			return mav;
 		} else {
 			ModelAndView mav = new ModelAndView("LoginPage");

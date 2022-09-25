@@ -16,6 +16,12 @@ public class Project {
 	private String video;
 	private String award;
 	private Double avgscore;
+	private Integer state_project = 1 ;
+	
+	// 1 คือ รอการประเมิน
+	// 2 คือ ผ่านรอบแรก
+	// 3 คือ ผ่านรอบสอง
+	// 4 คือ ไม่ผ่าน
 
 	private ProjectType projecttype;
 	private Team team;

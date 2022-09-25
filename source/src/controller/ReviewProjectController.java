@@ -34,11 +34,11 @@ public class ReviewProjectController {
 			Report report = reviewProjectManager.getReportByProjectID(project_id);
 			StudentProject sproject = reviewProjectManager.getStudentProjectByID(project_id);
 			List<StudentProject> listsproject = reviewProjectManager.getListScienceProject(project_id);
-			List<Question> listquestion = reviewProjectManager.getListQuestion();
+			Question question = reviewProjectManager.getQuestion();
 			ModelAndView mav = new ModelAndView("ReviewProject");
 			session.setAttribute("report", report);
 			mav.addObject("reviewer", reviewer);
-			mav.addObject("listquestion", listquestion);
+			mav.addObject("question", question);
 			mav.addObject("sproject", sproject);
 			mav.addObject("listsproject", listsproject);
 			return mav;

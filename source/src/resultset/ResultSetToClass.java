@@ -64,6 +64,7 @@ public class ResultSetToClass {
 		project.setVideo(rs.getString("project.video"));
 		project.setAward(rs.getString("project.award"));
 		project.setAvgscore(rs.getDouble("project.avgscore"));
+		project.setState_project(rs.getInt("project.state_project"));
 	
 		project.setProjecttype(this.setResultSetToProjectType(rs));
 		project.setTeam(this.setResultSetToTeam(rs));

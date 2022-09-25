@@ -51,7 +51,7 @@
 				<tr>
 					<th width="17%">รหัสโครงงานวิทยาศาสตร์</th>
 					<th width="65%">ชื่อโครงงานวิทยาศาสตร์</th>
-					<th width="15%" colspan="2">อัปโหลด / ดูรายละเอียด</th>				
+					<th width="15%" colspan="2"></th>				
 				</tr>
 			</thead>
 			<tbody >
@@ -68,7 +68,7 @@
 					<td align="center">
 						<button name="button" class="btn btn-success" 
 							onclick="window.location.href='doViewUploadReport?project_id=<%=project.getProject_id()%>';">
-							<i class="fa fa-upload"></i>
+							<i class="fa-solid fa-cloud-arrow-up"></i>
 						</button>
 					</td>
 					<td align="center">

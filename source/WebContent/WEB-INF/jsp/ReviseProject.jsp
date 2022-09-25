@@ -64,11 +64,8 @@
 			alert("<!-- กรุณากรอกคะแนนให้ครบทุกช่อง --> ");
 			return false;
 		}
-		if (frm.answer.value > 0) {
-			alert("<!-- กรุณากรอกคะแนนให้มากกว่า 0 -->");
-			return false;
-		}
-		var regexp = /^[ก-์|A-Za-z|0-9]{3,250}$/;
+	
+		var regexp = /^[ก-์|A-Za-z|0-9| ]{3,250}$/;
 		if (frm.comments.value == "") {
 			alert("<!-- กรุณากรอกคำอธิบาย -->");
 			return false;
@@ -100,12 +97,22 @@
 			}
 		}
 		
-		function  checkNumber45(elm) {			
+		function  checkNumber25(elm) {			
 			if (elm.value.match(/[^\d|.]/)) {
 				alert("<!-- กรุณากรอกคะแนนให้ถูกต้อง -->");
 				elm.value = "";
-			} else if(elm.value > 45 ) {
-				alert("<!-- กรุณากรอกคะแนนไม่เกิน 45 คะแนน -->");
+			} else if(elm.value > 25 ) {
+				alert("<!-- กรุณากรอกคะแนนไม่เกิน 25 คะแนน -->");
+				elm.value = "";
+			}
+		}
+		
+		function  checkNumber20(elm) {			
+			if (elm.value.match(/[^\d|.]/)) {
+				alert("<!-- กรุณากรอกคะแนนให้ถูกต้อง -->");
+				elm.value = "";
+			} else if(elm.value > 20 ) {
+				alert("<!-- กรุณากรอกคะแนนไม่เกิน 20 คะแนน -->");
 				elm.value = "";
 			}
 		}
@@ -128,7 +135,7 @@
 							<br>
 							
 								<input type="hidden" id="reviewer_id" name="reviewer_id" class="form-control data" value="<%=reviewer.getReviewer_id()%>" >
-								<input type="hidden" id="projecttype_id" name="projecttype_id" class="form-control data" value="<%=reviewer.getProjecttype().getProjecttype_id()%>" >
+								<input type="hidden" id="team_id" name="team_id" class="form-control data" value="<%=reviewer.getTeam().getTeam_id()%>" >
 								<input type="hidden" id="review_id" name="review_id" class="form-control data" value="<%=reviews.getReviews_id()%>" >
 								
 								<div class="form-group row">

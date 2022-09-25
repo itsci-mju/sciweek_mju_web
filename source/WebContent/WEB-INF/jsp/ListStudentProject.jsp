@@ -71,94 +71,30 @@
 	<jsp:include page="common/navbar.jsp"></jsp:include>
 
 	<div class="container" style="margin-top: 35px;">
-	
-		<%-- <form action="searchproject" method="post" class="row g-3" >
-			<div class="col-auto">
-				<h3><i class="fa-solid fa-folder-open">&nbsp;</i>นำเข้าข้อมูลโครงงานวิทยาศาสตร์</h3>			
-			</div>	
-			<div class="col-auto text-center" style="margin-left : 529px;">
-					<input type="text" class="form-control" name="keyword" value="<%=keyword%>" placeholder="ค้นหาโครงงานวิทยาศาสตร์....." title="Projects">
-			</div>
-			<div class="col-auto text-left">
-				<button type="submit" class="btn btn-success"> <i class="fa fa-search">&nbsp;</i>ค้นหา</button>
-			</div>
-		</form>	
-		
-		<hr class="colorgraph">
-		
-		<form action="ImportExcel" name="frm" method="post" enctype="multipart/form-data">
-			<div class="form-group row">
-				<div class="col-sm-4">
-					<input class="form-control" type="file" name="fileexcel" id="fileexcel" accept=".csv, application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet">
-				</div>		
-				<div class="col-sm-3" >
-					<button type="submit" name="upload" class="btn btn-success"><i class="fa-solid fa-file-excel">&nbsp;</i>นำเข้าข้อมูลโครงงาน</button>
-				</div>
-			</div>
-		</form>
-		
-		<%
-				if (listsproject.size() != 0) {
-		%>
-		
-		<table class="table table-bordered  table-hover" id=myTable > 
-			<thead class="table-info">
-				<tr>
-					<th style="white-space: nowrap">รหัสโครงงานวิทยาศาสตร์</th>
-					<th style="white-space: nowrap">ชื่อโครงงานวิทยาศาสตร์</th>
-					<th style="white-space: nowrap">ข้อมูลโครงงานวิทยาศาสตร์</th>
-				</tr>
-			</thead>
-			<tbody>
-				
-				<%
-					for (StudentProject studentProject : listsproject) {
-						Project project = studentProject.getProject();
-				%>
-				<tr>
-					<td><%=project.getProject_id()%></td>
-					<td ><%=project.getProjectname()%></td>
-					<td align="center"><a href="ViewStudentProjectDetail?project_id=<%=project.getProject_id()%>">
-							<button name="button" class="btn btn-warning">
-								<i class="fa fa-eye"></i>&nbsp;ดูรายละเอียด
-							</button></a>
-					</td>
-				</tr>
-				<%
-					}
-				%>
-				<%
-					} 
-				%>		
-			</tbody>
-		</table> --%>
-		
-	<div>
-	
-    <h1><i class="fa-solid fa-folder-open">&nbsp;</i>นำเข้าข้อมูลโครงงานวิทยาศาสตร์</h1>
-    <div id="multi-step-form-container">
-        <!-- Form Steps / Progress Bar -->
-        <ul class="form-stepper form-stepper-horizontal text-center mx-auto pl-0">
-            <!-- Step 1 -->
-            <li class="form-stepper-active text-center form-stepper-list" step="1">
-                <a class="mx-2">
-                    <span class="form-stepper-circle">
-                        <span>1</span>
-                    </span>            
-                    <div class="label">นำเข้าข้อมูลโครงงานวิทยาศาสตร์</div>
-                </a>
-            </li>
-            <!-- Step 2 -->
-            <li class="form-stepper-unfinished text-center form-stepper-list" step="2">
-                <a class="mx-2">
-                    <span class="form-stepper-circle text-muted">
-                        <span>2</span>
-                    </span>
-                    <div class="label text-muted">รายการข้อมูลโครงงานวิทยาศาสตร์</div>
-                </a>
-            </li>
-           <!-- Step 3 -->
-          <!--   <li class="form-stepper-unfinished text-center form-stepper-list" step="3">
+		<div>
+			<h1>
+				<i class="fa-solid fa-folder-open">&nbsp;</i>นำเข้าข้อมูลโครงงานวิทยาศาสตร์
+			</h1>
+			<div id="multi-step-form-container">
+				<!-- Form Steps / Progress Bar -->
+				<ul
+					class="form-stepper form-stepper-horizontal text-center mx-auto pl-0">
+					<!-- Step 1 -->
+					<li class="form-stepper-active text-center form-stepper-list"
+						step="1"><a class="mx-2"> <span
+							class="form-stepper-circle"> <span>1</span>
+						</span>
+							<div class="label">นำเข้าข้อมูลโครงงานวิทยาศาสตร์</div>
+					</a></li>
+					<!-- Step 2 -->
+					<li class="form-stepper-unfinished text-center form-stepper-list"
+						step="2"><a class="mx-2"> <span
+							class="form-stepper-circle text-muted"> <span>2</span>
+						</span>
+							<div class="label text-muted">รายการข้อมูลโครงงานวิทยาศาสตร์</div>
+					</a></li>
+					<!-- Step 3 -->
+					<!--   <li class="form-stepper-unfinished text-center form-stepper-list" step="3">
                 <a class="mx-2">
                     <span class="form-stepper-circle text-muted">
                         <span>3</span>
@@ -166,53 +102,58 @@
                     <div class="label text-muted">ข้อมูลรายละเอียดโครงงานวิทยาศาสตร์</div>
                 </a>
             </li> -->
-        </ul>
-        <!-- Step Wise Form Content -->
-     <!--    <form id="userAccountSetupForm" name="userAccountSetupForm" enctype="multipart/form-data" method="POST"> -->
-            <!-- Step 1 Content -->
-            <section id="step-1" class="form-step">
-                <h2 class="font-normal">ขั้นตอนที่ 1 : นำเข้าข้อมูลโครงงานวิทยาศาสตร์</h2>
-                <!-- Step 1 input fields -->
-                <div class="mt-3">
-                    <h6 style="color : red">ชี้แจ้ง : กรุณาอัปโหลดข้อมูลไฟล์ Excel เป็นนามสกุล .xlsx..</h6>
-                    <br>
-						<form action="ImportExcel" name="frm" method="post" enctype="multipart/form-data">
+				</ul>
+				<!-- Step Wise Form Content -->
+				<!--    <form id="userAccountSetupForm" name="userAccountSetupForm" enctype="multipart/form-data" method="POST"> -->
+				<!-- Step 1 Content -->
+				<section id="step-1" class="form-step">
+					<h2 class="font-normal">ขั้นตอนที่ 1 :
+						นำเข้าข้อมูลโครงงานวิทยาศาสตร์</h2>
+					<!-- Step 1 input fields -->
+					<div class="mt-3">
+						<h6 style="color: red">ชี้แจ้ง : กรุณาอัปโหลดข้อมูลไฟล์ Excel
+							เป็นนามสกุล .xlsx..</h6>
+						<br>
+						<form action="ImportExcel" name="frm" method="post"
+							enctype="multipart/form-data">
 							<div class="form-group row">
 								<div class="col-sm-4">
-									<input class="form-control" type="file" name="fileexcel" id="fileexcel"
-										accept=".csv, application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet">
+									<input class="form-control" type="file" name="fileexcel" id="fileexcel" accept=".csv, application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet">
 								</div>
 								<div class="col-sm-3">
 									<button type="submit" name="upload" class="btn btn-success">
 										<i class="fa-solid fa-file-excel">&nbsp;</i>Import file
 									</button>
 								</div>
-								<br>
-								<label style="color: green; text-align: left; ">${msg}</label>
+								<br> <label style="color: green; text-align: left;">${msg}</label>
 							</div>
 						</form>
 					</div>
-                <div class="mt-3">
-                    <button class="button btn-navigate-form-step" type="button" step_number="2">ต่อไป</button>
-                </div>
-            </section>
-            <!-- Step 2 Content, default hidden on page load. -->
-            <section id="step-2" class="form-step d-none">      
-                <form action="searchproject" method="post" class="row g-3">
+					<div class="mt-3">
+						<button class="button btn-navigate-form-step" type="button" step_number="2">ต่อไป</button>
+					</div>
+				</section>
+				<!-- Step 2 Content, default hidden on page load. -->
+				<section id="step-2" class="form-step d-none">
+					<form action="searchproject" method="post" class="row g-3">
 						<div class="col-auto">
-							<h2 class="font-normal">ขั้นตอนที่ 2 : รายการโครงงานวิทยาศาสตร์</h2>
+							<h2 class="font-normal">ขั้นตอนที่ 2 :
+								รายการโครงงานวิทยาศาสตร์</h2>
 						</div>
 						<div class="col-auto text-center" style="margin-left: 25%;">
 							<input type="text" class="form-control" name="keyword" value="<%=keyword%>" placeholder="ค้นหาโครงงานวิทยาศาสตร์....." title="Projects">
 						</div>
 						<div class="col-auto text-left">
-							<button type="submit" class="btn btn-success"><i class="fa fa-search">&nbsp;</i>ค้นหา</button>
+							<button type="submit" class="btn btn-success">
+								<i class="fa fa-search">&nbsp;</i>ค้นหา
+							</button>
 						</div>
 					</form>
-                <!-- Step 2 input fields -->
-                <div class="mt-3">
-                    <h6 style="color : red">ชี้แจ้ง : กรุณาอัปโหลดข้อมูลไฟล์ Excel เป็นนามสกุล .xlsx..</h6>
-                    <br>
+					<!-- Step 2 input fields -->
+					<div class="mt-3">
+						<h6 style="color: red">ชี้แจ้ง : กรุณาอัปโหลดข้อมูลไฟล์ Excel
+							เป็นนามสกุล .xlsx..</h6>
+						<br>
 						<%
 							if (listsproject.size() != 0) {
 						%>
@@ -234,8 +175,9 @@
 								<tr>
 									<td><%=project.getProject_id()%></td>
 									<td><%=project.getProjectname()%></td>
-									<td align="center"><a href="ViewStudentProjectDetail?project_id=<%=project.getProject_id()%>">
-											<button type="button"  class="btn btn-warning">
+									<td align="center"><a
+										href="ViewStudentProjectDetail?project_id=<%=project.getProject_id()%>">
+											<button type="button" class="btn btn-warning">
 												<i class="fa fa-eye"></i>
 											</button>
 									</a></td>
@@ -244,17 +186,18 @@
 									}
 								%>
 								<%
-									} 
+									}
 								%>
 							</tbody>
 						</table>
 					</div>
-                <div class="mt-3">
-                    <button class="button btn-navigate-form-step" type="button" step_number="1">ย้อนกลับ</button>
-                </div>
-            </section>
-            <!-- Step 3 Content, default hidden on page load. -->
-           <!--  <section id="step-3" class="form-step d-none">
+					<div class="mt-3">
+						<button class="button btn-navigate-form-step" type="button"
+							step_number="1">ย้อนกลับ</button>
+					</div>
+				</section>
+				<!-- Step 3 Content, default hidden on page load. -->
+				<!--  <section id="step-3" class="form-step d-none">
                 <h2 class="font-normal">ขั้นตอนที่ 3 : บันทึกข้อมูลโครงงานวิทยาศาสตร์</h2>
                 Step 3 input fields
                 <div class="mt-3">
@@ -265,9 +208,9 @@
                     <button class="button submit-btn" type="submit">บันทึก</button>
                 </div>
             </section>  -->
-       <!--  </form> -->
-    </div>
-</div>
+				<!--  </form> -->
+			</div>
+		</div>
 	</div>
 
 	<jsp:include page="common/footer.jsp"></jsp:include>

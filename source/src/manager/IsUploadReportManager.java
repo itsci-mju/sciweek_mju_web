@@ -158,7 +158,7 @@ public class IsUploadReportManager {
 		return listsproject;
 	}
 	
-	public boolean isDeleteUpload(String report_id) {
+	public boolean isDeleteUpload(Integer report_id) {
 		ConnectionDB condb = new ConnectionDB();
 		Connection con = condb.getConnection();
 
@@ -166,7 +166,7 @@ public class IsUploadReportManager {
 	
 			try {
 				CallableStatement stmt = con.prepareCall("{call isDeleteUpload(?)}");
-				stmt.setString(1, report_id);
+				stmt.setInt(1, report_id);
 				stmt.execute();
 				result = true;
 				con.close();

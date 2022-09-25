@@ -7,6 +7,7 @@
 	List<Reviewer> listreviewer = new Vector<>();
 	List<Team> teamList = new Vector<>();
 	List<Project> listproject = new Vector<>();
+	List<ProjectType> projectTypeList = new Vector<>();
 
 	try {
 		admin = (Admin) session.getAttribute("admin");
@@ -55,9 +56,9 @@
 </head>
 <script type="text/javascript">
 function validateForm(choosegroup) {
-		
+	var select = document.getElementById("team_name");
 // choosegroup
-	if (choosegroup.projecttype_id.value == "") {
+	if (select == "") {
 		alert("<!-- กรุณาเลือกกลุ่ม --> ");
 		return false;
 	}
@@ -114,7 +115,7 @@ function validateForm(choosegroup) {
 				<!--    <form id="userAccountSetupForm" name="userAccountSetupForm" enctype="multipart/form-data" method="POST"> -->
 				<!-- Step 1 Content -->
 				<section id="step-1" class="form-step">
-					<h2 class="font-normal">-ขั้นตอนที่ 1 : นำเข้าข้อมูลคณะกรรมการ</h2>
+					<h2 class="font-normal">ขั้นตอนที่ 1 : นำเข้าข้อมูลคณะกรรมการ</h2>
 					<!-- Step 1 input fields -->
 					<div class="mt-3">
 						<h6 style="color: red">ชี้แจ้ง : กรุณาอัปโหลดข้อมูลไฟล์ Excel เป็นนามสกุล .xlsx..</h6>
@@ -171,7 +172,7 @@ function validateForm(choosegroup) {
 					<br>
 					<div class="mt-3">
 						<a class="button btn-navigate-form-step" type="button" step_number="1" style="text-decoration: none;">กลับ</a>				
-						<a class="button btn-navigate-form-step" type="button" OnClick ="return validateForm(choosegroup)" step_number="3" >ต่อไป</a>
+						<a class="button btn-navigate-form-step" type="button" OnClick ="return validateForm(choosegroup)" step_number="3" style="text-decoration: none;">ต่อไป</a>
 					</div>					
 				</section>
 				<!-- Step 3 Content, default hidden on page load. -->
@@ -179,7 +180,7 @@ function validateForm(choosegroup) {
 					<h2 class="font-normal">ขั้นตอนที่ 3 : เลือกคณะกรรมการ</h2>
 					<!-- Step 3 input fields -->
 					<div class="mt-3">
-						<h6 style="color: red">Please, Import Excel file with .xlsx file extension..</h6>
+						<h6 style="color: red">ชี้แจ้ง : กรุณาเลือกประธานคณะกรรมการ และคณะกรรมการ..</h6>
 					</div>
 					<br>
 					<div class="container">
@@ -264,8 +265,8 @@ function validateForm(choosegroup) {
 								<td><a href="ViewReviewerDetail?reviewer_id=<%=listreviewer.get(i).getReviewer_id()%>" class="btn btn-warning"> <i class="fa fa-eye" aria-hidden="true"></i> </a></td>
 							</tr>
 							<%
-								}
 									}
+								}
 							%>
 							<%
 								} else {
@@ -281,7 +282,7 @@ function validateForm(choosegroup) {
 					<br>
 					<div class="mt-3">
 						<a class="button btn-navigate-form-step" type="button" step_number="2" style="text-decoration: none;">กลับ</a>	
-						<a class="button btn-navigate-form-step" type="button" step_number="4">ต่อไป</a>
+						<a class="button btn-navigate-form-step" type="button" step_number="4" style="text-decoration: none;"> ต่อไป</a>
 					</div>
 				</section>
 				<!-- Step 4 Content, default hidden on page load. -->
@@ -310,7 +311,8 @@ function validateForm(choosegroup) {
 											if (listproject.size() != 0) {
 										%>
 										<%
-											for (int i = 0 ; i < listproject.size() ; i++) {												
+											for (int i = 0 ; i < listproject.size() ; i++) {		
+												if (listproject.get(i).getTeam().getTeam_id() == 0 ) {
 										%>
 										<tr>
 											<td align="center"><input type="checkbox" id="chkproject" name="chkproject" value="<%=listproject.get(i).getProject_id()%>"></td>
@@ -318,6 +320,7 @@ function validateForm(choosegroup) {
 											<td><%=listproject.get(i).getProjectname()%></td>										
 										</tr>
 										<%
+												}
 											}
 										%>
 										<%

@@ -170,7 +170,7 @@
 <body style="background-image: url('./image/hero-bg.png')">
 
 	<jsp:include page="common/navbar.jsp"></jsp:include>
-
+	
 	<div style="margin-top: 5px;">
 		<section id="content">
 				<div class="row">

@@ -82,13 +82,11 @@
 			<nav class="navbar navbar-expand-sm navbar-dark container">
 				<ul class="navbar-nav">
 					<li class="nav-item active"><a href="index" class="nav-link"><span style="color: white;"><i class="fa fa-home">&nbsp;</i>หน้าแรก</span></a></li>
-					<li class="nav-item  active"><a href="doListProject" class="nav-link"><span style="color: white;"><i class="fa fa-th-list">&nbsp;</i>รายการโครงงานวิทยาศาสตร์</span></a></li>
-					<li class="nav-item active"><a href="doViewResult" class="nav-link"><span style="color: white;"><i class="fa-solid fa-trophy">&nbsp;</i>รางวัล</span></a></li>	
+					<li class="nav-item  active"><a href="doListProject" class="nav-link"><span style="color: white;"><i class="fa fa-th-list">&nbsp;</i>รายการโครงงานวิทยาศาสตร์</span></a></li>	
 				</ul>
 				<div class="navbar-nav ml-auto">
 					<div class="hidden-lg hidden-md hidden-sm">
-						<div style="height: 40px; line-height: 40px; text-align: left">
-						
+						<div style="height: 40px; line-height: 40px; text-align: left">					
 						</div>
 					</div>
 				</div>
@@ -100,7 +98,7 @@
 						<div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
 							<a class="dropdown-item" href="getEditProfileStudent"><span style="color: black;"><i class="fa fa-address-card">&nbsp;</i>ข้อมูลส่วนตัว</span></a>
 							<a class="dropdown-item" href="verifylogout"><span style="color: black;"><i class="fa fa-sign-out">&nbsp;</i>ออกจากระบบ</span></a>
-						</div>
+						</div>				
 					</li>							
 				</ul>			
 			</nav>
@@ -116,7 +114,7 @@
 			<nav class="navbar navbar-expand-sm navbar-dark container">
 				<ul class="nav navbar-nav pull-center">		
 					<li class="nav-item  active"><a href="doListScienceProject" class="nav-link"><span style="color: white;"><i class="fa fa-pencil-square-o">&nbsp;</i>ประเมินโครงงานวิทยาศาสตร์</span></a></li>
-					<li class="nav-item  active"><a href="SummaryReviews" class="nav-link"><span style="color: white;"><i class="fas fa-poll">&nbsp;</i>ผลการประเมินโครงงาน</span></a></li>
+					<li class="nav-item  active"><a href="SummaryResult" class="nav-link"><span style="color: white;"><i class="fas fa-poll">&nbsp;</i>ผลการประเมินโครงงาน</span></a></li>
 					<li class="nav-item  active"><a href="SummaryOfReviews" class="nav-link"><span style="color: white;"><i class="fas fa-poll-h">&nbsp;</i>สรุปผลรวมการประเมินโครงงาน</span></a></li>
 				</ul>
 				<div class="navbar-nav ml-auto">

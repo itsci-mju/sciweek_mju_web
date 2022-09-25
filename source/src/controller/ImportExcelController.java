@@ -136,6 +136,7 @@ public class ImportExcelController {
 							project.setVideo(video);
 							project.setAward(award);
 							project.setAvgscore(avgscore);
+							project.setState_project(1);
 							project.setProjecttype(projecttype);
 														
 							School schoolTemp = importExcelManager.getSchoolByID(school_id);

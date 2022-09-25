@@ -44,179 +44,194 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <link href='https://fonts.googleapis.com/css?family=Kanit' rel='stylesheet' type='text/css'>
 <link rel="stylesheet" href="./css/web_css.css">
+<link rel="stylesheet" href="./css/multi_step_form.css">
 </head>
-<script type="text/javascript">
-	
-</script>
 <body style="background-image: url('./image/hero-bg.png')">
 	<%	
 		String video = null ;
 		String readonly = null;
-		String disabled = null;
-		String award = null;
-		
-		if (sproject.getProject().getAward().equals("-") || sproject.getProject().getAvgscore() == 0) {
-			award = "ยังไม่มีรางวัล" ;
-		} else { 
-			award = sproject.getProject().getAward() ;
-		}
-
+		String disabled = null;	
+	
 		if (sproject.getProject().getVideo().equals("-")) {
-			video = "***กรุณาอัปโหลดวิดีโอ***" ;
-			readonly = null ;
-			disabled = null ;
+			video = "กรุณาอัปโหลดวิดีโอ" ;
+			readonly = "" ;
+			disabled = "" ;
 		} else {
+			video = sproject.getProject().getVideo();
 			readonly = "readonly" ;
-			disabled = "disabled" ;
-			
+			disabled = "disabled" ;	
 		}
+		
 	%>
 	<jsp:include page="common/navbar.jsp"></jsp:include>
-	
+					
 	<div class="container" style="margin-top: 35px;">
 		<form action="UploadReport" method="POST" enctype="multipart/form-data" >
-			<section id="content">
-				<div class="container" style="margin-top: 35px">
-					<div class="row">
-						<div class="col-lg-12">
-							<div class="container">
-								<h3><i class="fa-solid fa-clipboard">&nbsp;</i>ข้อมูลโครงงานวิทยาศาสตร์</h3>
-								<hr class="colorgraph">
-								<h5>ข้อมูล</h5>
-								<br>
-								
-								<div class="form-group row">
-									<label class="col-sm-3 col-form-label text-right">รหัสโครงงานวิทยาศาสตร์</label>
-									<div class="col-sm-2">
-										<input type="text" name="project_id" id="project_id" class="form-control data" value="<%=sproject.getProject().getProject_id()%>" readonly>
-									</div>
-								</div>
-								
-								<div class="form-group row">
-									<label class="col-sm-3 col-form-label text-right">ชื่อโครงงานวิทยาศาสตร์</label>
-									<div class="col-sm-8">
-										<input type="text" name="projectname" id="projectname" class="form-control data" value="<%=sproject.getProject().getProjectname()%>" readonly>
-									</div>
-								</div>
-								
-								<div class="form-group row">
-									<label class="col-sm-3 col-form-label text-right">ประเภทโครงงานวิทยาศาสตร์</label>
-									<div class="col-sm-3">
-										<input type="text" name="type_name" id="type_name" class="form-control data" value="<%=sproject.getProject().getProjecttype().getProjecttype_name()%>" readonly>
-									</div>									
-								</div>	
-
-								<div class="form-group row">
-									<label class="col-sm-2 col-form-label text-right">ลิงก์วีดิโอ</label>
-									<div class="col-sm-6">															
-										<input type="text" name="filevideo" id="filevideo" class="form-control data" value="<%=video%>"  <%=readonly%>>
-										<label style="color: red; text-align: center; ">ตัวอย่างลิงก์ *** https://www.youtube.com/embed/XXX ***</label>																																													
-									</div>																																																																																
-								</div>
-
-								<div class="form-group row">
-									<label class="col-sm-2 col-form-label text-right">เอกสารรายงาน</label>
-									<div class="col-sm-10">
-										<input type="file" name="filereport"  id="filereport" class="dropzone" accept=".pdf" class="form-control data" <%=disabled%>>	
-										<label style="color: red; text-align: center; ">*** อัปโหลดเป็นนามสกุลไฟล์ .PDF ***</label>																																													
-									</div>
-								</div>
-												
-								<div class="form-group row">						
-									<label class="col-sm-2 col-form-label text-right">รางวัล</label>
-									<div class="col-sm-3">
-										<input type="text" name="award" id="award" class="form-control data" value="<%=award%>" readonly>
-									</div>
-								</div>
-							
-								<%
-									for (int i = 0; i < listsproject.size(); i++) {
-								%>
-								<h5>นักเรียนคนที่&nbsp;<%=i + 1%></h5>
-							<hr class="colorgraph">
+		<div>
+			<h1><i class="fa-solid fa-cloud-arrow-up">&nbsp;</i>อัปโหลดเอกสาร</h1>
+			<div id="multi-step-form-container">
+				<!-- Form Steps / Progress Bar -->
+				<ul class="form-stepper form-stepper-horizontal text-center mx-auto pl-0">
+					<!-- Step 1 -->
+					<li class="form-stepper-active text-center form-stepper-list" step="1">
+						<a class="mx-2"> 
+							<span class="form-stepper-circle"> 
+								<span>1</span>
+							</span>
+							<div class="label">อัปโหลดลิงค์วิดีโอ</div>
+						</a>
+					</li>
+					<!-- Step 2 -->
+					<li class="form-stepper-unfinished text-center form-stepper-list" step="2">
+						<a class="mx-2"> 
+							<span class="form-stepper-circle text-muted"> 
+								<span>2</span>
+							</span>
+							<div class="label text-muted">อัปโหลดเอกสารรายงาน</div>
+						</a>
+					</li>
+					<!-- Step 3 -->
+					<!-- <li class="form-stepper-unfinished text-center form-stepper-list"
+						step="3"><a class="mx-2"> <span
+							class="form-stepper-circle text-muted"> <span>3</span>
+						</span>
+							<div class="label text-muted">ข้อมูลรายละเอียดโครงงานวิทยาศาสตร์</div>
+						</a>
+					</li> -->
+				</ul>
+				<!-- Step Wise Form Content -->
+				<!-- Step 1 Content -->
+				<section id="step-1" class="form-step">
+					<h2 class="font-normal">ขั้นตอนที่ 1 : อัปโหลดลิงค์วิดีโอ</h2>
+					<!-- Step 1 input fields -->
+					<div class="mt-3">
+						<h6 style="color: red">ชี้แจ้ง : ตัวอย่างลิงก์ https://www.youtube.com/embed/XXX..</h6>						
 							<div class="form-group row">
-								<label class="col-sm-2 col-form-label text-right">ชื่อ - นามสกุล</label>
 								<div class="col-sm-4">
-									<input type="text" name="fullname" id="fullname" class="form-control data" value="<%=listsproject.get(i).getStudent().getPrefix() +" "+ listsproject.get(i).getStudent().getFirstname() +" "+ listsproject.get(i).getStudent().getLastname()%>" readonly>
-								</div>
-								<input type="hidden" name="prefix" id="prefix" class="form-control data" value="<%=listsproject.get(i).getStudent().getPrefix()%>" readonly>
-								<input type="hidden" name="firstname" id="firstname" class="form-control data" value="<%=listsproject.get(i).getStudent().getFirstname()%>" readonly>
-								<input type="hidden" name="lastname" id="lastname" class="form-control data" value="<%=listsproject.get(i).getStudent().getLastname()%>" readonly>
-							</div>
-
-							<div class="form-group row">
-							<label class="col-sm-2 col-form-label text-right">อีเมล</label>
-								<div class="col-sm-3">
-									<input type="text" name="email" id="email"
-										class="form-control data"
-										value="<%=listsproject.get(i).getStudent().getEmail()%>" readonly>
-								</div>
-								<label class="col-sm-2 col-form-label text-right">เบอร์โทรศัพท์</label>
-								<div class="col-sm-3">
-									<input type="text" name="mobileno" id="mobileno"
-										class="form-control data"
-										value="<%=listsproject.get(i).getStudent().getMobileno()%>"
-										readonly>
-								</div>
-							</div>
-
-							<div class="form-group row">
-								<label class="col-sm-2 col-form-label text-right">ระดับชั้น</label>
-								<div class="col-sm-3">
-									<input type="text" name="grade" id="grade"
-										class="form-control data"
-										value="<%=listsproject.get(i).getStudent().getGrade()%>"
-										readonly>
-								</div>
-								<label class="col-sm-2 col-form-label text-right">โรงเรียน</label>
-								<div class="col-sm-4">
-									<input type="text" name="school_name" id="school_name"
-										class="form-control data"
-										value="<%=listsproject.get(i).getStudent().getSchool().getSchool_name()%>"
-										readonly>
-								</div>
-							</div>
-							<br>	
-							<%
-									}
-							%>
-								<h5>อาจารย์ที่ปรึกษา</h5>
-								<hr class="colorgraph">
-								
-								<div class="form-group row">
-									<label class="col-sm-2 col-form-label text-right">คำนำหน้าชื่อ</label>
-										<div class="col-sm-2">
-											<input type="text" name="prefixad" id="prefixad" class="form-control data" value="<%=sproject.getAdvisor().getPrefix()%>" readonly>
-										</div>								
+									<label style="color: green; text-align: left;">${msg}</label>
+									<input type="hidden" name="project_id" id="project_id" class="form-control data" value="<%=sproject.getProject().getProject_id()%>">
+									<input type="text" name="filevideo" id="filevideo" class="form-control data" value="<%=video%>">
 								</div>
 								
-								<div class="form-group row">
-									<label class="col-sm-2 col-form-label text-right">ชื่อ</label>
-										<div class="col-sm-3">
-											<input type="text" name="firstnamead" id="firstnamead" class="form-control data" value="<%=sproject.getAdvisor().getFirstname()%>" readonly>
-										</div>	
-									<label class="col-sm-2 col-form-label text-right">นามสกุล</label>
-										<div class="col-sm-3">
-											<input type="text" name="lastnamead" id="lastnamead" class="form-control data" value="<%=sproject.getAdvisor().getLastname()%>" readonly>
-										</div>								
-								</div>
-								<br>	
 								<br>
-								<div class="form-group row">
-									<div class="col-sm-12 text-center">										
-										<button type="submit" class="btn btn-success">บันทึกข้อมูล</button>
-										<a href="index" class="btn btn-danger" role="button">ยกเลิก</a>
-									</div>
-								</div>									
 							</div>
-						</div>
 					</div>
-				</div>
-			</section>
+					<div class="mt-3">
+						<a class="button btn-navigate-form-step" type="button" step_number="2" style="text-decoration: none;">ต่อไป</a>
+					</div>
+				</section>
+				<!-- Step 2 Content, default hidden on page load. -->
+				<section id="step-2" class="form-step d-none">
+					<h2 class="font-normal">ขั้นตอนที่ 2 : อัปโหลดเอกสารรายงาน</h2>
+					<!-- Step 2 input fields -->
+					<div class="mt-3">
+						<h6 style="color: red">ชี้แจ้ง : กรุณาอัปโหลดข้อมูลไฟล์รายงานเป็นนามสกุล .pdf..</h6>
+						<br>
+						<div class="form-group row">
+								<div class="col-sm-4">
+									<input class="form-control" type="file" name="filepdf" id="filepdf" accept=".pdf">
+								</div>
+								<br> <label style="color: green; text-align: left;">${msg}</label>
+							</div>
+					</div>
+					<div class="mt-3">
+						<a class="button btn-navigate-form-step" type="button" step_number="1" style="text-decoration: none;">ย้อนกลับ</a>
+						<button class="button submit-btn" type="submit">บันทึก</button>
+					</div>
+				</section>
+				<!-- Step 3 Content, default hidden on page load. -->
+				<!--  <section id="step-3" class="form-step d-none">
+                <h2 class="font-normal">ขั้นตอนที่ 3 : บันทึกข้อมูลโครงงานวิทยาศาสตร์</h2>
+                Step 3 input fields
+                <div class="mt-3">
+                    
+                </div>
+                <div class="mt-3">
+                    <button class="button btn-navigate-form-step" type="button" step_number="2">กลับ</button>
+                    <button class="button submit-btn" type="submit">บันทึก</button>
+                </div>
+            </section>  -->
+			</div>
+		</div>
 		</form>
 	</div>
-	
+
 	<jsp:include page="common/footer.jsp"></jsp:include>
+	
+	<script type="text/javascript">
+	/**
+	 * Define a function to navigate betweens form steps.
+	 * It accepts one parameter. That is - step number.
+	 */
+	const navigateToFormStep = (stepNumber) => {
+	    /**
+	     * Hide all form steps.
+	     */
+	    document.querySelectorAll(".form-step").forEach((formStepElement) => {
+	        formStepElement.classList.add("d-none");
+	    });
+	    /**
+	     * Mark all form steps as unfinished.
+	     */
+	    document.querySelectorAll(".form-stepper-list").forEach((formStepHeader) => {
+	        formStepHeader.classList.add("form-stepper-unfinished");
+	        formStepHeader.classList.remove("form-stepper-active", "form-stepper-completed");
+	    });
+	    /**
+	     * Show the current form step (as passed to the function).
+	     */
+	    document.querySelector("#step-" + stepNumber).classList.remove("d-none");
+	    /**
+	     * Select the form step circle (progress bar).
+	     */
+	    const formStepCircle = document.querySelector('li[step="' + stepNumber + '"]');
+	    /**
+	     * Mark the current form step as active.
+	     */
+	    formStepCircle.classList.remove("form-stepper-unfinished", "form-stepper-completed");
+	    formStepCircle.classList.add("form-stepper-active");
+	    /**
+	     * Loop through each form step circles.
+	     * This loop will continue up to the current step number.
+	     * Example: If the current step is 3,
+	     * then the loop will perform operations for step 1 and 2.
+	     */
+	    for (let index = 0; index < stepNumber; index++) {
+	        /**
+	         * Select the form step circle (progress bar).
+	         */
+	        const formStepCircle = document.querySelector('li[step="' + index + '"]');
+	        /**
+	         * Check if the element exist. If yes, then proceed.
+	         */
+	        if (formStepCircle) {
+	            /**
+	             * Mark the form step as completed.
+	             */
+	            formStepCircle.classList.remove("form-stepper-unfinished", "form-stepper-active");
+	            formStepCircle.classList.add("form-stepper-completed");
+	        }
+	    }
+	};
+	/**
+	 * Select all form navigation buttons, and loop through them.
+	 */
+	document.querySelectorAll(".btn-navigate-form-step").forEach((formNavigationBtn) => {
+	    /**
+	     * Add a click event listener to the button.
+	     */
+	    formNavigationBtn.addEventListener("click", () => {
+	        /**
+	         * Get the value of the step.
+	         */
+	        const stepNumber = parseInt(formNavigationBtn.getAttribute("step_number"));
+	        /**
+	         * Call the function to navigate to the target form step.
+	         */
+	        navigateToFormStep(stepNumber);
+	    });
+	});
+	</script>
 
 </body>
 </html>

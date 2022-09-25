@@ -12,7 +12,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
+import manager.AssignProjectManager;
+import manager.AssignReviewerManager;
 import manager.CreateTeamManager;
+import manager.ListTeamManager;
 import manager.ViewTeamDetailManager;
 import util.ConnectionDB;
 import bean.Admin;
@@ -50,47 +53,45 @@ public class CreateTeamController {
 		
 		request.setCharacterEncoding("UTF-8");
 		CreateTeamManager createTeamManager = new CreateTeamManager();
-		ViewTeamDetailManager viewTeamDetailManager = new ViewTeamDetailManager();		
+		AssignReviewerManager assignReviewerManager = new AssignReviewerManager();
+		AssignProjectManager assignProjectManager = new AssignProjectManager();
 
 		Team team = new Team();	
 		team.setTeam_id(createTeamManager.getMaxTeam());
 		team.setTeam_name(request.getParameter("team_name"));
 		
+		createTeamManager.isCreateTeam(team);		
+		
 		String[] reviewerIdStrList = request.getParameterValues("chkreviewer");
-
-		if (reviewerIdStrList != null && team.getTeam_name() != null) {
 			for (String reviewerIdstr : reviewerIdStrList) {
+				
 				int reviewer_id = Integer.parseInt(reviewerIdstr);
-
 				Reviewer reviewer = new Reviewer();
 				reviewer.setReviewer_id(reviewer_id);
 				reviewer.setTeam(team);
-
-			}
-			conn.close();
-			List<Project> listproject = viewTeamDetailManager.getListProject();
-			ModelAndView mav = new ModelAndView("AssignProject");
-			mav.addObject("team", team);
-			mav.addObject("reviewerIdStrList", reviewerIdStrList);
-			mav.addObject("listproject", listproject);
-			return mav;	
-		} else if (reviewerIdStrList == null || team.getTeam_name() != null){
-			team.setTeam_id(Integer.parseInt(request.getParameter("team_id")));
-			team.setTeam_name(request.getParameter("team_name"));
-			List<Reviewer> listreviewer = viewTeamDetailManager.getListReviewer();
-			ModelAndView mav = new ModelAndView("CreateTeam");
-			mav.addObject("msg", "กรุณาเลือกประธานคณะกรรมการและคณะกรรมการ!!!!");
-			mav.addObject("team", team);
-			mav.addObject("listreviewer", listreviewer);
-			return mav;			
-		} else {		
-			List<Reviewer> listreviewer = viewTeamDetailManager.getListReviewer();			
-			ModelAndView mav = new ModelAndView("CreateTeam");
-			mav.addObject("msg", "**กรุณาเลือกกลุ่ม**");
-			mav.addObject("listreviewer", listreviewer);
-			return mav;
+				
+				assignReviewerManager.isAssignReviewer(reviewer, conn);
 		}
 		
+		String[] projectIdStrList = request.getParameterValues("chkproject");
+			for (String projectIdstr : projectIdStrList) {
+				
+					String project_id = projectIdstr;
+					Project project = new Project();
+					project.setProject_id(project_id);
+					project.setTeam(team);
+
+					assignProjectManager.isAssignProject(project, conn);
+
+			}
+			
+			conn.close();
+			
+			ListTeamManager vtem = new ListTeamManager();
+			List<Team> teamList = vtem.getListTeam();
+			ModelAndView mav = new ModelAndView("ListTeam");
+			mav.addObject("teamList", teamList);
+			return mav;
 	}
 	
 }

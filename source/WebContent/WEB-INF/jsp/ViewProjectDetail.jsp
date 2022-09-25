@@ -53,23 +53,18 @@
 </head>
 <%	
 		String video = null ;
-		String readonly = null;
-		String disabled = null;
 		String award = null;
 		
-		if (studentProject.getProject().getAward().equals("-") || studentProject.getProject().getAvgscore() == 0) {
+		if (studentProject.getProject().getAward().equals("-") && studentProject.getProject().getAward().equals("ยังไม่มีรางวัล") && studentProject.getProject().getAvgscore() == 0) {
 			award = "ยังไม่มีรางวัล" ;
 		} else { 
 			award = studentProject.getProject().getAward() ;
 		}
 
 		if (studentProject.getProject().getVideo().equals("-")) {
-			readonly = "readonly" ;
-			disabled = "disabled" ;
+			video = "กรุณาอัปโหลดวิดีโอ" ;
 		} else {
-			readonly = null ;
-			disabled = null ;
-			
+			video = studentProject.getProject().getVideo();
 		}
 	%>
 <body style="background-image: url('./image/hero-bg.png')">
@@ -89,33 +84,28 @@
 							<div class="form-group row">
 								<label class="col-sm-3 col-form-label text-right">รหัสโครงงานวิทยาศาสตร์</label>
 								<div class="col-sm-2">
-									<input type="text" name="project_id" id="project_id"
-										class="form-control data"
-										value="<%=studentProject.getProject().getProject_id()%>" readonly>
+									<input type="text" name="project_id" id="project_id" class="form-control data" value="<%=studentProject.getProject().getProject_id()%>" style="background-color: white" readonly>
 								</div>
 							</div>
 
 							<div class="form-group row">
 								<label class="col-sm-3 col-form-label text-right">ชื่อโครงงานวิทยาศาสตร์</label>
 								<div class="col-sm-8">
-									<input type="text" name="projectname" id="projectname" class="form-control data" value="<%=studentProject.getProject().getProjectname()%>" readonly>
+									<input type="text" name="projectname" id="projectname" class="form-control data" value="<%=studentProject.getProject().getProjectname()%>" style="background-color: white" readonly>
 								</div>
 							</div>
 
 							<div class="form-group row">
 								<label class="col-sm-3 col-form-label text-right">ประเภทโครงงานวิทยาศาสตร์</label>
 								<div class="col-sm-4">
-									<input type="text" name="type_name" id="type_name"
-										class="form-control data"
-										value="<%=studentProject.getProject().getProjecttype().getProjecttype_name()%>"
-										readonly>
+									<input type="text" name="projecttype_name" id="projecttype_name" class="form-control data" value="<%=studentProject.getProject().getProjecttype().getProjecttype_name()%>" style="background-color: white" readonly>
 								</div>
 							</div>
 
 							<div class="form-group row">
 								<label class="col-sm-2 col-form-label text-right">วีดิโอ</label>
 								<div class="col-sm-6">
-									<button name="button" class="btn btn-link"  onclick="window.location.href='<%=studentProject.getProject().getVideo()%>';" <%=disabled%>>
+									<button name="button" class="btn btn-link"  onclick="window.location.href='<%=studentProject.getProject().getVideo()%>';">
 										<i class="fa fa-file-video-o">&nbsp;&nbsp;</i>วิดีโอ
 									</button>											
 								</div>
@@ -124,7 +114,7 @@
 							<div class="form-group row">
 								<label class="col-sm-2 col-form-label text-right">เอกสารรายงาน</label>
 								<div class="col-sm-6">
-									<button name="button" class="btn btn-link"  onclick="window.location.href='./report/<%=report.getReportname()%>.pdf';" <%=disabled%>>
+									<button name="button" class="btn btn-link"  onclick="window.location.href='./report/<%=report.getReportname()%>.pdf';" >
 										<i class="fa-solid fa-file-pdf">&nbsp;&nbsp;</i>เอกสารรายงาน
 									</button>
 								</div>
@@ -133,7 +123,11 @@
 							<div class="form-group row">						
 								<label class="col-sm-2 col-form-label text-right">รางวัล</label>
 								<div class="col-sm-3">
-									<input type="text" name="award" id="award" class="form-control data" value="<%=award%>" readonly>
+									<input type="text" name="award" id="award" class="form-control data" value="<%=award%>" style="background-color: white" readonly>
+								</div>
+								<label class="col-sm-2 col-form-label text-right">คะแนน</label>
+								<div class="col-sm-1">
+									<input type="text" name="avgscore" id="avgscore" class="form-control data" value="<%=studentProject.getProject().getAvgscore()%>" style="background-color: white" readonly>
 								</div>
 							</div>
 
@@ -146,7 +140,7 @@
 							<div class="form-group row">
 								<label class="col-sm-2 col-form-label text-right">ชื่อ - นามสกุล</label>
 								<div class="col-sm-4">
-									<input type="text" name="fullname" id="fullname" class="form-control data" value="<%=listsproject.get(i).getStudent().getPrefix() +" "+ listsproject.get(i).getStudent().getFirstname() +" "+ listsproject.get(i).getStudent().getLastname()%>" readonly>
+									<input type="text" name="fullname" id="fullname" class="form-control data" value="<%=listsproject.get(i).getStudent().getPrefix() +" "+ listsproject.get(i).getStudent().getFirstname() +" "+ listsproject.get(i).getStudent().getLastname()%>" style="background-color: white"  readonly>
 								</div>
 								<input type="hidden" name="prefix" id="prefix" class="form-control data" value="<%=listsproject.get(i).getStudent().getPrefix()%>" readonly>
 								<input type="hidden" name="firstname" id="firstname" class="form-control data" value="<%=listsproject.get(i).getStudent().getFirstname()%>" readonly>
@@ -156,33 +150,22 @@
 							<div class="form-group row">
 							<label class="col-sm-2 col-form-label text-right">อีเมล</label>
 								<div class="col-sm-3">
-									<input type="text" name="email" id="email"
-										class="form-control data"
-										value="<%=listsproject.get(i).getStudent().getEmail()%>" readonly>
+									<input type="text" name="email" id="email" class="form-control data" value="<%=listsproject.get(i).getStudent().getEmail()%>" style="background-color: white" readonly>
 								</div>
 								<label class="col-sm-2 col-form-label text-right">เบอร์โทรศัพท์</label>
 								<div class="col-sm-3">
-									<input type="text" name="mobileno" id="mobileno"
-										class="form-control data"
-										value="<%=listsproject.get(i).getStudent().getMobileno()%>"
-										readonly>
+									<input type="text" name="mobileno" id="mobileno" class="form-control data" value="<%=listsproject.get(i).getStudent().getMobileno()%>" style="background-color: white" readonly>
 								</div>
 							</div>
 
 							<div class="form-group row">
 								<label class="col-sm-2 col-form-label text-right">ระดับชั้น</label>
 								<div class="col-sm-3">
-									<input type="text" name="grade" id="grade"
-										class="form-control data"
-										value="<%=listsproject.get(i).getStudent().getGrade()%>"
-										readonly>
+									<input type="text" name="grade" id="grade" class="form-control data" value="<%=listsproject.get(i).getStudent().getGrade()%>" style="background-color: white"  readonly>
 								</div>
 								<label class="col-sm-2 col-form-label text-right">โรงเรียน</label>
 								<div class="col-sm-4">
-									<input type="text" name="school_name" id="school_name"
-										class="form-control data"
-										value="<%=listsproject.get(i).getStudent().getSchool().getSchool_name()%>"
-										readonly>
+									<input type="text" name="school_name" id="school_name" class="form-control data" value="<%=listsproject.get(i).getStudent().getSchool().getSchool_name()%>" style="background-color: white"  readonly>
 								</div>
 							</div>
 							<br>
@@ -197,7 +180,7 @@
 							<div class="form-group row">
 								<label class="col-sm-2 col-form-label text-right">ชื่อ - นามสกุล</label>
 								<div class="col-sm-4">
-									<input type="text" name="fullnamead" id="fullnamead" class="form-control data" value="<%=studentProject.getAdvisor().getPrefix() +" "+ studentProject.getAdvisor().getFirstname() +" "+  studentProject.getAdvisor().getLastname()%>" readonly>							
+									<input type="text" name="fullnamead" id="fullnamead" class="form-control data" value="<%=studentProject.getAdvisor().getPrefix() +" "+ studentProject.getAdvisor().getFirstname() +" "+  studentProject.getAdvisor().getLastname()%>"  style="background-color: white" readonly>							
 								</div>
 								<input type="hidden" name="prefixad" id="prefixad" class="form-control data" value="<%=studentProject.getAdvisor().getPrefix()%>" readonly>
 								<input type="hidden" name="firstnamead" id="firstnamead" class="form-control data" value="<%=studentProject.getAdvisor().getFirstname()%>" readonly>
@@ -207,15 +190,11 @@
 							<div class="form-group row">
 								<label class="col-sm-2 col-form-label text-right">อีเมล</label>
 								<div class="col-sm-3">
-									<input type="text" name="emailad" id="emailad"
-										class="form-control data"
-										value="<%=studentProject.getAdvisor().getEmail()%>" readonly>
+									<input type="text" name="emailad" id="emailad" class="form-control data" value="<%=studentProject.getAdvisor().getEmail()%>" style="background-color: white"  readonly>
 								</div>
 								<label class="col-sm-2 col-form-label text-right">เบอร์โทรศัพท์</label>
 								<div class="col-sm-3">
-									<input type="text" name="phonead" id="phonead"
-										class="form-control data"
-										value="<%=studentProject.getAdvisor().getMobileno()%>" readonly>
+									<input type="text" name="phonead" id="phonead" class="form-control data" value="<%=studentProject.getAdvisor().getMobileno()%>" style="background-color: white"  readonly>
 								</div>
 							</div>
 							<br>

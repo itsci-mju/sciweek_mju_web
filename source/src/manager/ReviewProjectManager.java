@@ -65,7 +65,6 @@ public class ReviewProjectManager {
 		return result;
 	}
 
-
 	public List<Question> getListQuestion() throws Exception {
 		List<Question> listquestion = new Vector<>();
 		ConnectionDB condb = new ConnectionDB();
@@ -89,6 +88,33 @@ public class ReviewProjectManager {
 			e.printStackTrace();
 		}
 		return listquestion;
+	}
+	
+	public Question getQuestion() throws Exception {
+		Question question = new Question();
+		ConnectionDB condb = new ConnectionDB();
+		Connection con = condb.getConnection();
+		Statement stmt = null;
+		
+		try {
+			stmt = con.createStatement();
+			String sql = "SELECT * FROM question WHERE question_id  = 1  ";
+			ResultSet rs = stmt.executeQuery(sql);
+
+			while (rs.next()) {
+				
+				question = resultSetToClass.setResultSetToQuestion(rs);
+				
+			}
+
+			con.close();
+			stmt.close();
+			rs.close();
+		} catch (SQLException e) {
+			System.out.println("catch");
+			e.printStackTrace();
+		}
+		return question;
 	}
 	
 	public List<StudentProject> getListScienceProject(String project_id) throws Exception {

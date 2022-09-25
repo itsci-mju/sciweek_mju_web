@@ -4,7 +4,7 @@
 <%@ page import="java.util.*,manager.*,bean.*,java.text.*"%>
 <%
 	Admin admin = null;
-	ProjectType projecttype = null;
+	Team team = null;
 	List<Project> listproject = new Vector<>();
 	List<Reviewer> listreviewer = new Vector<>();
 
@@ -15,8 +15,8 @@
 	}
 	
 	try {
-		projecttype = (ProjectType) request.getAttribute("projecttype");
-		session.setAttribute("key",projecttype.getProjecttype_id()); 
+		team = (Team) request.getAttribute("team");
+		session.setAttribute("key",team.getTeam_id()); 
 	} catch (Exception e) {
 		e.printStackTrace();
 	}
@@ -67,14 +67,14 @@
 								<div class="form-group row">
 									<label class="col-sm-2 col-form-label text-right">รหัสทีม</label>
 									<div class="col-sm-4">
-										<input type="text" name="team_id" id="team_id" class="form-control data" value="<%=projecttype.getProjecttype_id()%>" disabled="disabled">
+										<input type="text" name="team_id" id="team_id" class="form-control data" value="<%=team.getTeam_id()%>" disabled="disabled">
 									</div>
 								</div>
 								
 								<div class="form-group row">
 									<label class="col-sm-2 col-form-label text-right">ชื่อทีม</label>
 									<div class="col-sm-4">
-										<input type="text" name="team_name" id="team_name" class="form-control data" value="<%=projecttype.getProjecttype_name()%>" disabled="disabled">
+										<input type="text" name="team_name" id="team_name" class="form-control data" value="<%=team.getTeam_name()%>" disabled="disabled">
 									</div>
 								</div>
 								<br>
@@ -90,16 +90,16 @@
 											<th width="150">รหัสคณะกรรมการ</th>
 											<th>ชื่อคณะกรรมการ</th>
 											<th width="200">ตำแหน่ง</th>
-											<!-- <th width="75"></th> -->														
+											<!-- <th width="75"></th>	 -->												
 										</tr>
 									</thead>
 									<tbody align="center">
 										<%
-											if (listreviewer != null) {
+											if (listreviewer.size() != 0) {
 										%>
 										<%
 											for (int i = 0; i < listreviewer.size(); i++) {
-												if(listreviewer.get(i).getPosition().equals("ประธานคณะกรรมการ")) {
+												if (listreviewer.get(i).getPosition().equals("ประธานคณะกรรมการ")) {
 										%>
 										<tr>																		
 											<td><%=listreviewer.get(i).getReviewer_id()%></td>
@@ -109,7 +109,7 @@
 												<button name="button" class="btn btn-danger" onclick="window.location.href='doDeleteReviewerByTeamID?team_id=<%=listreviewer.get(i).getTeam().getTeam_id()%>&reviewer_id=<%=listreviewer.get(i).getReviewer_id()%>';">
 													<i class="fa-solid fa-trash-can"></i>
 												</button>
-											</td>	 --%>							
+											</td>	 --%>						
 										</tr>
 										<%
 											}
@@ -140,16 +140,16 @@
 											<th width="150">รหัสคณะกรรมการ</th>
 											<th>ชื่อคณะกรรมการ</th>
 											<th width="200">ตำแหน่ง</th>	
-											<!-- <th width="75"></th>	 -->							
+											<!-- <th width="75"></th> -->							
 										</tr>
 									</thead>
 									<tbody align="center">
 										<%
-											if (listreviewer != null) {
+											if (listreviewer.size() != 0) {
 										%>
 										<%
 											for (int i = 0; i < listreviewer.size(); i++) {
-												if(listreviewer.get(i).getPosition().equals("คณะกรรมการ")) {
+												if (listreviewer.get(i).getPosition().equals("คณะกรรมการ")) {
 										%>
 										<tr>										
 											<td><%=listreviewer.get(i).getReviewer_id()%></td>
@@ -159,7 +159,7 @@
 												<button name="button" class="btn btn-danger" onclick="window.location.href='doDeleteReviewerByTeamID?team_id=<%=listreviewer.get(i).getTeam().getTeam_id()%>&reviewer_id=<%=listreviewer.get(i).getReviewer_id()%>';">
 													<i class="fa-solid fa-trash-can"></i>
 												</button>
-											</td>	 --%>								
+											</td>	 --%>							
 										</tr>
 										<%
 											}
@@ -169,7 +169,7 @@
 											} else {
 										%>
 										<tr align="center">
-											<td colspan="3"><h2>ไม่มีข้อมูล</h2></td>
+											<td colspan="4"><h2>ไม่มีข้อมูล</h2></td>
 										</tr>
 										<%
 											}
@@ -185,7 +185,7 @@
 									</div>		
 								</div>										
 								<hr class="colorgraph">
-								<table class="table table-bordered  table-hover" id=myTable>
+								<table class="table table-bordered  table-hover" id=myTable >
 									<thead class="table-info" align="center">
 										<tr>										
 											<th width="125px">รหัสโครงงาน</th>
@@ -212,7 +212,7 @@
 											} else {
 										%>
 										<tr align="center">
-											<td colspan="2"><h2>ไม่มีข้อมูล</h2></td>
+											<td colspan="3"><h2>ไม่มีข้อมูล</h2></td>
 										</tr>
 										<%
 											}
@@ -230,9 +230,8 @@
 								</div>
 								<div class="form-group row">
 									<div class="col-sm-12 text-center">									
-										<a href="doDeleteTeam?projecttype_id=<%=projecttype.getProjecttype_id()%>"> 
-											<input type="button" name="delete" id="delete" value="ลบข้อมูล"
-											class="btn btn-danger" disabled="disabled" onclick="return confirm('คุณต้องการลบโครงงานวิทยาศาสตร์นี้หรือไม่ ');">
+										<a href="doDeleteTeam?team_id=<%=team.getTeam_id()%>"> 
+											<input type="button" name="delete" id="delete" value="ลบข้อมูล" class="btn btn-danger" disabled="disabled" onclick="return confirm('คุณต้องการลบทีมนี้หรือไม่ ');">
 										</a>
 										<a class="btn btn-warning" href="doViewTeam" role="button">ยกเลิก</a>	
 									</div>

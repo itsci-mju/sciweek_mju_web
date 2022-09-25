@@ -46,12 +46,13 @@ public class ViewTeamDetailController {
 
 		Admin admin = (Admin) session.getAttribute("admin");
 		Integer team_id = Integer.parseInt(request.getParameter("team_id"));
+		Integer reviewer_id = Integer.parseInt(request.getParameter("reviewer_id"));
 		if (admin != null) {
 			ModelAndView mav = new ModelAndView("ViewTeamDetail");
 			
 			ViewTeamDetailManager viewTeamDetailManager = new ViewTeamDetailManager();
 			
-			if (viewTeamDetailManager.isDeleteReviewerByTeamID(team_id)) {
+			if (viewTeamDetailManager.isDeleteReviewerByTeamID(team_id,reviewer_id)) {
 				mav.addObject("msg", "ลบข้อมูลสำเร็จแล้ว!!!! ");
 			} else {
 				mav.addObject("msg", "ลบข้อมูลไม่สำเร็จแล้ว!!!! ");

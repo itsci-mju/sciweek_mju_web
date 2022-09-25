@@ -157,15 +157,16 @@ public class ViewTeamDetailManager {
 		return listproject;
 	}
 	
-	public boolean isDeleteReviewerByTeamID(Integer team_id) {
+	public boolean isDeleteReviewerByTeamID(Integer team_id,Integer reviewer_id) {
 		ConnectionDB condb = new ConnectionDB();
 		Connection con = condb.getConnection();
 
 		boolean result = false;
 	
 			try {
-				CallableStatement stmt = con.prepareCall("{call isDeleteReviewerByTeamID(?)}");
+				CallableStatement stmt = con.prepareCall("{call isDeleteReviewerByTeamID(?,?)}");
 				stmt.setInt(1, team_id);
+				stmt.setInt(2, reviewer_id);
 				stmt.execute();
 				result = true;
 				con.close();
