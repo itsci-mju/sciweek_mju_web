@@ -4,10 +4,10 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.List;
+import java.util.Vector;
 
-import bean.Admin;
-import bean.Reviewer;
-import bean.Student;
+import bean.*;
 import resultset.ResultSetToClass;
 import util.ConnectionDB;
 
@@ -30,7 +30,6 @@ public class LoginManager {
 			ResultSet rs = stmt.executeQuery(sql);
 			if (rs.next() && rs.getRow() == 1) {
 				stu = resultSetToClass.setResultSetToStudent(rs);
-
 			} else {
 				stu = null;
 			}
@@ -92,5 +91,64 @@ public class LoginManager {
 		}
 		return adm;
 	}
+	
+	public List<StudentProject> getListStudentProjectByStudentID(Integer student_id) throws Exception {
+		ConnectionDB condb = new ConnectionDB();
+		Connection con = condb.getConnection();
+		Statement stmt = null;
+		List<StudentProject> studentProjectList = new Vector<>();
 
+		try {
+			stmt = con.createStatement();
+			String sql = " SELECT * FROM studentproject"
+					+ "  LEFT JOIN project on  studentproject.project_id = project.project_id"
+					+ "  LEFT JOIN projecttype on project.projecttype_id = projecttype.projecttype_id"
+					+ "  LEFT JOIN team on project.team_id = team.team_id"
+					+ "  LEFT JOIN student on studentproject.student_id = student.student_id"
+					+ "  LEFT JOIN school on student.school_id = school.school_id"
+					+ "  LEFT JOIN advisor on studentproject.advisor_id = advisor.advisor_id  "
+					+ "  WHERE studentproject.student_id = '"+ student_id +"' ";
+			ResultSet rs = stmt.executeQuery(sql);
+			if (rs.next() && rs.getRow() == 1) {
+				studentProjectList.add(resultSetToClass.setResultSetToStudentProject(rs));
+			} else {
+				studentProjectList = null;
+			}
+			con.close();
+			stmt.close();
+			rs.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return studentProjectList;
+	}
+	
+	public Report getReportByProjectID(String project_id) throws Exception {
+		ConnectionDB condb = new ConnectionDB();
+		Connection con = condb.getConnection();
+		Statement stmt = null;
+		Report report = null;
+
+		try {
+			stmt = con.createStatement();
+			String sql = " SELECT * FROM report " 
+					+ "  LEFT JOIN project on  report.project_id = project.project_id"
+					+ "  LEFT JOIN projecttype on project.projecttype_id = projecttype.projecttype_id"
+					+ "  LEFT JOIN team on project.team_id = team.team_id" 
+					+ "  WHERE report.project_id = '" + project_id + "' ";
+			ResultSet rs = stmt.executeQuery(sql);
+			if (rs.next() && rs.getRow() == 1) {
+				report = resultSetToClass.setResultSetToReport(rs);
+			} else {
+				report = null;
+			}
+			con.close();
+			stmt.close();
+			rs.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return report;
+	}
+	
 }

@@ -1,5 +1,7 @@
 package bean;
 
+import java.sql.Timestamp;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,6 +14,7 @@ import lombok.Setter;
 public class Project {
 
 	private String project_id;
+	private Timestamp importdate ;
 	private String projectname;
 	private String video;
 	private String award;

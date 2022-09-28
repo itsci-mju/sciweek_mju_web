@@ -60,6 +60,7 @@ public class ResultSetToClass {
 		Project project = new Project();
 		
 		project.setProject_id(rs.getString("project.project_id"));
+		project.setImportdate(rs.getTimestamp("project.importdate"));
 		project.setProjectname(rs.getString("project.projectname"));		
 		project.setVideo(rs.getString("project.video"));
 		project.setAward(rs.getString("project.award"));
@@ -154,6 +155,7 @@ public class ResultSetToClass {
 		Student student = new Student();
 		
 		student.setStudent_id(rs.getInt("student.student_id"));
+		student.setImportdate(rs.getTimestamp("student.importdate"));
 		student.setPrefix(rs.getString("student.prefix"));
 		student.setFirstname(rs.getString("student.firstname"));
 		student.setLastname(rs.getString("student.lastname"));

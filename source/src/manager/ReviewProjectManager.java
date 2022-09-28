@@ -11,6 +11,7 @@ import java.util.Vector;
 import org.springframework.stereotype.Controller;
 
 import bean.Answer;
+import bean.Project;
 import bean.Question;
 import bean.Report;
 import bean.Reviews;
@@ -73,11 +74,13 @@ public class ReviewProjectManager {
 		
 		try {
 			stmt = con.createStatement();
-			String sql = "SELECT * FROM question";
+			String sql = "SELECT * FROM question WHERE question_id  > 1  ";
 			ResultSet rs = stmt.executeQuery(sql);
 
 			while (rs.next()) {
+				
 				listquestion.add(resultSetToClass.setResultSetToQuestion(rs));
+				
 			}
 
 			con.close();
@@ -224,7 +227,7 @@ public class ReviewProjectManager {
 		return report;
 	}
 	
-	public Reviews getReviewsByProjectID(String key) throws Exception {
+	public Reviews getReviewsByReviewID(String reviews_id) throws Exception {
 		ConnectionDB condb = new ConnectionDB();
 		Connection con = condb.getConnection();
 		Statement stmt = null;
@@ -237,18 +240,12 @@ public class ReviewProjectManager {
 					+ "  LEFT JOIN project ON reviews.project_id = project.project_id"
 					+ "  LEFT JOIN projecttype ON project.projecttype_id = projecttype.projecttype_id"
 					+ "  LEFT JOIN team ON project.team_id = team.team_id"
-					+ " WHERE reviews.project_id = '"+ key +"' ";
+					+ " WHERE reviews.reviews_id = '"+ reviews_id +"' ";
 			ResultSet rs = stmt.executeQuery(sql);
 
 			while (rs.next()) {		
 				
-			reviews.setReviews_id(rs.getString("reviews.reviews_id"));
-			reviews.setReviewdate(rs.getTimestamp("reviews.reviewdate"));
-			reviews.setEnddate(rs.getTimestamp("reviews.enddate"));
-			reviews.setComments(rs.getString("reviews.comments"));
-			reviews.setTotalscore(rs.getDouble("reviews.totalscore"));
-			reviews.setReviewer(resultSetToClass.setResultSetToReviewer(rs));
-			reviews.setProject(resultSetToClass.setResultSetToProject(rs));
+			reviews = resultSetToClass.setResultSetToReview(rs);
 			
 			}
 			con.close();

@@ -47,6 +47,25 @@
 <link rel="stylesheet" href="./css/multi_step_form.css">
 </head>
 <body style="background-image: url('./image/hero-bg.png')">
+<script type="text/javascript">
+
+	function validateForm(frm) {
+		
+		if (frm.filevideo.value == "" && frm.filepdf.value == "")  {
+			alert("<!-- กรุณาอัปโหลดเอกสารรายงานและวิดีโอ -->");
+			return false;
+		} else if (frm.filevideo.value == "") {
+			alert("<!-- กรุณาอัปโหลดวิดีโอ -->");
+			return false;
+		} else if (frm.filepdf.value == "") {
+			alert("<!-- กรุณาอัปโหลดเอกสารรายงาน -->");
+			return false;
+		}
+		
+		
+	}
+		
+</script>
 	<%	
 		String video = null ;
 		String readonly = null;
@@ -66,7 +85,7 @@
 	<jsp:include page="common/navbar.jsp"></jsp:include>
 					
 	<div class="container" style="margin-top: 35px;">
-		<form action="UploadReport" method="POST" enctype="multipart/form-data" >
+		<form action="UploadReport" id="frm" method="POST" enctype="multipart/form-data" >
 		<div>
 			<h1><i class="fa-solid fa-cloud-arrow-up">&nbsp;</i>อัปโหลดเอกสาร</h1>
 			<div id="multi-step-form-container">
@@ -110,7 +129,7 @@
 								<div class="col-sm-4">
 									<label style="color: green; text-align: left;">${msg}</label>
 									<input type="hidden" name="project_id" id="project_id" class="form-control data" value="<%=sproject.getProject().getProject_id()%>">
-									<input type="text" name="filevideo" id="filevideo" class="form-control data" value="<%=video%>">
+									<input type="text" name="filevideo" id="filevideo" class="form-control data" placeholder="<%=video%>" required>
 								</div>
 								
 								<br>
@@ -129,14 +148,14 @@
 						<br>
 						<div class="form-group row">
 								<div class="col-sm-4">
-									<input class="form-control" type="file" name="filepdf" id="filepdf" accept=".pdf">
+									<input class="form-control" type="file" name="filepdf" id="filepdf" accept=".pdf" required>
 								</div>
 								<br> <label style="color: green; text-align: left;">${msg}</label>
 							</div>
 					</div>
 					<div class="mt-3">
 						<a class="button btn-navigate-form-step" type="button" step_number="1" style="text-decoration: none;">ย้อนกลับ</a>
-						<button class="button submit-btn" type="submit">บันทึก</button>
+						<button class="button submit-btn" type="submit" onclick ="return validateForm(frm)">บันทึก</button>
 					</div>
 				</section>
 				<!-- Step 3 Content, default hidden on page load. -->

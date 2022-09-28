@@ -61,11 +61,6 @@
 			award = studentProject.getProject().getAward() ;
 		}
 
-		if (studentProject.getProject().getVideo().equals("-")) {
-			video = "กรุณาอัปโหลดวิดีโอ" ;
-		} else {
-			video = studentProject.getProject().getVideo();
-		}
 	%>
 <body style="background-image: url('./image/hero-bg.png')">
 	<jsp:include page="common/navbar.jsp"></jsp:include>
@@ -101,6 +96,8 @@
 									<input type="text" name="projecttype_name" id="projecttype_name" class="form-control data" value="<%=studentProject.getProject().getProjecttype().getProjecttype_name()%>" style="background-color: white" readonly>
 								</div>
 							</div>
+							
+							<% %>
 
 							<div class="form-group row">
 								<label class="col-sm-2 col-form-label text-right">วีดิโอ</label>
@@ -110,7 +107,8 @@
 									</button>											
 								</div>
 							</div>
-							
+							<% %>
+							<% %>
 							<div class="form-group row">
 								<label class="col-sm-2 col-form-label text-right">เอกสารรายงาน</label>
 								<div class="col-sm-6">
@@ -119,6 +117,7 @@
 									</button>
 								</div>
 							</div>
+							<% %>
 
 							<div class="form-group row">						
 								<label class="col-sm-2 col-form-label text-right">รางวัล</label>

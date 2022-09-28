@@ -19,6 +19,7 @@ import bean.*;
 import lombok.val;
 import manager.ListScienceProjectManager;
 import manager.ReviewProjectManager;
+import manager.ReviseProjectManager;
 import model.ProjectResponse;
 import model.ReviewerResponse;
 
@@ -30,15 +31,20 @@ public class ReviewProjectController {
 		Reviewer reviewer = (Reviewer) session.getAttribute("reviewer");
 		if (reviewer != null) {
 			String project_id = request.getParameter("project_id");
+			String reviews_id = request.getParameter("reviews_id");
 			ReviewProjectManager reviewProjectManager = new ReviewProjectManager();
 			Report report = reviewProjectManager.getReportByProjectID(project_id);
+			Reviews reviews = reviewProjectManager.getReviewsByReviewID(reviews_id);
 			StudentProject sproject = reviewProjectManager.getStudentProjectByID(project_id);
 			List<StudentProject> listsproject = reviewProjectManager.getListScienceProject(project_id);
 			Question question = reviewProjectManager.getQuestion();
+			List<Question> listquestion = reviewProjectManager.getListQuestion();
 			ModelAndView mav = new ModelAndView("ReviewProject");
 			session.setAttribute("report", report);
+			mav.addObject("reviews", reviews);
 			mav.addObject("reviewer", reviewer);
 			mav.addObject("question", question);
+			mav.addObject("listquestion", listquestion);
 			mav.addObject("sproject", sproject);
 			mav.addObject("listsproject", listsproject);
 			return mav;
@@ -52,8 +58,10 @@ public class ReviewProjectController {
 
 	@RequestMapping(value = "/isReviewProject", method = RequestMethod.POST)
 	public ModelAndView isReviewProject(HttpServletRequest request, Model md, HttpSession session) throws Exception {
-
+		
 		request.setCharacterEncoding("UTF-8");
+		
+		boolean statusresult = false;
 		
 		Reviewer reviewer = new Reviewer();
 		reviewer.setReviewer_id(Integer.parseInt(request.getParameter("reviewer_id")));
@@ -61,39 +69,83 @@ public class ReviewProjectController {
 		Project project = new Project();
 		project.setProject_id(request.getParameter("project_id"));	
 		
-		Date dd = new Date();
-	    Calendar c1 = Calendar.getInstance();
-	    c1.setTime(dd);
-	    c1.add(Calendar.YEAR,543);
-	    dd = c1.getTime();
-	    String date1 = new SimpleDateFormat("ddMMyyyyHHmmss").format(dd);
-
-		ReviewProjectManager reviewProjectManager = new ReviewProjectManager();
-
-		Reviews reviews = new Reviews();
+		String reviews_id = request.getParameter("reviews_id");
 		
-		reviews.setReviews_id(date1);
-		reviews.setComments(request.getParameter("comments"));
-		reviews.setReviewer(reviewer);
-		reviews.setProject(project);
-		boolean statusresult = reviewProjectManager.isReviewProject(reviews);	
-
-		String[] questionIdList = request.getParameterValues("question_id");
-		String[] answerStrList = request.getParameterValues("answer");
-
-		for (int i = 0 ; i < questionIdList.length ; i++) {
+		Integer state_project = Integer.parseInt(request.getParameter("state_project"));
+		
+		if (state_project == 1) { 
 			
-			val questionId = Integer.parseInt(questionIdList[i]);
-			val answers = Double.parseDouble(answerStrList[i]);
+			Date dd = new Date();
+		    Calendar c1 = Calendar.getInstance();
+		    c1.setTime(dd);
+		    c1.add(Calendar.YEAR,543);
+		    dd = c1.getTime();
+		    String date1 = new SimpleDateFormat("ddMMyyyyHHmmss").format(dd);
 
-			Answer answer = new Answer();
-			answer.setAnswer(answers);
-			answer.setQuestion(new Question(questionId));
-			answer.setReview(reviews);
-			answer.setReviewer(reviewer);
-			answer.setProject(project);
-			reviewProjectManager.isAnswerReview(answer);
+			ReviewProjectManager reviewProjectManager = new ReviewProjectManager();
+
+			Reviews reviews = new Reviews();
+			
+			reviews.setReviews_id(date1);
+			reviews.setComments(request.getParameter("comments"));
+			reviews.setReviewer(reviewer);
+			reviews.setProject(project);
+			
+			statusresult = reviewProjectManager.isReviewProject(reviews);	
+
+			String[] questionIdList = request.getParameterValues("question_id");
+			String[] answerStrList = request.getParameterValues("answer");
+
+			for (int i = 0 ; i < questionIdList.length ; i++) {
+				
+				val questionId = Integer.parseInt(questionIdList[i]);
+				val answers = Double.parseDouble(answerStrList[i]);
+
+				Answer answer = new Answer();
+				answer.setAnswer(answers);
+				answer.setQuestion(new Question(questionId));
+				answer.setReview(reviews);
+				answer.setReviewer(reviewer);
+				answer.setProject(project);
+				reviewProjectManager.isAnswerReview(answer);
+			}
+	
+		} 
+		
+		if (state_project == 2) { 
+			
+			ReviewProjectManager reviewProjectManager = new ReviewProjectManager();
+			ReviseProjectManager reviseProjectManager = new ReviseProjectManager();
+
+			Reviews reviews = new Reviews();
+			reviews.setReviews_id(reviews_id);
+			reviews.setComments(request.getParameter("comments"));
+			reviews.setReviewer(reviewer);
+			reviews.setProject(project);
+			
+			statusresult = reviseProjectManager.isUpdateReviewProject(reviews);	
+
+			String[] questionIdList = request.getParameterValues("question_id");
+			
+			String[] answerStrList = request.getParameterValues("answer");
+
+			for (int i = 0 ; i < questionIdList.length ; i++) {
+				
+				val questionId = Integer.parseInt(questionIdList[i]);
+				val answers = Double.parseDouble(answerStrList[i]);
+
+				Answer answer = new Answer();
+				answer.setAnswer(answers);
+				answer.setQuestion(new Question(questionId));
+				answer.setReview(reviews);
+				answer.setReviewer(reviewer);
+				answer.setProject(project);
+				reviewProjectManager.isAnswerReview(answer);
+				
+			}
+		
 		}
+		
 
 		if (statusresult) {
 			int team_id = Integer.parseInt(request.getParameter("team_id"));

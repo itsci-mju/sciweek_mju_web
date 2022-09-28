@@ -14,6 +14,8 @@ public class ProjectResponse {
 
 	private String projectName;
 	
+	private Integer stateProject;
+	
 	private Timestamp reviewDate;
 	
 	private Timestamp endDate;

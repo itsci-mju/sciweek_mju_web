@@ -50,57 +50,70 @@ try {
 <link href='https://fonts.googleapis.com/css?family=Kanit' rel='stylesheet' type='text/css'>
 <link rel="stylesheet" href="./css/web_css.css">
 </head>
-<body style="background-image: url('./image/hero-bg.png')">>
+<body style="background-image: url('./image/hero-bg.png')">
 
 	<jsp:include page="common/navbar.jsp"></jsp:include>
 
 	<div class="container" style="margin-top: 35px;">
-			<section id="content">
-				<div class="container" style="margin-top: -20px">
-					<div class="row">
-						<div class="col-lg-12">
-							<br>
-							<h3><i class="fa-solid fa-clipboard">&nbsp;</i>ข้อมูลโครงงานวิทยาศาสตร์</h3>
-							<hr class="colorgraph">				
-							<h5>ข้อมูลคณะกรรมการ</h5>
-							<br>			
-								<div class="form-group row">
-									<label class="col-sm-2 col-form-label text-right">ชื่อ - นามสกุล</label>
-									<div class="col-sm-3">
-										<input type="text" id="prefix" name="prefix" class="form-control data" value="<%=reviewer.getPrefix()%> <%=reviewer.getFirstname()%>  <%=reviewer.getLastname()%>" readonly>
-									</div>
-									<div class="col-sm-1">
-										<input type="hidden" id="prefix" name="prefix" class="form-control data" value="<%=reviewer.getPrefix()%>" >
-									</div>
-									<div class="col-sm-3">					
-										<input type="hidden" id="firstname" name="firstname" class="form-control data" value="<%=reviewer.getFirstname()%>" >
-									</div>
-									<div class="col-sm-3">								
-										<input type="hidden" id="lastname" name="lastname" class="form-control data" value="<%=reviewer.getLastname()%>" >
-									</div>									
-								</div>
-								
-												
-								<div class="form-group row">
-									<label class="col-sm-2 col-form-label text-right">อีเมล</label>
-									<div class="col-sm-3">
-										<input type="text" id="student_id" name="student_id" class="form-control data" value="<%=reviewer.getEmail()%>" readonly>
-									</div>
-								</div>
-																		
-								<div class="form-group row">
-									<label class="col-sm-2 col-form-label text-right">คณะ
-									</label>
-									<div class="col-sm-3">
-										<input type="text" id="faculty" name="faculty" class="form-control data" value="<%=reviewer.getFaculty()%>" readonly>
-									</div>
-									<label class="col-sm-2 col-form-label text-right">สาขา
-									</label>
-									<div class="col-sm-3">
-										<input type="text" id="major" name="major" class="form-control data" value="<%=reviewer.getMajor()%>" readonly>
-									</div>
-								</div>
-								<%	String team_name = null ;
+		<section id="content">
+			<div class="container" style="margin-top: -20px">
+				<div class="row">
+					<div class="col-lg-12">
+						<br>
+						<h3>
+							<i class="fa-solid fa-clipboard">&nbsp;</i>ข้อมูลโครงงานวิทยาศาสตร์
+						</h3>
+						<hr class="colorgraph">
+						<h5>ข้อมูลคณะกรรมการ</h5>
+						<br>
+						<div class="form-group row">
+							<label class="col-sm-2 col-form-label text-right">ชื่อ -
+								นามสกุล</label>
+							<div class="col-sm-3">
+								<input type="text" id="prefix" name="prefix"
+									class="form-control data"
+									value="<%=reviewer.getPrefix()%> <%=reviewer.getFirstname()%>  <%=reviewer.getLastname()%>"
+									style="background-color: white" readonly>
+							</div>
+							<div class="col-sm-1">
+								<input type="hidden" id="prefix" name="prefix"
+									class="form-control data" value="<%=reviewer.getPrefix()%>">
+							</div>
+							<div class="col-sm-3">
+								<input type="hidden" id="firstname" name="firstname"
+									class="form-control data" value="<%=reviewer.getFirstname()%>">
+							</div>
+							<div class="col-sm-3">
+								<input type="hidden" id="lastname" name="lastname"
+									class="form-control data" value="<%=reviewer.getLastname()%>">
+							</div>
+						</div>
+
+
+						<div class="form-group row">
+							<label class="col-sm-2 col-form-label text-right">อีเมล</label>
+							<div class="col-sm-3">
+								<input type="text" id="student_id" name="student_id"
+									class="form-control data" value="<%=reviewer.getEmail()%>"
+									style="background-color: white" readonly>
+							</div>
+						</div>
+
+						<div class="form-group row">
+							<label class="col-sm-2 col-form-label text-right">คณะ </label>
+							<div class="col-sm-3">
+								<input type="text" id="faculty" name="faculty"
+									class="form-control data" value="<%=reviewer.getFaculty()%>"
+									style="background-color: white" readonly>
+							</div>
+							<label class="col-sm-2 col-form-label text-right">สาขา </label>
+							<div class="col-sm-3">
+								<input type="text" id="major" name="major"
+									class="form-control data" value="<%=reviewer.getMajor()%>"
+									style="background-color: white" readonly>
+							</div>
+						</div>
+						<%	String team_name = null ;
 								
 										if (reviewer.getTeam().getTeam_name() == null) {
 											team_name = "ไม่มีกลุ่ม" ;
@@ -108,77 +121,84 @@ try {
 											team_name = reviewer.getTeam().getTeam_name();
 										}					
 								%>
-								<div class="form-group row">									
-									<label class="col-sm-2 col-form-label text-right">กลุ่ม</label>
-									<div class="col-sm-4">
-										<input type="hidden" id="team_id" name="team_id" class="form-control data" value="<%=reviewer.getTeam().getTeam_id()%>">
-										<input type="text" id="team_name" name="team_name" class="form-control data" value="<%=team_name%>" readonly>
-									</div>				
-								</div>
-								
-								<div class="form-group row">																
-									<label class="col-sm-2 col-form-label text-right">ตำแหน่ง</label>
-									<div class="col-sm-3">								
-										<input type="text" id="position" name="position" class="form-control data" value="<%=reviewer.getPosition()%>" readonly>
-									</div>					
-								</div>
-																																						
+						<div class="form-group row">
+							<label class="col-sm-2 col-form-label text-right">กลุ่ม</label>
+							<div class="col-sm-4">
+								<input type="hidden" id="team_id" name="team_id"
+									class="form-control data"
+									value="<%=reviewer.getTeam().getTeam_id()%>"> <input
+									type="text" id="team_name" name="team_name"
+									class="form-control data" value="<%=team_name%>"
+									style="background-color: white" readonly>
 							</div>
 						</div>
+
+						<div class="form-group row">
+							<label class="col-sm-2 col-form-label text-right">ตำแหน่ง</label>
+							<div class="col-sm-3">
+								<input type="text" id="position" name="position"
+									class="form-control data" value="<%=reviewer.getPosition()%>"
+									style="background-color: white" readonly>
+							</div>
+						</div>
+
 					</div>
-			</section>
-	
-	<br>
-	<h5>สรุปคำวิจารณ์ที่ได้รับและความคิดเห็น</h5>
-	<hr class="colorgraph">
-	<table class="table table-bordered  table-hover" id=myTable>
+				</div>
+			</div>
+		</section>
+
+		<br>
+		
+		<% if (reviews.getProject().getState_project() == 1) { %>
+		
+		<h5>สรุปคำวิจารณ์ที่ได้รับและความคิดเห็น</h5>
+		<hr class="colorgraph">
+		<table class="table table-bordered  table-hover" id=myTable>
 			<thead class="table-info" align="center">
-				<tr>		
+				<tr>
 					<th width="200">วันเวลาประเมิน</th>
 					<th>ชื่อโครงงาน/สิ่งประดิษฐ์</th>
-					<th width="70">ภาพรวม</th>
 					<th width="70">รายงาน</th>
-					<th width="70">วิดีโอ</th>
 					<th width="70">รวมคะแนน</th>
 				</tr>
 			</thead>
 			<%
-				if (reviews != null ) {	
+				if (reviews.getReviews_id() != null ) {	
 			%>
-			
+
 			<tbody>
 				<tr>
 					<td align="center"><%=reviews.getReviewdate()%></td>
-					<td><%=reviews.getProject().getProjectname()%></td>	
-					
+					<td><%=reviews.getProject().getProjectname()%></td>
+
 					<%
 						List<Answer> answerList = reviews.getListanswer()  ;
 
 						for (Answer answer : answerList) {
 							Question question = answer.getQuestion();
-					%>			
+					%>
 					<td align="center"><%=answer.getAnswer() %></td>
 					<% } %>
-					
+
 					<% if (reviews.getTotalscore() >= 80) { %>
-			        	<td align="center" style="background-color: #C6EFCE"><%=reviews.getTotalscore()%></td>
-			      	<%} else if (reviews.getTotalscore() >= 75) { %>
-			      		<td align="center" style="background-color: #B7DEE8"><%=reviews.getTotalscore()%></td>
-			        <%} else if (reviews.getTotalscore() >= 70) { %>
-			         	<td align="center" style="background-color: #B8CCE4"><%=reviews.getTotalscore()%></td>
-			        <%} else if (reviews.getTotalscore() >= 65) { %>
-			        	<td align="center" style="background-color: #CCC0DA"><%=reviews.getTotalscore()%></td>
-			       <%} else if (reviews.getTotalscore() >= 60) { %>
-			       		<td align="center" style="background-color: #FFFFCC"><%=reviews.getTotalscore()%></td>
-			       <%} else if (reviews.getTotalscore() >= 55) { %>
-			       		<td align="center" style="background-color: #FDE9D9"><%=reviews.getTotalscore()%></td>
-			       <%}  else if (reviews.getTotalscore() >= 50) { %>
-			       		<td align="center" style="background-color: #FCD5B4"><%=reviews.getTotalscore()%></td>
-			       <%} else { %>
-			        	<td align="center" style="background-color: #FFC7CE"><%=reviews.getTotalscore()%></td>
-			        <% } %>		        		        
+					<td align="center" style="background-color: #C6EFCE"><%=reviews.getTotalscore()%></td>
+					<%} else if (reviews.getTotalscore() >= 75) { %>
+					<td align="center" style="background-color: #B7DEE8"><%=reviews.getTotalscore()%></td>
+					<%} else if (reviews.getTotalscore() >= 70) { %>
+					<td align="center" style="background-color: #B8CCE4"><%=reviews.getTotalscore()%></td>
+					<%} else if (reviews.getTotalscore() >= 65) { %>
+					<td align="center" style="background-color: #CCC0DA"><%=reviews.getTotalscore()%></td>
+					<%} else if (reviews.getTotalscore() >= 60) { %>
+					<td align="center" style="background-color: #FFFFCC"><%=reviews.getTotalscore()%></td>
+					<%} else if (reviews.getTotalscore() >= 55) { %>
+					<td align="center" style="background-color: #FDE9D9"><%=reviews.getTotalscore()%></td>
+					<%}  else if (reviews.getTotalscore() >= 50) { %>
+					<td align="center" style="background-color: #FCD5B4"><%=reviews.getTotalscore()%></td>
+					<%} else { %>
+					<td align="center" style="background-color: #FFC7CE"><%=reviews.getTotalscore()%></td>
+					<% } %>
 				</tr>
-				
+
 				<%
 					} else {
 				%>
@@ -189,22 +209,23 @@ try {
 					}
 				%>
 			</tbody>
-			
+
 		</table>
 		<br>
-		<table class="table table-bordered  table-hover" id=myTable style="width:70%">
+		<table class="table table-bordered  table-hover" id=myTable
+			style="width: 70%">
 			<thead class="table-info" align="center">
-				<tr>		
-					<th colspan = 2>ความคิดเห็น</th>		
+				<tr>
+					<th colspan=2>ความคิดเห็น</th>
 				</tr>
 			</thead>
 			<%
-				if (reviews != null) {
+				if (reviews.getComments() != null) {
 			%>
 			<tbody>
 				<tr>
-					<td width="150" align="center">ความคิดเห็น : </td>
-					<td align="left"><%=reviews.getComments()%></td>	
+					<td width="150" align="center">ความคิดเห็น :</td>
+					<td align="left"><%=reviews.getComments()%></td>
 				</tr>
 				<%
 					} else {
@@ -218,6 +239,105 @@ try {
 			</tbody>
 		</table>
 		
+		<% } %>
+		
+		
+		<% if (reviews.getProject().getState_project() == 2) { %>
+		
+		<h5>สรุปคำวิจารณ์ที่ได้รับและความคิดเห็น</h5>
+		<hr class="colorgraph">
+		<table class="table table-bordered  table-hover" id=myTable>
+			<thead class="table-info" align="center">
+				<tr>
+					<th width="200">วันเวลาประเมิน</th>
+					<th>ชื่อโครงงาน/สิ่งประดิษฐ์</th>
+					<th style="white-space: nowrap">รายงาน</th>
+					<th style="white-space: nowrap">แสดงโครงงาน</th>
+					<th style="white-space: nowrap">การอภิปราย</th>
+					<th style="white-space: nowrap">โครงงาน</th>
+					<th width="70">รวมคะแนน</th>
+				</tr>
+			</thead>
+			<%
+				if (reviews.getReviews_id() != null ) {	
+			%>
+
+			<tbody>
+				<tr>
+					<td align="center"><%=reviews.getReviewdate()%></td>
+					<td><%=reviews.getProject().getProjectname()%></td>
+
+					<%
+						List<Answer> answerList = reviews.getListanswer()  ;
+
+						for (Answer answer : answerList) {
+							Question question = answer.getQuestion();
+					%>
+					<td align="center"><%=answer.getAnswer() %></td>
+					<% } %>
+
+					<% if (reviews.getTotalscore() >= 80) { %>
+					<td align="center" style="background-color: #C6EFCE"><%=reviews.getTotalscore()%></td>
+					<%} else if (reviews.getTotalscore() >= 75) { %>
+					<td align="center" style="background-color: #B7DEE8"><%=reviews.getTotalscore()%></td>
+					<%} else if (reviews.getTotalscore() >= 70) { %>
+					<td align="center" style="background-color: #B8CCE4"><%=reviews.getTotalscore()%></td>
+					<%} else if (reviews.getTotalscore() >= 65) { %>
+					<td align="center" style="background-color: #CCC0DA"><%=reviews.getTotalscore()%></td>
+					<%} else if (reviews.getTotalscore() >= 60) { %>
+					<td align="center" style="background-color: #FFFFCC"><%=reviews.getTotalscore()%></td>
+					<%} else if (reviews.getTotalscore() >= 55) { %>
+					<td align="center" style="background-color: #FDE9D9"><%=reviews.getTotalscore()%></td>
+					<%}  else if (reviews.getTotalscore() >= 50) { %>
+					<td align="center" style="background-color: #FCD5B4"><%=reviews.getTotalscore()%></td>
+					<%} else { %>
+					<td align="center" style="background-color: #FFC7CE"><%=reviews.getTotalscore()%></td>
+					<% } %>
+				</tr>
+
+				<%
+					} else {
+				%>
+				<tr align="center">
+					<td colspan="6"><h2>ไม่มีข้อมูล</h2></td>
+				</tr>
+				<%
+					}
+				%>
+			</tbody>
+
+		</table>
+		<br>
+		<table class="table table-bordered  table-hover" id=myTable
+			style="width: 70%">
+			<thead class="table-info" align="center">
+				<tr>
+					<th colspan=2>ความคิดเห็น</th>
+				</tr>
+			</thead>
+			<%
+				if (reviews.getComments() != null) {
+			%>
+			<tbody>
+				<tr>
+					<td width="150" align="center">ความคิดเห็น :</td>
+					<td align="left"><%=reviews.getComments()%></td>
+				</tr>
+				<%
+					} else {
+				%>
+				<tr align="center">
+					<td colspan="5"><h2>ไม่มีข้อมูล</h2></td>
+				</tr>
+				<%
+					}
+				%>
+			</tbody>
+		</table>
+		
+		<% } %>
+		
+
 	</div>
 
 	<jsp:include page="common/footer.jsp"></jsp:include>

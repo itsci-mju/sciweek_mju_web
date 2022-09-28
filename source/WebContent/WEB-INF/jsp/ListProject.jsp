@@ -38,7 +38,8 @@
 <link rel="stylesheet" href="./css/web_css.css">
 </head>
 <body style="background-image: url('./image/hero-bg.png')">
-
+<div class="square_box box_three"></div>
+<div class="square_box box_four"></div>
 <jsp:include page="common/navbar.jsp"></jsp:include>
 
 	<div class="container" style="margin-top: 35px;">

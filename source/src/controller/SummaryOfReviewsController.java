@@ -61,50 +61,74 @@ public class SummaryOfReviewsController {
 		}
 	}
 	
-	@RequestMapping(value = "/chooseproject", method = RequestMethod.GET)
+	@RequestMapping(value = "/isChooseProject", method = RequestMethod.POST)
 	public ModelAndView isChooseProject(HttpSession session, HttpServletRequest request) throws Exception {
 		Reviewer reviewer = (Reviewer) session.getAttribute("reviewer");
 		if (reviewer != null) {
+			request.setCharacterEncoding("UTF-8");
+			
+			Integer team_id = Integer.parseInt(request.getParameter("team_id"));		
+			Integer reviewer_id = Integer.parseInt(request.getParameter("reviewer_id"));	
+			
 			SummaryOfReviewsManager summaryOfReviewsManager = new SummaryOfReviewsManager();
-			
-			String[] projectIdStrList = request.getParameterValues("chkproject");
-			for (String projectIdstr : projectIdStrList) {
-				
-					String project_id = projectIdstr;
-					
-					Project project = new Project();
-					project.setProject_id(project_id);
-					
-					summaryOfReviewsManager.isChooseProject(project);
-			}
-
-			int team_id = reviewer.getTeam().getTeam_id();
-			int reviewer_id = reviewer.getReviewer_id();
 			ListScienceProjectManager listScienceProjectManager = new ListScienceProjectManager();
-			List<ProjectResponse> projectResponseList = listScienceProjectManager.getListProjectByReviewerID(reviewer_id);
-			
-			List<ReviewerResponse> reviewerResponseList = new ArrayList<>();
-			for (ProjectResponse reviews : projectResponseList) {
-				if (reviewerResponseList.size() == 0) {
-					reviewerResponseList = reviews.getReviewerResponseList();
-				} else {
-					for (ReviewerResponse reviewerResponse : reviewerResponseList) {
-						boolean check = reviewerResponseList.stream()
-								.anyMatch(e -> e.getReviewerName() == reviewerResponse.getReviewerName());
-						if (!check) {
-							reviewerResponseList.add(reviewerResponse);
+						
+			summaryOfReviewsManager.isFailedProject(team_id);
+				
+			String[] projectIdStrList = request.getParameterValues("chkproject");
+				
+				for (String projectIdstr : projectIdStrList) {
+					
+						String project_id = projectIdstr;
+						
+						System.out.println(project_id);
+						
+						Project projectTemp = summaryOfReviewsManager.getProjectByProjectID(project_id);
+						
+						Integer state_project = projectTemp.getState_project();
+						
+						System.out.println(state_project);
+						
+						Project project = new Project();
+						project.setProject_id(project_id);
+						
+						summaryOfReviewsManager.isChooseProjectFirst(project);
+						System.out.println("===========================");
+						System.out.println(project_id);
+						System.out.println(state_project);
+						
+						if (state_project == 2) {
+							summaryOfReviewsManager.isChooseProjectSecond(project, team_id);
+						}
+
+				}
+
+				List<ProjectResponse> projectResponseList = listScienceProjectManager.getListProjectByReviewerID(reviewer_id);
+				
+				List<ReviewerResponse> reviewerResponseList = new ArrayList<>();
+				for (ProjectResponse reviews : projectResponseList) {
+					if (reviewerResponseList.size() == 0) {
+						reviewerResponseList = reviews.getReviewerResponseList();
+					} else {
+						for (ReviewerResponse reviewerResponse : reviewerResponseList) {
+							boolean check = reviewerResponseList.stream()
+									.anyMatch(e -> e.getReviewerName() == reviewerResponse.getReviewerName());
+							if (!check) {
+								reviewerResponseList.add(reviewerResponse);
+							}
 						}
 					}
 				}
-			}
+				
+				List<StudentProject> studentProjectList = listScienceProjectManager.getListScienceProjectByTeamID(team_id);
+				
+				ModelAndView mav = new ModelAndView("ListScienceProject");
+				mav.addObject("projectResponseList", projectResponseList);
+				mav.addObject("reviewerResponseList", reviewerResponseList);
+				mav.addObject("studentProjectList", studentProjectList);
+				return mav;
+				
 			
-			List<StudentProject> studentProjectList = listScienceProjectManager.getListScienceProjectByTeamID(team_id);
-						
-			ModelAndView mav = new ModelAndView("ListScienceProject");
-			mav.addObject("projectResponseList", projectResponseList);
-			mav.addObject("reviewerResponseList", reviewerResponseList);
-			mav.addObject("studentProjectList", studentProjectList);
-			return mav;
 		} else {
 			ModelAndView mav = new ModelAndView("LoginPage");
 			mav.addObject("msg", "กรุณาเข้าสู่ระบบใหม่อีกครั้ง!!!!");

@@ -192,6 +192,30 @@ public class ReviseProjectManager {
 		return result;
 	}
 	
+	
+	public boolean isUpdateReviewProject(Reviews reviews) {
+		ConnectionDB condb = new ConnectionDB();
+		Connection con = condb.getConnection();
+
+		boolean result = false;
+
+		try {
+			CallableStatement stmt = con.prepareCall("{call isUpdateReviewProject(?,?,?,?)}");
+			stmt.setString(1, reviews.getReviews_id());
+			stmt.setString(2, reviews.getComments());
+			stmt.setInt(3, reviews.getReviewer().getReviewer_id());
+			stmt.setString(4, reviews.getProject().getProject_id());
+			stmt.execute();
+			result = true;
+			con.close();
+			stmt.close();
+		} catch (SQLException er) {
+			er.printStackTrace();
+		}
+
+		return result;
+	}
+	
 	public Reviews getReviewsByReviewerID(Integer reviewer_id, String project_id) throws Exception {
 		ConnectionDB condb = new ConnectionDB();
 		Connection con = condb.getConnection();

@@ -7,7 +7,7 @@
 	Reviewer reviewer = null;
 	List<ProjectResponse> projectResponseList  = null;
 	List<ReviewerResponse> reviewerResponseList = null;
-	List<StudentProject> listsproject = null;
+	List<StudentProject> studentProjectList = null;
 
 	try {
 		reviewer = (Reviewer) session.getAttribute("reviewer");
@@ -16,7 +16,7 @@
 	}
 	
 	try {
-		listsproject = (List<StudentProject>) request.getAttribute("studentProjectList");
+		studentProjectList = (List<StudentProject>) request.getAttribute("studentProjectList");
 	} catch (Exception e) {
 		e.printStackTrace();
 	}
@@ -110,7 +110,7 @@
 						%>
 						<div class="form-group row">
 							<label class="col-sm-2 col-form-label text-right">กลุ่ม</label>
-							<div class="col-sm-3">
+							<div class="col-sm-4">
 								<input type="hidden" id="projecttype_id" name="projecttype_id" class="form-control data" value="<%=reviewer.getTeam().getTeam_id()%>">
 								<input type="text" id="projecttype_name" name="projecttype_name" class="form-control data" value="<%=team_name%>" style="background-color: white" readonly>
 							</div>
@@ -135,15 +135,20 @@
 								</tr>
 							</thead>
 							<%
-								if (listsproject.size() != 0 ) {
+								if (studentProjectList.size() != 0 ) {
 							%>
+
 							<%
-								for (int i = 0 ; i < listsproject.size() ; i++) {											
-							%>											
+								for (int i = 0 ; i < studentProjectList.size() ; i++) {					
+							%>	
+									
+							<%
+								if (reviewer != null && studentProjectList.get(i).getProject().getState_project() == 1) {
+							%>
 							<tbody>
 								<tr>
-									<td align="center"><%=listsproject.get(i).getProject().getProject_id()%></td>
-									<td><%=listsproject.get(i).getProject().getProjectname()%></td>
+									<td align="center"><%=studentProjectList.get(i).getProject().getProject_id()%></td>
+									<td><%=studentProjectList.get(i).getProject().getProjectname()%></td>
 
 									<%
 												String error = null;
@@ -154,7 +159,7 @@
 												ListScienceProjectManager listScienceProjectManager = new ListScienceProjectManager();
 
 												List<Reviews> reviewList = listScienceProjectManager
-													.getListReviewsByProjectIDAndReviewerID(listsproject.get(i).getProject().getProject_id(), reviewer.getReviewer_id());
+													.getListReviewsByProjectIDAndReviewerID(studentProjectList.get(i).getProject().getProject_id(), reviewer.getReviewer_id());
 
 												if (reviewList.size() != 0) {																					
 
@@ -184,7 +189,8 @@
 															status = "ยังไม่ได้ประเมิน";
 														}
 									%>
-									<td align="center"><button name="button" class="<%=klass%>" disabled ><%=status%></button></td>
+									<td align="center"><button name="button"
+											class="<%=klass%>" disabled><%=status%></button></td>
 									<%
 										}
 
@@ -193,36 +199,138 @@
 													klass = "btn btn-danger";
 													status = "ยังไม่ได้ประเมิน";
 									%>
-									<td align="center"><button name="button" class="<%=klass%>" disabled ><%=status%></button></td>
+									<td align="center"><button name="button"
+											class="<%=klass%>" disabled><%=status%></button></td>
 									<%
 										}
 									%>
-									
+
 									<td>
-										<button name="button" class="btn btn-link" 
-											onclick="window.location.href='ReviewProject?project_id=<%=listsproject.get(i).getProject().getProject_id()%>';" <%=error%> >(ประเมิน)
-										</button>								
+										<button name="button" class="btn btn-link"
+											onclick="window.location.href='ReviewProject?project_id=<%=studentProjectList.get(i).getProject().getProject_id()%>';"
+											<%=error%>>(ประเมิน)</button>
 									</td>
-									
+
 									<td>
-										<button name="button" class="btn btn-link" 
-											onclick="window.location.href='ReviseProject?project_id=<%=listsproject.get(i).getProject().getProject_id()%>';" <%=bug%> >(แก้ไข)
-										</button>
+										<button name="button" class="btn btn-link"
+											onclick="window.location.href='ReviseProject?project_id=<%=studentProjectList.get(i).getProject().getProject_id()%>';"
+											<%=bug%>>(แก้ไข)</button>
 									</td>
 
 									<td align="center">
-										<button name="button" class="btn btn-warning" 
-											onclick="window.location.href='ViewScienceProjectDetail?project_id=<%=listsproject.get(i).getProject().getProject_id()%>';" <%=bug%> >
+										<button name="button" class="btn btn-warning"
+											onclick="window.location.href='ViewScienceProjectDetail?project_id=<%=studentProjectList.get(i).getProject().getProject_id()%>';"
+											<%=bug%>>
 											<i class="fa fa-eye"></i>
 										</button>
 									</td>
 
 								</tr>
-								
+
 									<%
-											}
+										}
 									%>
+									
+							<%
+								if (reviewer != null && studentProjectList.get(i).getProject().getState_project() == 2) {
+							%>
+							<tbody>
+								<tr>
+									<td align="center"><%=studentProjectList.get(i).getProject().getProject_id()%></td>
+									<td><%=studentProjectList.get(i).getProject().getProjectname()%></td>
+
+									<%
+												String error = null;
+												String bug = null;
+												String klass = null;
+												String status = null;
+												String reviews_id = null;
+
+												ListScienceProjectManager listScienceProjectManager = new ListScienceProjectManager();
+
+												List<Reviews> reviewList = listScienceProjectManager
+													.getListReviewsByProjectIDAndReviewerID(studentProjectList.get(i).getProject().getProject_id(), reviewer.getReviewer_id());
+
+												if (reviewList.size() != 0) {		
 													
+													for (Reviews reviews : reviewList) {
+														
+														reviews_id = reviews.getReviews_id();												
+																											
+														Date date = new Date();  
+										                Timestamp timestamp = new Timestamp(date.getTime());  
+										                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); 
+									               
+																											
+														if (timestamp.after(reviews.getEnddate())) {
+															error = "disabled";
+															bug = "disabled";
+															status = "หมดเวลา";
+														} else if (reviews.getStatus().equals("ประเมินสำเร็จ")) {
+															error = "disabled";
+															klass = "btn btn-success";
+															status = reviews.getStatus();
+														} else if (reviews.getStatus().equals("กำลังประเมิน")) {
+															bug = "disabled";
+															klass = "btn btn-warning";
+															status = reviews.getStatus();
+														} else {
+															bug = "disabled";
+															klass = "btn btn-danger";
+															status = "ยังไม่ได้ประเมิน";
+														}
+									%>
+									<td align="center"><button name="button"
+											class="<%=klass%>" disabled><%=status%></button></td>
+									<%
+										}
+
+												} else {
+													bug = "disabled";
+													klass = "btn btn-danger";
+													status = "ยังไม่ได้ประเมิน";
+									%>
+									<td align="center"><button name="button"
+											class="<%=klass%>" disabled><%=status%></button></td>
+									<%
+										}
+									%>
+
+									<td>
+										<button name="button" class="btn btn-link"
+											onclick="window.location.href='ReviewProject?project_id=<%=studentProjectList.get(i).getProject().getProject_id()%>&reviews_id=<%=reviews_id%> ';"
+											<%=error%>>(ประเมิน)</button>
+									</td>
+
+									<td>
+										<button name="button" class="btn btn-link"
+											onclick="window.location.href='ReviseProject?project_id=<%=studentProjectList.get(i).getProject().getProject_id()%>';"
+											<%=bug%>>(แก้ไข)</button>
+									</td>
+
+									<td align="center">
+										<button name="button" class="btn btn-warning"
+											onclick="window.location.href='ViewScienceProjectDetail?project_id=<%=studentProjectList.get(i).getProject().getProject_id()%>';"
+											<%=bug%>>
+											<i class="fa fa-eye"></i>
+										</button>
+									</td>
+
+								</tr>
+
+									<%
+										}
+									%>
+									
+									
+									
+
+								<%
+									}
+								%>
+
+
+
 								<%						
 									} else { 
 								%>

@@ -156,7 +156,10 @@
 					<td align="center" style="white-space: nowrap "><%=award%></td>
 				</tr>			
 				<%	
+					if ( admin != null ) {
 						announceResultManager.isUpdateAward(project_id, award) ;
+					} 
+						
 					
 						}
 						

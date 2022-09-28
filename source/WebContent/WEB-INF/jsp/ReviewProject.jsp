@@ -4,8 +4,10 @@
 <%
 	Report report = null;
 	Reviewer reviewer = null ;
+	Reviews reviews = null ;
 	StudentProject sproject = null;
 	Question question = null;
+	List<Question> listquestion = new Vector<>();
 	List<StudentProject> listsproject = new Vector<>();
 	
 	try {
@@ -21,7 +23,19 @@
 	}
 	
 	try {
+		reviews = (Reviews) request.getAttribute("reviews");
+	} catch (Exception e) {
+		e.printStackTrace();
+	}
+	
+	try {
 		question = (Question) request.getAttribute("question");
+	} catch (Exception e) {
+		e.printStackTrace();
+	}
+	
+	try {
+		listquestion = (List<Question>) request.getAttribute("listquestion");
 	} catch (Exception e) {
 		e.printStackTrace();
 	}
@@ -132,6 +146,8 @@
 								
 								<input type="hidden" id="reviewer_id" name="reviewer_id" class="form-control data" value="<%=reviewer.getReviewer_id()%>" >
 								<input type="hidden" id="team_id" name="team_id" class="form-control data" value="<%=reviewer.getTeam().getTeam_id()%>" >
+								<input type="hidden" id="reviews_id" name="reviews_id" class="form-control data" value="<%=reviews.getReviews_id()%>" >
+								<input type="hidden" id="state_project" name="state_project" class="form-control data" value="<%=sproject.getProject().getState_project()%>" >
 				
 								<div class="form-group row">
 									<label class="col-sm-3 col-form-label text-left">รหัสโครงงานวิทยาศาสตร์</label>
@@ -209,10 +225,15 @@
 								</div>
 							</div>						
 
-							<br>
+							<br>							
 							<h4>ประเมินโครงงานวิทยาศาสตร์</h4>
 							<hr class="colorgraph">						
 							<br>
+							
+							<!-- 1 -->
+							
+							<% if (sproject.getProject().getState_project() == 1) { %>
+							
 							<table class="table table-bordered  table-hover" id=myTable style="width: 75%; align:center" >
 								<thead class="table-info" align="center">
 									<tr>
@@ -221,9 +242,9 @@
 										<th colspan="2">คะแนน</th>								
 									</tr>
 								</thead>
-																								
-								<input type="hidden"  id="question_id"  name="question_id" class="form-control data" value="<%=question.getQuestion_id()%>">
 								
+								<input type="hidden"  id="question_id"  name="question_id" class="form-control data" value="<%=question.getQuestion_id()%>">		
+							
 								<tbody>
 									<tr>
 										<td align="center"><%=question.getQuestion_id()%></td>
@@ -231,8 +252,7 @@
 										<td width="50px"><input type="text" name="answer" id="answer" class="form-control data" style="width: 100px" maxlength="5"  onkeyup="checkNumber<%=question.getFullscore()%>(this)"></td>	
 										<td align="center" width="130px">&nbsp;&nbsp;/&nbsp;<%=question.getFullscore()%></td>						
 									</tr>
-								</tbody>
-															
+								</tbody>						
 							</table>
 			
 							<div class="form-group row">
@@ -240,14 +260,58 @@
 							</div>	
 							<div class="form-group row">						
 								<textarea id="comments" name="comments" rows="4" cols="50"  class="form-control data" style="margin-left: 15px; width: 600px"></textarea>
-							</div>				
+							</div>
+							
+							<% } %>
+									
+							<!-- 2 -->
+
+							<% if (sproject.getProject().getState_project() == 2) { %>
+								<table class="table table-bordered  table-hover" id=myTable
+									style="width: 75%; align: center">
+									<thead class="table-info" align="center">
+										<tr>
+											<th width="100px">ลำดับ</th>
+											<th>รายการประเมิน</th>
+											<th colspan="2">คะแนน</th>
+										</tr>
+									</thead>
+
+									<% 
+										for (Question questions : listquestion) { 							
+									%>
+									<input type="hidden" id="question_id" name="question_id" class="form-control data" value="<%=questions.getQuestion_id()%>">
+									<tbody>
+										<tr>
+											<td align="center"><%=questions.getQuestion_id()%></td>
+											<td><%=questions.getQuestion()%></td>
+											<td width="50px"><input type="text" name="answer" id="answer" class="form-control data" style="width: 100px" maxlength="5"
+												onkeyup="checkNumber<%=questions.getFullscore()%>(this)"></td>
+											<td align="center" width="130px">&nbsp;&nbsp;/&nbsp;<%=questions.getFullscore()%></td>
+										</tr>
+									</tbody>
+									<% } %>
+								</table>
+
+								<div class="form-group row">
+									<label class="col-sm-3 col-form-label text-left">ความคิดเห็นเพิ่มเติม (*)</label>
+								</div>
+								<div class="form-group row">
+									<textarea id="comments" name="comments" rows="4" cols="50" class="form-control data" style="margin-left: 15px; width: 600px"><%=reviews.getComments()%></textarea>
+								</div>
+
+								<% } %>
+
+								<!-- 3 -->
+							
+				
 							<br>
 							<div class="form-group row">
-									<div class="col-sm-12 text-left">
-										<button type="submit" class="btn btn-success" onclick ="return validateForm(frm)">ส่งผลประเมิน</button>									
-										<a class="btn btn-danger" href="doListScienceProject" role="button">ยกเลิก</a>	
-									</div>
+								<div class="col-sm-12 text-left">
+									<button type="submit" class="btn btn-success" onclick ="return validateForm(frm)">ส่งผลประเมิน</button>									
+									<a class="btn btn-danger" href="doListScienceProject" role="button">ยกเลิก</a>	
 								</div>
+							</div>					
 						</div>
 					</div>
 				</div>

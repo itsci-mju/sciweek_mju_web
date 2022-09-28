@@ -2,18 +2,20 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
-<%@ page import="java.util.*,manager.*,bean.*,java.text.*"%>
+<%@ page import="java.util.*,manager.*,bean.*,java.text.*,java.sql.Timestamp"%>
 <%
 	Student student = null;
 	Reviewer reviewer = null;
 	Admin admin = null;
+	String error = null; 
+	Integer errors = null;
 
 	try {
 		student = (Student) session.getAttribute("student");
 	} catch (Exception e) {
 		
 	}
-
+	
 	try {
 		reviewer = (Reviewer) session.getAttribute("reviewer");
 	} catch (Exception e) {
@@ -25,6 +27,18 @@
 	} catch (Exception e) {
 
 	}
+	
+	try {
+		errors = (Integer) session.getAttribute("errors");
+	} catch (Exception e) {
+		
+	}
+
+	Date present = new Date();  
+    Timestamp timestamp = new Timestamp(present.getTime());  
+    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss"); 
+	String presentdate = new SimpleDateFormat("dd/MM/yyyy").format(present.getTime());
+	String presenttime = new SimpleDateFormat("HH:mm").format(present.getTime()); 
 	
 	ListNewsManager listNewsManager= new ListNewsManager();
 	List<Pressrelease> listnews = listNewsManager.getlistNewsForshow();
@@ -46,131 +60,13 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <link href='https://fonts.googleapis.com/css?family=Kanit' rel='stylesheet' type='text/css'>
 <link rel="stylesheet" href="./css/web_css.css">
-
-<style type="text/css">
-.zoom {
-	padding: 50px;
-	background-color: green;
-	transition: transform .2s;
-	width: 200px;
-	height: 200px;
-	margin: 0 auto;
-}
-
-.zoom:hover {
-	-ms-transform: scale(1.5); /* IE 9 */
-	-webkit-transform: scale(1.5); /* Safari 3-8 */
-	transform: scale(1.5);
-}
-
-.section {
-	padding: 100px 0;
-	position: relative;
-}
-
-.gray-bg {
-	background-color: #ebf4fa;
-}
-/* Blog 
----------------------*/
-.blog-grid {
-	margin-top: 15px;
-	margin-bottom: 15px;
-}
-
-.blog-grid .blog-img {
-	position: relative;
-	border-radius: 5px;
-	overflow: hidden;
-}
-
-.blog-grid .blog-img .date {
-	position: absolute;
-	background: #3a3973;
-	color: #ffffff;
-	padding: 8px 15px;
-	left: 0;
-	top: 10px;
-	font-size: 14px;
-}
-
-.blog-grid .blog-info {
-	box-shadow: 0 0 30px rgba(31, 45, 61, 0.125);
-	border-radius: 5px;
-	background: #ffffff;
-	padding: 20px;
-	margin: -30px 20px 0;
-	position: relative;
-}
-
-.blog-grid .blog-info h5 {
-	font-size: 22px;
-	font-weight: 500;
-	margin: 0 0 10px;
-}
-
-.blog-grid .blog-info h5 a {
-	color: #3a3973;
-}
-
-.blog-grid .blog-info p {
-	margin: 0;
-}
-
-.blog-grid .blog-info .btn-bar {
-	margin-top: 20px;
-}
-
-.px-btn-arrow {
-	padding: 0 50px 0 0;
-	line-height: 20px;
-	position: relative;
-	display: inline-block;
-	color: #fe4f6c;
-	-moz-transition: ease all 0.3s;
-	-o-transition: ease all 0.3s;
-	-webkit-transition: ease all 0.3s;
-	transition: ease all 0.3s;
-}
-
-.px-btn-arrow .arrow {
-	width: 13px;
-	height: 2px;
-	background: currentColor;
-	display: inline-block;
-	position: absolute;
-	top: 0;
-	bottom: 0;
-	margin: auto;
-	right: 25px;
-	-moz-transition: ease right 0.3s;
-	-o-transition: ease right 0.3s;
-	-webkit-transition: ease right 0.3s;
-	transition: ease right 0.3s;
-}
-
-.px-btn-arrow .arrow:after {
-	width: 8px;
-	height: 8px;
-	border-right: 2px solid currentColor;
-	border-top: 2px solid currentColor;
-	content: "";
-	position: absolute;
-	top: -3px;
-	right: 0;
-	display: inline-block;
-	-moz-transform: rotate(45deg);
-	-o-transform: rotate(45deg);
-	-ms-transform: rotate(45deg);
-	-webkit-transform: rotate(45deg);
-	transform: rotate(45deg);
-}
-</style>
+<link rel="stylesheet" href="./css/index_css.css">
 </head>
+
 <body style="background-image: url('./image/hero-bg.png')">
 
 	<jsp:include page="common/navbar.jsp"></jsp:include>
-	
+
 	<div style="margin-top: 5px;">
 		<section id="content">
 				<div class="row">
@@ -184,7 +80,88 @@
 				</div>
 		</section>
 	</div>
-
+	
+	<%
+		if (student != null && errors == 1) {
+			error = "กรุณาอัปโหลดเอกสารรายงานและวิดีโอ";
+	%>
+	<section style="margin-top : -45px">
+		<div class="container mt-5">
+			<div class="row">
+				<div class="col-sm-12">
+					<div
+						class="alert fade alert-simple alert-danger alert-dismissible text-left font__family-montserrat font__size-16 font__weight-light brk-library-rendered rendered show"
+						role="alert" data-brk-library="component__alert">
+						<button type="button" class="close font__size-18"
+							data-dismiss="alert">
+							<span aria-hidden="true"> 
+								<i class="fa fa-times danger "></i> 
+							</span> 
+							<span class="sr-only">Close</span>
+						</button>
+						<i class="start-icon far fa-times-circle faa-pulse animated"></i>
+						<strong class="font__weight-semibold">แจ้งเตือน !!!</strong>&nbsp;วันที่ : <%=presentdate%> เวลา <%=presenttime%> น. &nbsp; <a href="doListProject"><i class="fa-solid fa-hand-point-right">&nbsp;</i><%=error%></a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+	<% } %>
+	
+	<% 
+		if (student != null && errors == 2) { 
+			error = "กรุณาอัปโหลดวิดีโอ" ;	
+	%>
+	<section style="margin-top : -45px">
+		<div class="container mt-5">
+			<div class="row">
+				<div class="col-sm-12">
+					<div
+						class="alert fade alert-simple alert-danger alert-dismissible text-left font__family-montserrat font__size-16 font__weight-light brk-library-rendered rendered show"
+						role="alert" data-brk-library="component__alert">
+						<button type="button" class="close font__size-18"
+							data-dismiss="alert">
+							<span aria-hidden="true"> 
+								<i class="fa fa-times danger "></i> 
+							</span> 
+							<span class="sr-only">Close</span>
+						</button>
+						<i class="start-icon far fa-times-circle faa-pulse animated"></i>
+						<strong class="font__weight-semibold">แจ้งเตือน !!!</strong>&nbsp;วันที่ : <%=presentdate%> เวลา <%=presenttime%> น. &nbsp; <a href="doListProject"><i class="fa-solid fa-hand-point-right">&nbsp;</i><%=error%></a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+	<% } %>
+	
+	<% 
+		if (student != null && errors == 3) { 
+			error = "กรุณาอัปโหลดเอกสารรายงาน" ;	
+	%>
+	<section style="margin-top : -45px">
+		<div class="container mt-5">
+			<div class="row">
+				<div class="col-sm-12">
+					<div
+						class="alert fade alert-simple alert-danger alert-dismissible text-left font__family-montserrat font__size-16 font__weight-light brk-library-rendered rendered show"
+						role="alert" data-brk-library="component__alert">
+						<button type="button" class="close font__size-18"
+							data-dismiss="alert">
+							<span aria-hidden="true"> 
+								<i class="fa fa-times danger "></i> 
+							</span> 
+							<span class="sr-only">Close</span>
+						</button>
+						<i class="start-icon far fa-times-circle faa-pulse animated"></i>
+						<strong class="font__weight-semibold">แจ้งเตือน !!!</strong>&nbsp;วันที่ : <%=presentdate%> เวลา <%=presenttime%> น. &nbsp; <a href="doListProject"><i class="fa-solid fa-hand-point-right">&nbsp;</i><%=error%></a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+	<% } %>
+	
 	<div style="margin-top: -5px; margin-bottom: 5px">
 		<div id="carouselExampleIndicators" class="carousel slide"
 			data-ride="carousel">
@@ -311,7 +288,6 @@
 		</section>
 	</div>
 
-
 	<jsp:include page="common/footer.jsp"></jsp:include>
 
 	<c:if test="${msg != null }">
@@ -320,5 +296,6 @@
 			alert(msg);
 		</script>
 	</c:if>
+
 </body>
 </html>
