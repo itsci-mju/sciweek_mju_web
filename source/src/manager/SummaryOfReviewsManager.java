@@ -88,15 +88,16 @@ public class SummaryOfReviewsManager {
 		return result;
 	}
 	
-	public boolean isFailedProject(Integer team_id) {
+	public boolean isFailedProject(Integer team_id, Integer state_project) {
 		ConnectionDB condb = new ConnectionDB();
 		Connection con = condb.getConnection();
 		
 		Boolean result = false;
 
 		try {
-			CallableStatement stmt = con.prepareCall("{call isFailedProject(?)}");
+			CallableStatement stmt = con.prepareCall("{call isFailedProject(?,?)}");
 			stmt.setInt(1, team_id);		
+			stmt.setInt(2, state_project);
 			stmt.execute();
 			result = true;
 			  
@@ -126,16 +127,15 @@ public class SummaryOfReviewsManager {
 		return result;
 	}
 	
-	public boolean isChooseProjectSecond(Project project, Integer team_id) {
+	public boolean isChooseProjectSecond(Project project) {
 		ConnectionDB condb = new ConnectionDB();
 		Connection con = condb.getConnection();
 		
 		Boolean result = false;
 
 		try {
-			CallableStatement stmt = con.prepareCall("{call isChooseProjectSecond(?,?)}");
+			CallableStatement stmt = con.prepareCall("{call isChooseProjectSecond(?)}");
 			stmt.setString(1, project.getProject_id());		
-			stmt.setInt(2, team_id);	
 			stmt.execute();
 			result = true;
 			  

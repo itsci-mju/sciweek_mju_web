@@ -17,6 +17,7 @@ import org.springframework.web.servlet.ModelAndView;
 import bean.Project;
 import bean.Reviewer;
 import bean.StudentProject;
+import lombok.val;
 import manager.ListScienceProjectManager;
 // import bean.Reviews;
 // import lombok.val;
@@ -73,35 +74,34 @@ public class SummaryOfReviewsController {
 			SummaryOfReviewsManager summaryOfReviewsManager = new SummaryOfReviewsManager();
 			ListScienceProjectManager listScienceProjectManager = new ListScienceProjectManager();
 						
-			summaryOfReviewsManager.isFailedProject(team_id);
-				
+//			summaryOfReviewsManager.isFailedProject(team_id);
+			
+			String[] state_projectStrList = request.getParameterValues("state_project");			
 			String[] projectIdStrList = request.getParameterValues("chkproject");
 				
-				for (String projectIdstr : projectIdStrList) {
-					
-						String project_id = projectIdstr;
-						
-						System.out.println(project_id);
-						
-						Project projectTemp = summaryOfReviewsManager.getProjectByProjectID(project_id);
-						
-						Integer state_project = projectTemp.getState_project();
-						
-						System.out.println(state_project);
-						
-						Project project = new Project();
-						project.setProject_id(project_id);
-						
-						summaryOfReviewsManager.isChooseProjectFirst(project);
-						System.out.println("===========================");
-						System.out.println(project_id);
-						System.out.println(state_project);
-						
-						if (state_project == 2) {
-							summaryOfReviewsManager.isChooseProjectSecond(project, team_id);
-						}
+			for (int i = 0 ; i < projectIdStrList.length; i++) {
 
+				val state_project = Integer.parseInt(state_projectStrList[i]);
+				val project_id = projectIdStrList[i];
+
+				Project project = new Project();
+				project.setProject_id(project_id);
+	
+				System.out.println(project_id);
+				System.out.println(state_project);
+				System.out.println("===========================");
+				
+				if (state_project == 1) {
+					summaryOfReviewsManager.isChooseProjectFirst(project);
+					summaryOfReviewsManager.isFailedProject(team_id, state_project);
 				}
+				
+				if (state_project == 2) {
+					summaryOfReviewsManager.isChooseProjectSecond(project);
+					summaryOfReviewsManager.isFailedProject(team_id, state_project);
+				}
+
+			}
 
 				List<ProjectResponse> projectResponseList = listScienceProjectManager.getListProjectByReviewerID(reviewer_id);
 				
@@ -126,9 +126,7 @@ public class SummaryOfReviewsController {
 				mav.addObject("projectResponseList", projectResponseList);
 				mav.addObject("reviewerResponseList", reviewerResponseList);
 				mav.addObject("studentProjectList", studentProjectList);
-				return mav;
-				
-			
+				return mav;	
 		} else {
 			ModelAndView mav = new ModelAndView("LoginPage");
 			mav.addObject("msg", "กรุณาเข้าสู่ระบบใหม่อีกครั้ง!!!!");

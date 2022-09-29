@@ -58,75 +58,256 @@
 <%response.setHeader("Content-Disposition", "inline; filename=ExportSummaryFile.xls"); %>
 
 	<div class="container" style="margin-top: 35px;">
-		<div class="container">
-			<div class="form-group row">
-				<h3>สรุปผลคะแนนโครงงานวิทยาศาสตร์</h3>
+		<section id="content">
+			<div class="container" style="margin-top: -20px">
+				<br>
+					<div class="form-group row">
+						<div class="col-auto">
+							<h3><i class="fa-solid fa-square-poll-horizontal">&nbsp;</i>ผลสรุปคะแนนโครงงานวิทยาศาสตร์</h3>
+						</div>				
+					</div>					
 			</div>
-		</div>
+		</section>
+		<hr class="colorgraph">
 	</div>
 
-	<div style="margin-left: 6%; margin-right: 6%;">
-		<br>
-		<table class="table table-bordered  table-hover" id=myTable>
-			<thead class="table-info" align="center">
-				<tr>
-					<th style="white-space: nowrap">ลำดับ</th>
-					<th style="white-space: nowrap">วันเวลาประเมิน</th>
-					<th style="white-space: nowrap">ชื่อโครงงาน/สิ่งประดิษฐ์</th>
-					<%
-						for (ReviewerResponse reviewers : reviewerList) {
-					%>
-					<th  style="white-space: nowrap " ><%=reviewers.getReviewerName()%></th>
-					<%
-						}
-					%>
-					<th style="white-space: nowrap">รวมคะแนน</th>
-				</tr>
-			</thead>
-			<%
-				for (int i = 0; i < projectResponseList.size(); i++) {
-					
-					Double total = projectResponseList.get(i).getTotalScore()/projectResponseList.get(i).getReviewerResponseList().size();
-					Double avgscore = ( Math.floor(total * 100) / 100 );
-									
-			%>	
-			
-			<tbody>
-				<tr>
-					<td align="center" width="50px"><%=i + 1%></td>
-					<td align="center" width="190px" ><%=projectResponseList.get(i).getReviewDate()%></td>
-					<td align="left"><%=projectResponseList.get(i).getProjectName()%></td>
-					<% for (ReviewerResponse reviewerResponse : projectResponseList.get(i).getReviewerResponseList()) { %>
+
+	<form action="isChooseProject" name="frm" id="chooseproject" method="post">
+	<input type="hidden" class="form-control" name="reviewer_id" id="reviewer_id" value="<%=reviewer.getReviewer_id()%>"> 
+	<input type="hidden" class="form-control" name="team_id" id="team_id" value="<%=reviewer.getTeam().getTeam_id()%>"> 
+		<div style="margin-left: 6%; margin-right: 6%;">
+			<br>
+			<table class="table table-bordered  table-hover" id=myTable>
+				<thead class="table-info" align="center">
+					<tr>
+						<th style="white-space: nowrap" width="55"></th>
+						<th style="white-space: nowrap">ลำดับ</th>
+						<th style="white-space: nowrap">วันเวลาประเมิน</th>
+						<th style="white-space: nowrap">ชื่อโครงงาน/สิ่งประดิษฐ์</th>
+						<%
+							for (ReviewerResponse reviewers : reviewerList) {
+						%>
+						<th style="white-space: nowrap"><%=reviewers.getReviewerName()%></th>
+						<%
+							}
+						%>
+						<th style="white-space: nowrap">รวมคะแนน</th>
+					</tr>
+				</thead>
+
+				<%
+					if (projectResponseList.size() != 0) {
+
+						for (int i = 0; i < projectResponseList.size(); i++) {
+
+							Double total = projectResponseList.get(i).getTotalScore()
+									/ projectResponseList.get(i).getReviewerResponseList().size();
+							Double avgscore = (Math.floor(total * 100) / 100);
+
+							SummaryOfReviewsManager summaryOfReviewsManager = new SummaryOfReviewsManager();
+
+							summaryOfReviewsManager.isUpdateAVGScore(projectResponseList.get(i).getProjectID(), avgscore);
+				%>
+				
+				<!-- 1 -->
+				
+				<% if (reviewer != null && projectResponseList.get(i).getStateProject() == 1) { %>
+				
+				<input type="hidden" name="state_project" id="state_project" value="<%=projectResponseList.get(i).getStateProject()%>">
+
+				<tbody>
+					<tr>
+						<td align="center"><input type="checkbox" id="chkproject" name="chkproject" value="<%=projectResponseList.get(i).getProjectID()%>"></td>
+						<td align="center" width="50px"><%=projectResponseList.get(i).getProjectID()%></td>
+						<td align="center" width="190px"><%=projectResponseList.get(i).getReviewDate()%></td>
+						<td align="left"><%=projectResponseList.get(i).getProjectName()%></td>
+						<%
+							for (ReviewerResponse reviewerResponse : projectResponseList.get(i).getReviewerResponseList()) {
+						%>
 						<td align="center" width="90px"><%=reviewerResponse.getScore()%></td>
-					<% } %>
-					
-					<% if (total >= 80) { %>
-			        	<td style="background-color: #C6EFCE" align="center" width="70px"><%=avgscore%></td>
-			      	<%} else if (total >= 75) { %>
-			      		<td style="background-color: #B7DEE8" align="center" width="70px"><%=avgscore%></td>
-			        <%} else if (total >= 70) { %>
-			         	<td style="background-color: #B8CCE4" align="center" width="70px"><%=avgscore%></td>
-			        <%} else if (total >= 65) { %>
-			        	<td style="background-color: #CCC0DA" align="center" width="70px"><%=avgscore%></td>
-			       <%} else if (total >= 60) { %>
-			       		<td style="background-color: #FFFFCC" align="center" width="70px"><%=avgscore%></td>
-			       <%} else if (total >= 55) { %>
-			       		<td style="background-color: #FDE9D9" align="center" width="70px"><%=avgscore%></td>
-			       <%}  else if (total >= 50) { %>
-			       		<td style="background-color: #FCD5B4" align="center" width="70px"><%=avgscore%></td>
-			       <%} else { %>
-			        	<td style="background-color: #FFC7CE" align="center" width="70px"><%=avgscore%></td>
-			       <% } %>
-				</tr>
-			</tbody>
-			
-			<%
-				}
-			%>
-			
-			
-		</table>
-	</div>
+						<%
+							}
+						%>
 
+						<%
+							if (total >= 80) {
+						%>
+						<td style="background-color: #C6EFCE" align="center" width="70px"><%=avgscore%></td>
+						<%
+							} else if (total >= 75) {
+						%>
+						<td style="background-color: #B7DEE8" align="center" width="70px"><%=avgscore%></td>
+						<%
+							} else if (total >= 70) {
+						%>
+						<td style="background-color: #B8CCE4" align="center" width="70px"><%=avgscore%></td>
+						<%
+							} else if (total >= 65) {
+						%>
+						<td style="background-color: #CCC0DA" align="center" width="70px"><%=avgscore%></td>
+						<%
+							} else if (total >= 60) {
+						%>
+						<td style="background-color: #FFFFCC" align="center" width="70px"><%=avgscore%></td>
+						<%
+							} else if (total >= 55) {
+						%>
+						<td style="background-color: #FDE9D9" align="center" width="70px"><%=avgscore%></td>
+						<%
+							} else if (total >= 50) {
+						%>
+						<td style="background-color: #FCD5B4" align="center" width="70px"><%=avgscore%></td>
+						<%
+							} else {
+						%>
+						<td style="background-color: #FFC7CE" align="center" width="70px"><%=avgscore%></td>
+						<%
+							}
+						%>
+					</tr>
+				</tbody>
+				
+				<% } %>
+				
+				<!-- 2 -->
+				
+				<% if (reviewer != null && projectResponseList.get(i).getStateProject() == 2) { %>
+				
+				<input type="hidden" name="state_project" id="state_project" value="<%=projectResponseList.get(i).getStateProject()%>">
+
+				<tbody>
+					<tr>
+						<td align="center"><input type="checkbox" id="chkproject" name="chkproject" value="<%=projectResponseList.get(i).getProjectID()%>"></td>
+						<td align="center" width="50px"><%=projectResponseList.get(i).getProjectID()%></td>
+						<td align="center" width="190px"><%=projectResponseList.get(i).getReviewDate()%></td>
+						<td align="left"><%=projectResponseList.get(i).getProjectName()%></td>
+						<%
+							for (ReviewerResponse reviewerResponse : projectResponseList.get(i).getReviewerResponseList()) {
+						%>
+						<td align="center" width="90px"><%=reviewerResponse.getScore()%></td>
+						<%
+							}
+						%>
+
+						<%
+							if (total >= 80) {
+						%>
+						<td style="background-color: #C6EFCE" align="center" width="70px"><%=avgscore%></td>
+						<%
+							} else if (total >= 75) {
+						%>
+						<td style="background-color: #B7DEE8" align="center" width="70px"><%=avgscore%></td>
+						<%
+							} else if (total >= 70) {
+						%>
+						<td style="background-color: #B8CCE4" align="center" width="70px"><%=avgscore%></td>
+						<%
+							} else if (total >= 65) {
+						%>
+						<td style="background-color: #CCC0DA" align="center" width="70px"><%=avgscore%></td>
+						<%
+							} else if (total >= 60) {
+						%>
+						<td style="background-color: #FFFFCC" align="center" width="70px"><%=avgscore%></td>
+						<%
+							} else if (total >= 55) {
+						%>
+						<td style="background-color: #FDE9D9" align="center" width="70px"><%=avgscore%></td>
+						<%
+							} else if (total >= 50) {
+						%>
+						<td style="background-color: #FCD5B4" align="center" width="70px"><%=avgscore%></td>
+						<%
+							} else {
+						%>
+						<td style="background-color: #FFC7CE" align="center" width="70px"><%=avgscore%></td>
+						<%
+							}
+						%>
+					</tr>
+				</tbody>
+				
+				<% } %>
+				
+				<!-- 3 -->
+				
+				<% if (reviewer != null && projectResponseList.get(i).getStateProject() == 3) { %>
+
+				<tbody>
+					<tr>		
+						<td align="center">#<%=i + 1%></td>				
+						<td align="center" width="50px"><%=projectResponseList.get(i).getProjectID()%></td>
+						<td align="center" width="190px"><%=projectResponseList.get(i).getReviewDate()%></td>
+						<td align="left"><%=projectResponseList.get(i).getProjectName()%></td>
+						<%
+							for (ReviewerResponse reviewerResponse : projectResponseList.get(i).getReviewerResponseList()) {
+						%>
+						<td align="center" width="90px"><%=reviewerResponse.getScore()%></td>
+						<%
+							}
+						%>
+
+						<%
+							if (total >= 80) {
+						%>
+						<td style="background-color: #C6EFCE" align="center" width="70px"><%=avgscore%></td>
+						<%
+							} else if (total >= 75) {
+						%>
+						<td style="background-color: #B7DEE8" align="center" width="70px"><%=avgscore%></td>
+						<%
+							} else if (total >= 70) {
+						%>
+						<td style="background-color: #B8CCE4" align="center" width="70px"><%=avgscore%></td>
+						<%
+							} else if (total >= 65) {
+						%>
+						<td style="background-color: #CCC0DA" align="center" width="70px"><%=avgscore%></td>
+						<%
+							} else if (total >= 60) {
+						%>
+						<td style="background-color: #FFFFCC" align="center" width="70px"><%=avgscore%></td>
+						<%
+							} else if (total >= 55) {
+						%>
+						<td style="background-color: #FDE9D9" align="center" width="70px"><%=avgscore%></td>
+						<%
+							} else if (total >= 50) {
+						%>
+						<td style="background-color: #FCD5B4" align="center" width="70px"><%=avgscore%></td>
+						<%
+							} else {
+						%>
+						<td style="background-color: #FFC7CE" align="center" width="70px"><%=avgscore%></td>
+						<%
+							}
+						%>
+					</tr>
+				</tbody>
+				
+				<% } %>
+				
+				<!-- END -->
+				
+				
+				
+
+				<%
+					}
+				%>
+
+				<%
+					} else {
+				%>
+				<tr align="center">
+					<td colspan="20"><h2>ไม่มีข้อมูล</h2></td>
+				</tr>
+				<%
+					}
+				%>
+			</table>
+				
+		</div>
+	</form>
 </body>
 </html>

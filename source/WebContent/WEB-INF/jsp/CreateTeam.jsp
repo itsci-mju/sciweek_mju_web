@@ -166,13 +166,14 @@ function validateForm(choosegroup) {
 										<option value="มัธยมศึกษาตอนปลายสาขาวิทยาศาสตร์ชีวภาพ">มัธยมศึกษาตอนปลายสาขาวิทยาศาสตร์ชีวภาพ</option>
 										<option value="มัธยมศึกษาตอนปลายสาขาวิทยาศาสตร์ประยุกต์">มัธยมศึกษาตอนปลายสาขาวิทยาศาสตร์ประยุกต์</option>
 								</select>
-							</div>						
+							
+							</div>												
 						</div>
 					</div>		
 					<br>
 					<div class="mt-3">
 						<a class="button btn-navigate-form-step" type="button" step_number="1" style="text-decoration: none;">กลับ</a>				
-						<a class="button btn-navigate-form-step" type="button" OnClick ="return validateForm(choosegroup)" step_number="3" style="text-decoration: none;">ต่อไป</a>
+						<a class="button btn-navigate-form-step" type="button" onclick ="return validateForm(choosegroup)" step_number="3" style="text-decoration: none;">ต่อไป</a>
 					</div>					
 				</section>
 				<!-- Step 3 Content, default hidden on page load. -->
@@ -194,8 +195,8 @@ function validateForm(choosegroup) {
 							</div>
 						</div>
 					</div>
-					<hr class="colorgraph">
-					<table class="table table-bordered  table-hover" id=myTable>
+					<hr class="colorgraph">				
+						<table class="table table-bordered  table-hover" id=myTable>
 						<thead class="table-primary" align="center">
 							<tr>
 								<th width="55"></th>
@@ -206,7 +207,7 @@ function validateForm(choosegroup) {
 						</thead>
 						<tbody align="center">
 							<%
-								if (listreviewer.size() != 0) {
+								if (listreviewer.size() != 0) {					
 							%>
 							<%
 								for (int i = 0; i < listreviewer.size(); i++) {
@@ -311,8 +312,9 @@ function validateForm(choosegroup) {
 											if (listproject.size() != 0) {
 										%>
 										<%
-											for (int i = 0 ; i < listproject.size() ; i++) {		
-												if (listproject.get(i).getTeam().getTeam_id() == 0 ) {
+											for (int i = 0 ; i < listproject.size() ; i++) {	
+												
+												if (listproject.get(i).getTeam().getTeam_id() == 0 && listproject.get(i).getProjecttype().getProjecttype_name() == null) {
 										%>
 										<tr>
 											<td align="center"><input type="checkbox" id="chkproject" name="chkproject" value="<%=listproject.get(i).getProject_id()%>"></td>
@@ -355,7 +357,13 @@ function validateForm(choosegroup) {
 		</script>
 	</c:if>
 	
-<script type="text/javascript">
+	<script>
+    if ( window.history.replaceState ) {
+        window.history.replaceState( null, null, window.location.href );
+    }
+	</script>
+	
+	<script type="text/javascript">
 	/**
 	 * Define a function to navigate betweens form steps.
 	 * It accepts one parameter. That is - step number.
@@ -429,7 +437,7 @@ function validateForm(choosegroup) {
 	    });
 	});
 	</script>
-	
+
 	<script type="text/javascript">
 		$(document).ready(
 				function() {

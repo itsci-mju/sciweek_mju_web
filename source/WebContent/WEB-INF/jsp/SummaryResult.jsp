@@ -221,6 +221,44 @@
 				%>
 				
 				
+				<%
+					if (reviewer != null &&  listreviews.get(i).getProject().getState_project().equals(3)) {
+				%>
+			
+			<tbody align="center">
+				<tr>
+					<td><%=listreviews.get(i).getProject().getProject_id()%></td>
+					<td><%=listreviews.get(i).getReviewdate()%></td>
+					<td align="left"><%=listreviews.get(i).getProject().getProjectname()%></td>
+					<% for (StudentProject studentProject : studentProjectList) { %>
+					<td align="center"><%=studentProject.getStudent().getSchool().getSchool_name()%></td>
+					<% } %>
+					<td><%=listreviews.get(i).getTotalscore()%></td>
+					<% if (num == 1) { %>
+					<td style="background-color: #C6EFCE"><%=num%></td>
+					<%} else if (num == 2) { %>
+					<td style="background-color: #B7DEE8"><%=num%></td>
+					<%} else if (num == 3) { %>
+					<td style="background-color: #B8CCE4"><%=num%></td>
+					<%} else if (num == 4) { %>
+					<td style="background-color: #CCC0DA"><%=num%></td>
+					<%} else if (num == 5) { %>
+					<td style="background-color: #FFFFCC"><%=num%></td>
+					<%} else if (num == 6) { %>
+					<td style="background-color: #FDE9D9"><%=num%></td>
+					<%}  else if (num == 7) { %>
+					<td style="background-color: #FCD5B4"><%=num%></td>
+					<%} else { %>
+					<td style="background-color: #FFC7CE"><%=num%></td>
+					<% } %>
+				</tr>
+				
+				<%
+					}
+				%>
+				
+				
+				
 				
 				<%
 					}

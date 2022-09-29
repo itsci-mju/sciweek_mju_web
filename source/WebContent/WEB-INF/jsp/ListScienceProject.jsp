@@ -323,6 +323,89 @@
 									%>
 									
 									
+									<%
+								if (reviewer != null && studentProjectList.get(i).getProject().getState_project() == 3) {
+							%>
+							<tbody>
+								<tr>
+									<td align="center"><%=studentProjectList.get(i).getProject().getProject_id()%></td>
+									<td><%=studentProjectList.get(i).getProject().getProjectname()%></td>
+
+									<%
+												String error = null;
+												String bug = null;
+												String klass = null;
+												String status = null;
+												String reviews_id = null;
+
+												ListScienceProjectManager listScienceProjectManager = new ListScienceProjectManager();
+
+												List<Reviews> reviewList = listScienceProjectManager
+													.getListReviewsByProjectIDAndReviewerID(studentProjectList.get(i).getProject().getProject_id(), reviewer.getReviewer_id());
+
+												if (reviewList.size() != 0) {		
+													
+													for (Reviews reviews : reviewList) {
+														
+														reviews_id = reviews.getReviews_id();												
+																											
+														Date date = new Date();  
+										                Timestamp timestamp = new Timestamp(date.getTime());  
+										                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); 
+									               
+																											
+														if (timestamp.after(reviews.getEnddate())) {
+															error = "disabled";
+															bug = "disabled";
+															status = "หมดเวลา";
+														} else if (reviews.getStatus().equals("ประเมินสำเร็จ")) {
+															error = "disabled";
+															bug = "disabled";
+															klass = "btn btn-success";
+															status = reviews.getStatus();
+														} 
+									%>
+									<td align="center"><button name="button"
+											class="<%=klass%>" disabled><%=status%></button></td>
+									<%
+										}
+
+												} else {
+													bug = "disabled";
+													klass = "btn btn-danger";
+													status = "ยังไม่ได้ประเมิน";
+									%>
+									<td align="center"><button name="button"
+											class="<%=klass%>" disabled><%=status%></button></td>
+									<%
+										}
+									%>
+
+									<td>
+										<button name="button" class="btn btn-link"
+											onclick="window.location.href='ReviewProject?project_id=<%=studentProjectList.get(i).getProject().getProject_id()%>&reviews_id=<%=reviews_id%> ';"
+											<%=error%>>(ประเมิน)</button>
+									</td>
+
+									<td>
+										<button name="button" class="btn btn-link"
+											onclick="window.location.href='ReviseProject?project_id=<%=studentProjectList.get(i).getProject().getProject_id()%>';"
+											<%=bug%>>(แก้ไข)</button>
+									</td>
+
+									<td align="center">
+										<button name="button" class="btn btn-warning" onclick="window.location.href='ViewScienceProjectDetail?project_id=<%=studentProjectList.get(i).getProject().getProject_id()%>';">
+											<i class="fa fa-eye"></i>
+										</button>
+									</td>
+
+								</tr>
+
+									<%
+										}
+									%>
+									
+									
 									
 
 								<%

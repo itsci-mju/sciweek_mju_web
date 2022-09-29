@@ -29,16 +29,10 @@
 	}
 	
 	try {
-		errors = (Integer) session.getAttribute("errors");
+		errors = (Integer) request.getAttribute("errors");
 	} catch (Exception e) {
 		
 	}
-
-	Date present = new Date();  
-    Timestamp timestamp = new Timestamp(present.getTime());  
-    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss"); 
-	String presentdate = new SimpleDateFormat("dd/MM/yyyy").format(present.getTime());
-	String presenttime = new SimpleDateFormat("HH:mm").format(present.getTime()); 
 	
 	ListNewsManager listNewsManager= new ListNewsManager();
 	List<Pressrelease> listnews = listNewsManager.getlistNewsForshow();
@@ -83,6 +77,13 @@
 	
 	<%
 		if (student != null && errors == 1) {
+			
+			Date present = new Date();  
+		    Timestamp timestamp = new Timestamp(present.getTime());  
+		    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss"); 
+			String presentdate = new SimpleDateFormat("dd/MM/yyyy").format(present.getTime());
+			String presenttime = new SimpleDateFormat("HH:mm").format(present.getTime()); 
+			
 			error = "กรุณาอัปโหลดเอกสารรายงานและวิดีโอ";
 	%>
 	<section style="margin-top : -45px">
@@ -110,6 +111,13 @@
 	
 	<% 
 		if (student != null && errors == 2) { 
+			
+			Date present = new Date();  
+		    Timestamp timestamp = new Timestamp(present.getTime());  
+		    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss"); 
+			String presentdate = new SimpleDateFormat("dd/MM/yyyy").format(present.getTime());
+			String presenttime = new SimpleDateFormat("HH:mm").format(present.getTime()); 
+			
 			error = "กรุณาอัปโหลดวิดีโอ" ;	
 	%>
 	<section style="margin-top : -45px">
@@ -137,6 +145,13 @@
 	
 	<% 
 		if (student != null && errors == 3) { 
+			
+			Date present = new Date();  
+		    Timestamp timestamp = new Timestamp(present.getTime());  
+		    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss"); 
+			String presentdate = new SimpleDateFormat("dd/MM/yyyy").format(present.getTime());
+			String presenttime = new SimpleDateFormat("HH:mm").format(present.getTime()); 
+			
 			error = "กรุณาอัปโหลดเอกสารรายงาน" ;	
 	%>
 	<section style="margin-top : -45px">

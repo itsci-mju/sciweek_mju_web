@@ -337,6 +337,103 @@ try {
 		
 		<% } %>
 		
+		
+		
+		<% if (reviews.getProject().getState_project() == 3) { %>
+		
+		<h5>สรุปคำวิจารณ์ที่ได้รับและความคิดเห็น</h5>
+		<hr class="colorgraph">
+		<table class="table table-bordered  table-hover" id=myTable>
+			<thead class="table-info" align="center">
+				<tr>
+					<th width="200">วันเวลาประเมิน</th>
+					<th>ชื่อโครงงาน/สิ่งประดิษฐ์</th>
+					<th style="white-space: nowrap">รายงาน</th>
+					<th style="white-space: nowrap">แสดงโครงงาน</th>
+					<th style="white-space: nowrap">การอภิปราย</th>
+					<th style="white-space: nowrap">โครงงาน</th>
+					<th width="70">รวมคะแนน</th>
+				</tr>
+			</thead>
+			<%
+				if (reviews.getReviews_id() != null ) {	
+			%>
+
+			<tbody>
+				<tr>
+					<td align="center"><%=reviews.getReviewdate()%></td>
+					<td><%=reviews.getProject().getProjectname()%></td>
+
+					<%
+						List<Answer> answerList = reviews.getListanswer()  ;
+
+						for (Answer answer : answerList) {
+							Question question = answer.getQuestion();
+					%>
+					<td align="center"><%=answer.getAnswer() %></td>
+					<% } %>
+
+					<% if (reviews.getTotalscore() >= 80) { %>
+					<td align="center" style="background-color: #C6EFCE"><%=reviews.getTotalscore()%></td>
+					<%} else if (reviews.getTotalscore() >= 75) { %>
+					<td align="center" style="background-color: #B7DEE8"><%=reviews.getTotalscore()%></td>
+					<%} else if (reviews.getTotalscore() >= 70) { %>
+					<td align="center" style="background-color: #B8CCE4"><%=reviews.getTotalscore()%></td>
+					<%} else if (reviews.getTotalscore() >= 65) { %>
+					<td align="center" style="background-color: #CCC0DA"><%=reviews.getTotalscore()%></td>
+					<%} else if (reviews.getTotalscore() >= 60) { %>
+					<td align="center" style="background-color: #FFFFCC"><%=reviews.getTotalscore()%></td>
+					<%} else if (reviews.getTotalscore() >= 55) { %>
+					<td align="center" style="background-color: #FDE9D9"><%=reviews.getTotalscore()%></td>
+					<%}  else if (reviews.getTotalscore() >= 50) { %>
+					<td align="center" style="background-color: #FCD5B4"><%=reviews.getTotalscore()%></td>
+					<%} else { %>
+					<td align="center" style="background-color: #FFC7CE"><%=reviews.getTotalscore()%></td>
+					<% } %>
+				</tr>
+
+				<%
+					} else {
+				%>
+				<tr align="center">
+					<td colspan="6"><h2>ไม่มีข้อมูล</h2></td>
+				</tr>
+				<%
+					}
+				%>
+			</tbody>
+
+		</table>
+		<br>
+		<table class="table table-bordered  table-hover" id=myTable
+			style="width: 70%">
+			<thead class="table-info" align="center">
+				<tr>
+					<th colspan=2>ความคิดเห็น</th>
+				</tr>
+			</thead>
+			<%
+				if (reviews.getComments() != null) {
+			%>
+			<tbody>
+				<tr>
+					<td width="150" align="center">ความคิดเห็น :</td>
+					<td align="left"><%=reviews.getComments()%></td>
+				</tr>
+				<%
+					} else {
+				%>
+				<tr align="center">
+					<td colspan="5"><h2>ไม่มีข้อมูล</h2></td>
+				</tr>
+				<%
+					}
+				%>
+			</tbody>
+		</table>
+		
+		<% } %>
+		
 
 	</div>
 

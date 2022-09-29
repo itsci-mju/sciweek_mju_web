@@ -74,7 +74,7 @@
 	</div>
 
 
-	<form action="isChooseProjectFirst" name="frm" id="chooseproject" method="post">
+	<form action="isChooseProject" name="frm" id="chooseproject" method="post">
 	<input type="hidden" class="form-control" name="reviewer_id" id="reviewer_id" value="<%=reviewer.getReviewer_id()%>"> 
 	<input type="hidden" class="form-control" name="team_id" id="team_id" value="<%=reviewer.getTeam().getTeam_id()%>"> 
 		<div style="margin-left: 6%; margin-right: 6%;">
@@ -114,6 +114,8 @@
 				<!-- 1 -->
 				
 				<% if (reviewer != null && projectResponseList.get(i).getStateProject() == 1) { %>
+				
+				<input type="hidden" name="state_project" id="state_project" value="<%=projectResponseList.get(i).getStateProject()%>">
 
 				<tbody>
 					<tr>
@@ -234,7 +236,8 @@
 				<% if (reviewer != null && projectResponseList.get(i).getStateProject() == 3) { %>
 
 				<tbody>
-					<tr>						
+					<tr>		
+						<td align="center">#<%=i + 1%></td>				
 						<td align="center" width="50px"><%=projectResponseList.get(i).getProjectID()%></td>
 						<td align="center" width="190px"><%=projectResponseList.get(i).getReviewDate()%></td>
 						<td align="left"><%=projectResponseList.get(i).getProjectName()%></td>
@@ -283,7 +286,7 @@
 						%>
 					</tr>
 				</tbody>
-				
+					
 				<% } %>
 				
 				<!-- END -->
@@ -304,8 +307,7 @@
 				<%
 					}
 				%>
-			</table>
-			
+			</table>		
 			<br>
 			<div class="form-group row">
 				<div class="col-sm-12 text-center">
