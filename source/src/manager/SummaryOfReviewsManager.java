@@ -5,6 +5,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 
@@ -108,6 +109,26 @@ public class SummaryOfReviewsManager {
 		return result;
 	}
 	
+	public boolean isFailedProjectSecond(Integer team_id, Integer state_project) {
+		ConnectionDB condb = new ConnectionDB();
+		Connection con = condb.getConnection();
+		
+		Boolean result = false;
+
+		try {
+			CallableStatement stmt = con.prepareCall("{call isFailedProjectSecond(?,?)}");
+			stmt.setInt(1, team_id);		
+			stmt.setInt(2, state_project);
+			stmt.execute();
+			result = true;
+			  
+			stmt.close();
+		} catch (SQLException er) {
+			er.printStackTrace();
+		}
+		return result;
+	}
+	
 	public boolean isChooseProjectFirst(Project project) {
 		ConnectionDB condb = new ConnectionDB();
 		Connection con = condb.getConnection();
@@ -136,6 +157,82 @@ public class SummaryOfReviewsManager {
 		try {
 			CallableStatement stmt = con.prepareCall("{call isChooseProjectSecond(?)}");
 			stmt.setString(1, project.getProject_id());		
+			stmt.execute();
+			result = true;
+			  
+			stmt.close();
+		} catch (SQLException er) {
+			er.printStackTrace();
+		}
+		return result;
+	}
+	
+	public boolean isFirstAward(String project_id) {
+		ConnectionDB condb = new ConnectionDB();
+		Connection con = condb.getConnection();
+		
+		Boolean result = false;
+
+		try {
+			CallableStatement stmt = con.prepareCall("{call isFirstAward(?)}");
+			stmt.setString(1, project_id);		
+			stmt.execute();
+			result = true;
+			  
+			stmt.close();
+		} catch (SQLException er) {
+			er.printStackTrace();
+		}
+		return result;
+	}
+	
+	public boolean isSecondAward(String project_id) {
+		ConnectionDB condb = new ConnectionDB();
+		Connection con = condb.getConnection();
+		
+		Boolean result = false;
+
+		try {
+			CallableStatement stmt = con.prepareCall("{call isSecondAward(?)}");
+			stmt.setString(1, project_id);		
+			stmt.execute();
+			result = true;
+			  
+			stmt.close();
+		} catch (SQLException er) {
+			er.printStackTrace();
+		}
+		return result;
+	}
+	
+	public boolean isThirdAward(String project_id) {
+		ConnectionDB condb = new ConnectionDB();
+		Connection con = condb.getConnection();
+		
+		Boolean result = false;
+
+		try {
+			CallableStatement stmt = con.prepareCall("{call isThirdAward(?)}");
+			stmt.setString(1, project_id);		
+			stmt.execute();
+			result = true;
+			  
+			stmt.close();
+		} catch (SQLException er) {
+			er.printStackTrace();
+		}
+		return result;
+	}
+	
+	public boolean isUpdateFailedProject(Integer team_id) {
+		ConnectionDB condb = new ConnectionDB();
+		Connection con = condb.getConnection();
+		
+		Boolean result = false;
+
+		try {
+			CallableStatement stmt = con.prepareCall("{call isUpdateFailedProject(?)}");
+			stmt.setInt(1, team_id);
 			stmt.execute();
 			result = true;
 			  
@@ -175,4 +272,33 @@ public class SummaryOfReviewsManager {
 		return project;
 	}	
 
+	public List<Project> getProjectByProjectIDList(List<String> projectidList) throws Exception {
+		ConnectionDB condb = new ConnectionDB();
+		Connection con = condb.getConnection();
+		Statement stmt = null;
+		List<Project> projectList = new ArrayList<>();
+		
+		try {
+			stmt = con.createStatement();
+			String sql = " SELECT * FROM project "
+					+ "  LEFT JOIN projecttype ON project.projecttype_id = projecttype.projecttype_id"
+					+ "  LEFT JOIN team ON project.team_id = team.team_id"
+					+ " WHERE project.project_id IN ("+ String.join(",", projectidList) +" )";
+			ResultSet rs = stmt.executeQuery(sql);
+
+			while (rs.next()) {		
+				
+				val project = resultSetToClass.setResultSetToProject(rs);
+				projectList.add(project);
+			}
+			con.close();
+			stmt.close();
+			rs.close();
+		} catch (SQLException e) {
+			System.out.println("catch");
+			e.printStackTrace();
+		}
+		return projectList;
+	}	
+	
 }

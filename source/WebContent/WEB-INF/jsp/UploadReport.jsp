@@ -1,11 +1,12 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<%@ page import="java.util.*,manager.*,bean.*,java.text.*"%>
+<%@ page import="java.util.*, manager.*, bean.*, java.text.*, java.sql.Timestamp"%>
 <%
-	Student student = null;
-	StudentProject sproject = null;
-	List<StudentProject> listsproject = new Vector<>();
+	Student student = null ;
+	StudentProject sproject = null ;
+	Report report = null ;
+	List<StudentProject> listsproject = new Vector<>() ;
 	
 	try {
 		sproject = (StudentProject) request.getAttribute("sproject");
@@ -16,6 +17,12 @@
 
 	try {
 		student = (Student) session.getAttribute("student");
+	} catch (Exception e) {
+		e.printStackTrace();
+	}
+	
+	try {
+		report = (Report) request.getAttribute("report");
 	} catch (Exception e) {
 		e.printStackTrace();
 	}
@@ -45,6 +52,7 @@
 <link href='https://fonts.googleapis.com/css?family=Kanit' rel='stylesheet' type='text/css'>
 <link rel="stylesheet" href="./css/web_css.css">
 <link rel="stylesheet" href="./css/multi_step_form.css">
+<script type="module" src="./js/multi_step_form.js"></script>
 </head>
 <body style="background-image: url('./image/hero-bg.png')">
 <script type="text/javascript">
@@ -61,24 +69,22 @@
 			alert("<!-- กรุณาอัปโหลดเอกสารรายงาน -->");
 			return false;
 		}
-		
-		
+
 	}
 		
 </script>
 	<%	
+		Date date = new Date();  
+		Timestamp timestamp = new Timestamp(date.getTime());  
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss"); 
+	
 		String video = null ;
-		String readonly = null;
-		String disabled = null;	
+		String disabled = null ;
 	
 		if (sproject.getProject().getVideo().equals("-")) {
 			video = "กรุณาอัปโหลดวิดีโอ" ;
-			readonly = "" ;
-			disabled = "" ;
 		} else {
 			video = sproject.getProject().getVideo();
-			readonly = "readonly" ;
-			disabled = "disabled" ;	
 		}
 		
 	%>
@@ -120,16 +126,27 @@
 				</ul>
 				<!-- Step Wise Form Content -->
 				<!-- Step 1 Content -->
+				
+				<%
+				
+				if (timestamp.after(report.getExpdate())) {
+					disabled = "disabled";
+				}
+				
+				%>
+				
 				<section id="step-1" class="form-step">
 					<h2 class="font-normal">ขั้นตอนที่ 1 : อัปโหลดลิงค์วิดีโอ</h2>
 					<!-- Step 1 input fields -->
 					<div class="mt-3">
-						<h6 style="color: red">ชี้แจ้ง : ตัวอย่างลิงก์ https://www.youtube.com/embed/XXX..</h6>						
+						<h6 style="color: red">ชี้แจ้ง : ตัวอย่างลิงก์ https://www.youtube.com/embed/XXX..<br><br>
+						วันเวลากำหนดส่ง : <%=report.getExpdate()%> 
+						</h6>						
 							<div class="form-group row">
 								<div class="col-sm-4">
 									<label style="color: green; text-align: left;">${msg}</label>
 									<input type="hidden" name="project_id" id="project_id" class="form-control data" value="<%=sproject.getProject().getProject_id()%>">
-									<input type="text" name="filevideo" id="filevideo" class="form-control data" placeholder="<%=video%>" required>
+									<input type="text" name="filevideo" id="filevideo" class="form-control data" placeholder="<%=video%>" required <%=disabled%>>
 								</div>
 								
 								<br>
@@ -144,18 +161,20 @@
 					<h2 class="font-normal">ขั้นตอนที่ 2 : อัปโหลดเอกสารรายงาน</h2>
 					<!-- Step 2 input fields -->
 					<div class="mt-3">
-						<h6 style="color: red">ชี้แจ้ง : กรุณาอัปโหลดข้อมูลไฟล์รายงานเป็นนามสกุล .pdf..</h6>
+						<h6 style="color: red">ชี้แจ้ง : กรุณาอัปโหลดข้อมูลไฟล์รายงานเป็นนามสกุล .pdf..<br><br>
+						วันเวลากำหนดส่ง : <%=report.getExpdate()%> 
+						</h6>
 						<br>
 						<div class="form-group row">
 								<div class="col-sm-4">
-									<input class="form-control" type="file" name="filepdf" id="filepdf" accept=".pdf" required>
+									<input class="form-control" type="file" name="filepdf" id="filepdf" accept=".pdf" required <%=disabled%>>
 								</div>
 								<br> <label style="color: green; text-align: left;">${msg}</label>
 							</div>
 					</div>
 					<div class="mt-3">
 						<a class="button btn-navigate-form-step" type="button" step_number="1" style="text-decoration: none;">ย้อนกลับ</a>
-						<button class="button submit-btn" type="submit" onclick ="return validateForm(frm)">บันทึก</button>
+						<button class="button submit-btn" type="submit" onclick ="return validateForm(frm)" >บันทึก</button>
 					</div>
 				</section>
 				<!-- Step 3 Content, default hidden on page load. -->
@@ -176,81 +195,6 @@
 	</div>
 
 	<jsp:include page="common/footer.jsp"></jsp:include>
-	
-	<script type="text/javascript">
-	/**
-	 * Define a function to navigate betweens form steps.
-	 * It accepts one parameter. That is - step number.
-	 */
-	const navigateToFormStep = (stepNumber) => {
-	    /**
-	     * Hide all form steps.
-	     */
-	    document.querySelectorAll(".form-step").forEach((formStepElement) => {
-	        formStepElement.classList.add("d-none");
-	    });
-	    /**
-	     * Mark all form steps as unfinished.
-	     */
-	    document.querySelectorAll(".form-stepper-list").forEach((formStepHeader) => {
-	        formStepHeader.classList.add("form-stepper-unfinished");
-	        formStepHeader.classList.remove("form-stepper-active", "form-stepper-completed");
-	    });
-	    /**
-	     * Show the current form step (as passed to the function).
-	     */
-	    document.querySelector("#step-" + stepNumber).classList.remove("d-none");
-	    /**
-	     * Select the form step circle (progress bar).
-	     */
-	    const formStepCircle = document.querySelector('li[step="' + stepNumber + '"]');
-	    /**
-	     * Mark the current form step as active.
-	     */
-	    formStepCircle.classList.remove("form-stepper-unfinished", "form-stepper-completed");
-	    formStepCircle.classList.add("form-stepper-active");
-	    /**
-	     * Loop through each form step circles.
-	     * This loop will continue up to the current step number.
-	     * Example: If the current step is 3,
-	     * then the loop will perform operations for step 1 and 2.
-	     */
-	    for (let index = 0; index < stepNumber; index++) {
-	        /**
-	         * Select the form step circle (progress bar).
-	         */
-	        const formStepCircle = document.querySelector('li[step="' + index + '"]');
-	        /**
-	         * Check if the element exist. If yes, then proceed.
-	         */
-	        if (formStepCircle) {
-	            /**
-	             * Mark the form step as completed.
-	             */
-	            formStepCircle.classList.remove("form-stepper-unfinished", "form-stepper-active");
-	            formStepCircle.classList.add("form-stepper-completed");
-	        }
-	    }
-	};
-	/**
-	 * Select all form navigation buttons, and loop through them.
-	 */
-	document.querySelectorAll(".btn-navigate-form-step").forEach((formNavigationBtn) => {
-	    /**
-	     * Add a click event listener to the button.
-	     */
-	    formNavigationBtn.addEventListener("click", () => {
-	        /**
-	         * Get the value of the step.
-	         */
-	        const stepNumber = parseInt(formNavigationBtn.getAttribute("step_number"));
-	        /**
-	         * Call the function to navigate to the target form step.
-	         */
-	        navigateToFormStep(stepNumber);
-	    });
-	});
-	</script>
 
 </body>
 </html>

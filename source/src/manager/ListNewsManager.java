@@ -79,10 +79,11 @@ public class ListNewsManager {
 		Boolean result = false;
 		try {
 
-			CallableStatement stmt = con.prepareCall("{call isEditNews(?,?,?)}");
+			CallableStatement stmt = con.prepareCall("{call isEditNews(?,?,?,?)}");
 			stmt.setInt(1, pressrelease.getNewsid());
 			stmt.setString(2, pressrelease.getTitle());
-			stmt.setString(3, pressrelease.getDetail());
+			stmt.setString(3, pressrelease.getType());
+			stmt.setString(4, pressrelease.getDetail());
 
 
 			stmt.execute();

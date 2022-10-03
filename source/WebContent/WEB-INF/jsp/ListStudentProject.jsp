@@ -65,6 +65,7 @@
 <link href='https://fonts.googleapis.com/css?family=Kanit' rel='stylesheet' type='text/css'>
 <link rel="stylesheet" href="./css/web_css.css">
 <link rel="stylesheet" href="./css/multi_step_form.css">
+<script type="module" src="./js/multi_step_form.js"></script>
 </head>
 <body <%if (msg) {%> onload="return result()" <% } %>  style="background-image: url('./image/hero-bg.png')">
 
@@ -84,14 +85,14 @@
 						step="1"><a class="mx-2"> <span
 							class="form-stepper-circle"> <span>1</span>
 						</span>
-							<div class="label">นำเข้าข้อมูลโครงงานวิทยาศาสตร์</div>
+							<div class="label">รายการข้อมูลโครงงานวิทยาศาสตร์</div>
 					</a></li>
 					<!-- Step 2 -->
 					<li class="form-stepper-unfinished text-center form-stepper-list"
 						step="2"><a class="mx-2"> <span
 							class="form-stepper-circle text-muted"> <span>2</span>
 						</span>
-							<div class="label text-muted">รายการข้อมูลโครงงานวิทยาศาสตร์</div>
+							<div class="label text-muted">นำเข้าข้อมูลโครงงานวิทยาศาสตร์</div>
 					</a></li>
 					<!-- Step 3 -->
 					<!--   <li class="form-stepper-unfinished text-center form-stepper-list" step="3">
@@ -107,40 +108,12 @@
 				<!--    <form id="userAccountSetupForm" name="userAccountSetupForm" enctype="multipart/form-data" method="POST"> -->
 				<!-- Step 1 Content -->
 				<section id="step-1" class="form-step">
-					<h2 class="font-normal">ขั้นตอนที่ 1 :
-						นำเข้าข้อมูลโครงงานวิทยาศาสตร์</h2>
-					<!-- Step 1 input fields -->
-					<div class="mt-3">
-						<h6 style="color: red">ชี้แจ้ง : กรุณาอัปโหลดข้อมูลไฟล์ Excel
-							เป็นนามสกุล .xlsx..</h6>
-						<br>
-						<form action="ImportExcel" name="frm" method="post"
-							enctype="multipart/form-data">
-							<div class="form-group row">
-								<div class="col-sm-4">
-									<input class="form-control" type="file" name="fileexcel" id="fileexcel" accept=".csv, application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet">
-								</div>
-								<div class="col-sm-3">
-									<button type="submit" name="upload" class="btn btn-success">
-										<i class="fa-solid fa-file-excel">&nbsp;</i>Import file
-									</button>
-								</div>
-								<br> <label style="color: green; text-align: left;">${msg}</label>
-							</div>
-						</form>
-					</div>
-					<div class="mt-3">
-						<button class="button btn-navigate-form-step" type="button" step_number="2">ต่อไป</button>
-					</div>
-				</section>
-				<!-- Step 2 Content, default hidden on page load. -->
-				<section id="step-2" class="form-step d-none">
+					
 					<form action="searchproject" method="post" class="row g-3">
 						<div class="col-auto">
-							<h2 class="font-normal">ขั้นตอนที่ 2 :
-								รายการโครงงานวิทยาศาสตร์</h2>
+							<h2 class="font-normal">ขั้นตอนที่ 1 : รายการข้อมูลโครงงานวิทยาศาสตร์</h2>
 						</div>
-						<div class="col-auto text-center" style="margin-left: 25%;">
+						<div class="col-auto text-center" style="margin-left: 20%;">
 							<input type="text" class="form-control" name="keyword" value="<%=keyword%>" placeholder="ค้นหาโครงงานวิทยาศาสตร์....." title="Projects">
 						</div>
 						<div class="col-auto text-left">
@@ -149,10 +122,10 @@
 							</button>
 						</div>
 					</form>
-					<!-- Step 2 input fields -->
+					
+					<!-- Step 1 input fields -->
 					<div class="mt-3">
-						<h6 style="color: red">ชี้แจ้ง : กรุณาอัปโหลดข้อมูลไฟล์ Excel
-							เป็นนามสกุล .xlsx..</h6>
+						<h6 style="color: red">ชี้แจ้ง : ถ้าไม่มีข้อมูลโครงงานวิทยาศาสตร์ กรุณากด " ต่อไป " เพื่อนำเข้าข้อมูล..</h6>
 						<br>
 						<%
 							if (listsproject.size() != 0) {
@@ -190,6 +163,36 @@
 								%>
 							</tbody>
 						</table>
+						
+					</div>
+					<div class="mt-3">
+						<button class="button btn-navigate-form-step" type="button" step_number="2">ต่อไป</button>
+					</div>
+				</section>
+				<!-- Step 2 Content, default hidden on page load. -->
+				<section id="step-2" class="form-step d-none">
+				<h2 class="font-normal">ขั้นตอนที่ 2 : นำเข้าข้อมูลโครงงานวิทยาศาสตร์</h2>
+					
+					<!-- Step 2 input fields -->
+					<div class="mt-3">					
+						<h6 style="color: red">ชี้แจ้ง : กรุณาอัปโหลดข้อมูลไฟล์ Excel เป็นนามสกุล .xlsx..</h6>
+						<br>
+						
+						<form action="ImportExcel" name="frm" method="post" enctype="multipart/form-data">
+							<div class="form-group row">
+								<div class="col-sm-4">
+									<input class="form-control" type="file" name="fileexcel" id="fileexcel" accept=".csv, application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet">
+								</div>
+								<div class="col-sm-3">
+									<button type="submit" name="upload" class="btn btn-success">
+										<i class="fa-solid fa-file-excel">&nbsp;</i>Import file
+									</button>
+								</div>
+								<br> <label style="color: green; text-align: left;">${msg}</label>
+							</div>
+						</form>
+						
+						
 					</div>
 					<div class="mt-3">
 						<button class="button btn-navigate-form-step" type="button"
@@ -252,81 +255,6 @@
 				});
 	</script>
 	
-	<script type="text/javascript">
-	/**
-	 * Define a function to navigate betweens form steps.
-	 * It accepts one parameter. That is - step number.
-	 */
-	const navigateToFormStep = (stepNumber) => {
-	    /**
-	     * Hide all form steps.
-	     */
-	    document.querySelectorAll(".form-step").forEach((formStepElement) => {
-	        formStepElement.classList.add("d-none");
-	    });
-	    /**
-	     * Mark all form steps as unfinished.
-	     */
-	    document.querySelectorAll(".form-stepper-list").forEach((formStepHeader) => {
-	        formStepHeader.classList.add("form-stepper-unfinished");
-	        formStepHeader.classList.remove("form-stepper-active", "form-stepper-completed");
-	    });
-	    /**
-	     * Show the current form step (as passed to the function).
-	     */
-	    document.querySelector("#step-" + stepNumber).classList.remove("d-none");
-	    /**
-	     * Select the form step circle (progress bar).
-	     */
-	    const formStepCircle = document.querySelector('li[step="' + stepNumber + '"]');
-	    /**
-	     * Mark the current form step as active.
-	     */
-	    formStepCircle.classList.remove("form-stepper-unfinished", "form-stepper-completed");
-	    formStepCircle.classList.add("form-stepper-active");
-	    /**
-	     * Loop through each form step circles.
-	     * This loop will continue up to the current step number.
-	     * Example: If the current step is 3,
-	     * then the loop will perform operations for step 1 and 2.
-	     */
-	    for (let index = 0; index < stepNumber; index++) {
-	        /**
-	         * Select the form step circle (progress bar).
-	         */
-	        const formStepCircle = document.querySelector('li[step="' + index + '"]');
-	        /**
-	         * Check if the element exist. If yes, then proceed.
-	         */
-	        if (formStepCircle) {
-	            /**
-	             * Mark the form step as completed.
-	             */
-	            formStepCircle.classList.remove("form-stepper-unfinished", "form-stepper-active");
-	            formStepCircle.classList.add("form-stepper-completed");
-	        }
-	    }
-	};
-	/**
-	 * Select all form navigation buttons, and loop through them.
-	 */
-	document.querySelectorAll(".btn-navigate-form-step").forEach((formNavigationBtn) => {
-	    /**
-	     * Add a click event listener to the button.
-	     */
-	    formNavigationBtn.addEventListener("click", () => {
-	        /**
-	         * Get the value of the step.
-	         */
-	        const stepNumber = parseInt(formNavigationBtn.getAttribute("step_number"));
-	        /**
-	         * Call the function to navigate to the target form step.
-	         */
-	        navigateToFormStep(stepNumber);
-	    });
-	});
-	</script>
-
 	<c:if test="${msg != null }">
 		<script type="text/javascript">
 			var msg = '${msg}';

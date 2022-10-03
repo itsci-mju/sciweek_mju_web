@@ -35,9 +35,11 @@ public class UploadReportController {
 			IsUploadReportManager isUploadReportManager = new IsUploadReportManager();
 			StudentProject sproject = isUploadReportManager.getStudentProjectByID(project_id);
 			List<StudentProject> listsproject = isUploadReportManager.getListStudentProject(project_id);
+			Report report = isUploadReportManager.getReportByProjectID(project_id);
 			ModelAndView mav = new ModelAndView("UploadReport");
 			mav.addObject("sproject", sproject);
 			mav.addObject("listsproject", listsproject);
+			mav.addObject("report", report);
 			return mav;
 		} else {
 			ModelAndView mav = new ModelAndView("LoginPage");

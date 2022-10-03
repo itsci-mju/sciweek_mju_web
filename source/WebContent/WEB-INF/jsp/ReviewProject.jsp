@@ -249,7 +249,7 @@
 									<tr>
 										<td align="center"><%=question.getQuestion_id()%></td>
 										<td><%=question.getQuestion()%></td>
-										<td width="50px"><input type="text" name="answer" id="answer" class="form-control data" style="width: 100px" maxlength="5"  onkeyup="checkNumber<%=question.getFullscore()%>(this)"></td>	
+										<td width="50px"><input type="text" name="answer" id="answer" class="form-control data" style="width: 100px" maxlength="5"  onkeyup="checkNumber<%=question.getFullscore()%>(this)" required></td>	
 										<td align="center" width="130px">&nbsp;&nbsp;/&nbsp;<%=question.getFullscore()%></td>						
 									</tr>
 								</tbody>						
@@ -259,7 +259,7 @@
 								<label class="col-sm-3 col-form-label text-left">ความคิดเห็นเพิ่มเติม (*)</label>																			
 							</div>	
 							<div class="form-group row">						
-								<textarea id="comments" name="comments" rows="4" cols="50"  class="form-control data" style="margin-left: 15px; width: 600px"></textarea>
+								<textarea id="comments" name="comments" rows="4" cols="50"  class="form-control data" style="margin-left: 15px; width: 600px" required></textarea>
 							</div>
 							
 							<% } %>

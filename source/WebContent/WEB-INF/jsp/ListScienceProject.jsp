@@ -2,7 +2,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<%@ page import="java.util.*,manager.*,bean.*,java.text.*,model.*,java.sql.Timestamp"%>
+<%@ page import="java.util.*,manager.*,bean.*,java.text.*,model.*, java.sql.Timestamp"%>
 <%
 	Reviewer reviewer = null;
 	List<ProjectResponse> projectResponseList  = null;

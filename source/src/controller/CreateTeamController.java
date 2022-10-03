@@ -12,10 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
-import manager.AssignProjectManager;
-import manager.AssignReviewerManager;
 import manager.CreateTeamManager;
-import manager.ListTeamManager;
 import manager.ViewTeamDetailManager;
 import util.ConnectionDB;
 import bean.Admin;
@@ -32,10 +29,8 @@ public class CreateTeamController {
 		if (admin != null) {
 			ViewTeamDetailManager viewTeamDetailManager = new ViewTeamDetailManager();
 			List<Reviewer> listreviewer = viewTeamDetailManager.getListReviewer();		
-			List<Project> listproject = viewTeamDetailManager.getListProject();
 			ModelAndView mav = new ModelAndView("CreateTeam");
 			mav.addObject("listreviewer", listreviewer);
-			mav.addObject("listproject", listproject);
 			return mav;
 		} else {
 			ModelAndView mav = new ModelAndView("LoginPage");
@@ -47,51 +42,37 @@ public class CreateTeamController {
 
 	@RequestMapping(value = "/isCreateTeam", method = RequestMethod.POST)
 	public ModelAndView isCreateTeam(HttpServletRequest request, Model md, HttpSession session) throws Exception {
-		
+
 		ConnectionDB condb = new ConnectionDB();
 		Connection conn = condb.getConnection();
-		
+
 		request.setCharacterEncoding("UTF-8");
 		CreateTeamManager createTeamManager = new CreateTeamManager();
-		AssignReviewerManager assignReviewerManager = new AssignReviewerManager();
-		AssignProjectManager assignProjectManager = new AssignProjectManager();
+		ViewTeamDetailManager viewTeamDetailManager = new ViewTeamDetailManager();
 
-		Team team = new Team();	
+		Team team = new Team();
 		team.setTeam_id(createTeamManager.getMaxTeam());
 		team.setTeam_name(request.getParameter("team_name"));
-		
-		createTeamManager.isCreateTeam(team);		
-		
+
 		String[] reviewerIdStrList = request.getParameterValues("chkreviewer");
-			for (String reviewerIdstr : reviewerIdStrList) {
-				
-				int reviewer_id = Integer.parseInt(reviewerIdstr);
-				Reviewer reviewer = new Reviewer();
-				reviewer.setReviewer_id(reviewer_id);
-				reviewer.setTeam(team);
-				
-				assignReviewerManager.isAssignReviewer(reviewer, conn);
+
+		for (String reviewerIdstr : reviewerIdStrList) {
+			int reviewer_id = Integer.parseInt(reviewerIdstr);
+
+			Reviewer reviewer = new Reviewer();
+			reviewer.setReviewer_id(reviewer_id);
+			reviewer.setTeam(team);
+
 		}
-		
-		String[] projectIdStrList = request.getParameterValues("chkproject");
-			for (String projectIdstr : projectIdStrList) {
-				
-					String project_id = projectIdstr;
-					Project project = new Project();
-					project.setProject_id(project_id);
-					project.setTeam(team);
-
-					assignProjectManager.isAssignProject(project, conn);
-
-			}
-			
-			conn.close();
-			
-			ListTeamManager vtem = new ListTeamManager();
-			List<Team> teamList = vtem.getListTeam();
-			ModelAndView mav = new ModelAndView("ListTeam");
-			mav.addObject("teamList", teamList);
-			return mav;
+		conn.close();
+		List<Project> listproject = viewTeamDetailManager.getListProject();
+		ModelAndView mav = new ModelAndView("AssignProject");
+		mav.addObject("team", team);
+		mav.addObject("reviewerIdStrList", reviewerIdStrList);
+		mav.addObject("listproject", listproject);
+		return mav;
 	}
+
 	
+
 }

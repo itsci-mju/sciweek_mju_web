@@ -56,7 +56,7 @@
 			<nav class="navbar navbar-expand-sm navbar-dark container">
 				<ul class="navbar-nav">
 					<li class="nav-item active "><a href="index" class="nav-link"><span style="color: white;"><i class="fa fa-home">&nbsp;</i>หน้าแรก</span></a></li>
-					<li class="nav-item  active"><a href="#" class="nav-link"><span style="color: white;"><i class="fa-solid fa-trophy">&nbsp;</i>รางวัล</span></a></li>
+					<li class="nav-item active"><a href="doViewResult" class="nav-link"><span style="color: white;"><i class="fa-solid fa-trophy">&nbsp;</i>รางวัล</span></a></li>	
 				</ul>
 				<div class="navbar-nav ml-auto">
 					<div class="hidden-lg hidden-md hidden-sm">
@@ -84,6 +84,7 @@
 				<ul class="navbar-nav">
 					<li class="nav-item active"><a href="index" class="nav-link"><span style="color: white;"><i class="fa fa-home">&nbsp;</i>หน้าแรก</span></a></li>
 					<li class="nav-item  active"><a href="doListProject" class="nav-link"><span style="color: white;"><i class="fa fa-th-list">&nbsp;</i>รายการโครงงานวิทยาศาสตร์</span></a></li>
+					<li class="nav-item active"><a href="doViewResult" class="nav-link"><span style="color: white;"><i class="fa-solid fa-trophy">&nbsp;</i>รางวัล</span></a></li>	
 				</ul>
 				<div class="navbar-nav ml-auto">
 					<div class="hidden-lg hidden-md hidden-sm">
@@ -178,9 +179,9 @@
 				<ul class="nav navbar-nav pull-center">
 					<li class="nav-item  active "><a href="index" class="nav-link "><span style="color: white;"><i class="fa fa-home">&nbsp;</i>หน้าแรก</span></a></li>
 					<li class="nav-item  active"><a href="doViewProject" class="nav-link"><span style="color: white;"><i class="fa fa-th-list">&nbsp;</i>โครงงานวิทยาศาสตร์</span></a></li>
-					<li class="nav-item  active"><a href="doViewTeam" class="nav-link"><span style="color: white;"><i class="fa-solid fa-people-group">&nbsp;</i>สร้างทีม</span></a></li>
+					<li class="nav-item  active"><a href="doViewTeam" class="nav-link"><span style="color: white;"><i class="fa-solid fa-people-group">&nbsp;</i>กลุ่มประเมินโครงงานวิทยาศาสตร์</span></a></li>
 					<li class="nav-item  active"><a href="doViewNews" class="nav-link"><span style="color: white;"><i class="fa fa-newspaper-o">&nbsp;</i>ข่าวสาร</span></a></li>
-					<li class="nav-item active"><a href="doViewResult" class="nav-link"><span style="color: white;"><i class="fa-solid fa-trophy">&nbsp;</i>รางวัล</span></a></li>									
+					<li class="nav-item active"><a href="doViewResult" class="nav-link"><span style="color: white;"><i class="fa-solid fa-trophy">&nbsp;</i>รางวัล</span></a></li>								
 				</ul>
 				<div class="navbar-nav ml-auto">
 					<div class="hidden-lg hidden-md hidden-sm">

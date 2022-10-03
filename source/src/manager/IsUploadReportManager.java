@@ -86,7 +86,7 @@ public class IsUploadReportManager {
 		return result;
 	}
 	
-	public StudentProject getStudentProjectByID(String key) throws Exception {
+	public StudentProject getStudentProjectByID(String project_id) throws Exception {
 		ConnectionDB condb = new ConnectionDB();
 		Connection con = condb.getConnection();
 		Statement stmt = null;
@@ -102,7 +102,7 @@ public class IsUploadReportManager {
 					+ "  LEFT JOIN student on studentproject.student_id = student.student_id"
 					+ "  LEFT JOIN school on student.school_id = school.school_id"
 					+ "  LEFT JOIN advisor on studentproject.advisor_id = advisor.advisor_id  "
-					+ "  WHERE studentproject.project_id like '"+ key +"'";
+					+ "  WHERE studentproject.project_id like '"+ project_id +"'";
 			ResultSet rs = stmt.executeQuery(sql);
 
 			while (rs.next()) {
@@ -123,7 +123,7 @@ public class IsUploadReportManager {
 		return sproject;
 	}
 	
-	public List<StudentProject> getListStudentProject(String pid) throws Exception {
+	public List<StudentProject> getListStudentProject(String project_id) throws Exception {
 		ConnectionDB condb = new ConnectionDB();
 		Connection con = condb.getConnection();
 		Statement stmt = null;
@@ -139,7 +139,7 @@ public class IsUploadReportManager {
 					+ "  LEFT JOIN student on studentproject.student_id = student.student_id"
 					+ "  LEFT JOIN school on student.school_id = school.school_id"
 					+ "  LEFT JOIN advisor on studentproject.advisor_id = advisor.advisor_id  "
-					+ "  WHERE studentproject.project_id = '" + pid + "'  ";
+					+ "  WHERE studentproject.project_id = '" + project_id + "'  ";
 			ResultSet rs = stmt.executeQuery(sql);
 
 			while (rs.next()) {
@@ -156,6 +156,37 @@ public class IsUploadReportManager {
 			e.printStackTrace();
 		}
 		return listsproject;
+	}
+	
+	
+	public Report getReportByProjectID(String project_id) throws Exception {	
+		ConnectionDB condb = new ConnectionDB();
+		Connection con = condb.getConnection();
+		Statement stmt = null;
+		Report report = new Report() ;
+		
+		try {		
+			stmt = con.createStatement();
+			String sql = " SELECT * FROM report "
+					+ "  LEFT JOIN project on  report.project_id = project.project_id "
+					+ "  LEFT JOIN projecttype on project.projecttype_id = projecttype.projecttype_id "
+					+ "  LEFT JOIN team on project.team_id = team.team_id "
+					+ " WHERE report.project_id = '"+ project_id +"' ";
+			ResultSet rs = stmt.executeQuery(sql);
+
+			while (rs.next()) {		
+				
+			report = resultSetToClass.setResultSetToReport(rs);
+			
+			}
+			con.close();
+			stmt.close();
+			rs.close();
+		} catch (SQLException e) {
+			System.out.println("catch");
+			e.printStackTrace();
+		}
+		return report;
 	}
 	
 	public boolean isDeleteUpload(Integer report_id) {

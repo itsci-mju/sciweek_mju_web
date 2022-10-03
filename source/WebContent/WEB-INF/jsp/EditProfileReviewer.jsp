@@ -123,7 +123,7 @@
 
 	<div class="container" style="margin-top: 35px;">
 
-		<form action="doEditProfileReviewer" name="frm" id="frm"method="post">
+		<form action="doEditProfileReviewer" name="frm" id="frm" method="post">
 			<section id="content">
 				<div class="container" style="margin-top: -20px">
 					<div class="row">
@@ -293,7 +293,7 @@
 								<br>
 								<div class="form-group row">
 									<div class="col-sm-12 text-center">
-										<button type="submit" class="btn btn-success" OnClick ="return validateForm(frm)">บันทึก</button>
+										<button type="submit" class="btn btn-success" onclick ="return validateForm(frm)">บันทึก</button>
 										<a class="btn btn-danger" href="index" role="button">ยกเลิก</a>	
 									</div>
 								</div>

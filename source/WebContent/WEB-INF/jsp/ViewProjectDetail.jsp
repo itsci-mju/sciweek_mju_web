@@ -97,22 +97,33 @@
 								</div>
 							</div>
 							
-							<% %>
+							<% 
+								String disabled = null ;
+									if (studentProject.getProject().getVideo().equals("-")) {
+										disabled = "disabled" ;
+									}		
+							%>
+						
 
 							<div class="form-group row">
 								<label class="col-sm-2 col-form-label text-right">วีดิโอ</label>
 								<div class="col-sm-6">
-									<button name="button" class="btn btn-link"  onclick="window.location.href='<%=studentProject.getProject().getVideo()%>';">
+									<button name="button" class="btn btn-link"  onclick="window.location.href='<%=studentProject.getProject().getVideo()%>';" <%=disabled%> >
 										<i class="fa fa-file-video-o">&nbsp;&nbsp;</i>วิดีโอ
 									</button>											
 								</div>
 							</div>
-							<% %>
-							<% %>
+							
+							<% 		
+								if (report == null) { 
+									disabled = "disabled" ;
+								}
+							%>
+							
 							<div class="form-group row">
 								<label class="col-sm-2 col-form-label text-right">เอกสารรายงาน</label>
 								<div class="col-sm-6">
-									<button name="button" class="btn btn-link"  onclick="window.location.href='./report/<%=report.getReportname()%>.pdf';" >
+									<button name="button" class="btn btn-link"  onclick="window.location.href='./report/<%=report.getReportname()%>.pdf';" <%=disabled%> >
 										<i class="fa-solid fa-file-pdf">&nbsp;&nbsp;</i>เอกสารรายงาน
 									</button>
 								</div>

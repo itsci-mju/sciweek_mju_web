@@ -48,6 +48,37 @@ public class ViewTeamDetailManager {
 		return listproject;
 	}
 	
+	public List<Project> getListProjectByProjectTypeName(String projecttype_name) throws Exception {
+		ConnectionDB condb = new ConnectionDB();
+		Connection con = condb.getConnection();
+		Statement stmt = null;
+		List<Project> listproject = new Vector<>();
+
+		try {
+			stmt = con.createStatement();
+			String sql = " SELECT * FROM project"	
+					+ "  LEFT JOIN projecttype ON project.projecttype_id = projecttype.projecttype_id  "
+					+ "  LEFT JOIN team ON project.team_id = team.team_id "
+					+ "  WHERE project.projecttype_name like '"+ projecttype_name +"' "
+					+ "  ORDER BY project.project_id ";
+			ResultSet rs = stmt.executeQuery(sql);
+
+			while (rs.next()) {
+				
+				listproject.add(resultSetToClass.setResultSetToProject(rs));
+				
+			}
+
+			con.close();
+			stmt.close();
+			rs.close();
+		} catch (SQLException e) {
+			System.out.println("catch");
+			e.printStackTrace();
+		}
+		return listproject;
+	}
+	
 	public List<Reviewer> getListReviewer() throws Exception {
 		ConnectionDB condb = new ConnectionDB();
 		Connection con = condb.getConnection();

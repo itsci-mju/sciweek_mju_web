@@ -1,10 +1,14 @@
 package controller;
 
 import java.util.ArrayList;
+// import java.util.Arrays;
+// import java.util.Collections;
+import java.util.Comparator;
 // import java.util.ArrayList;
 // import java.util.HashMap;
 import java.util.List;
 // import java.util.stream.Collectors;
+import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -35,6 +39,7 @@ public class SummaryOfReviewsController {
 			Integer team_id = reviewer.getTeam().getTeam_id();
 			SummaryOfReviewsManager summaryOfReviewsManager = new SummaryOfReviewsManager();
 			List<ProjectResponse> projectResponseList = summaryOfReviewsManager.getListReviewsByTeamID(team_id);
+			
 //			List<Reviewer> reviewerList = new ArrayList<>();
 //			for (val reviews : listreviews) {
 //				boolean check = reviewerList.stream()
@@ -73,12 +78,11 @@ public class SummaryOfReviewsController {
 			
 			SummaryOfReviewsManager summaryOfReviewsManager = new SummaryOfReviewsManager();
 			ListScienceProjectManager listScienceProjectManager = new ListScienceProjectManager();
-						
-//			summaryOfReviewsManager.isFailedProject(team_id);
-			
+									
 			String[] state_projectStrList = request.getParameterValues("state_project");			
 			String[] projectIdStrList = request.getParameterValues("chkproject");
-				
+			List<Project> projectList = new ArrayList<Project>();
+			
 			for (int i = 0 ; i < projectIdStrList.length; i++) {
 
 				val state_project = Integer.parseInt(state_projectStrList[i]);
@@ -86,10 +90,6 @@ public class SummaryOfReviewsController {
 
 				Project project = new Project();
 				project.setProject_id(project_id);
-	
-				System.out.println(project_id);
-				System.out.println(state_project);
-				System.out.println("===========================");
 				
 				if (state_project == 1) {
 					summaryOfReviewsManager.isChooseProjectFirst(project);
@@ -98,11 +98,40 @@ public class SummaryOfReviewsController {
 				
 				if (state_project == 2) {
 					summaryOfReviewsManager.isChooseProjectSecond(project);
-					summaryOfReviewsManager.isFailedProject(team_id, state_project);
+					summaryOfReviewsManager.isFailedProjectSecond(team_id, state_project);
+					summaryOfReviewsManager.isUpdateFailedProject(team_id);
+					
+					projectList.add(summaryOfReviewsManager.getProjectByProjectID(project.getProject_id()));
+					
+					projectList.stream()
+		            .sorted(Comparator.comparingDouble(Project::getAvgscore)) 
+		            .filter(x2 -> x2.getAvgscore() <= 1)
+		            .collect(Collectors.toList());
+					
+					for (int a = 0 ; a < projectList.size() ; a++) {
+							
+						if (a == 0) {
+							summaryOfReviewsManager.isFirstAward(projectList.get(a).getProject_id());
+							System.out.println(projectList.get(a).getProject_id());
+							System.out.println(projectList.get(a).getAward());
+						} else if (a == 1) {
+							summaryOfReviewsManager.isSecondAward(projectList.get(a).getProject_id());
+							System.out.println(projectList.get(a).getProject_id());
+							System.out.println(projectList.get(a).getAward());
+						} else if (a == 2) {
+							summaryOfReviewsManager.isThirdAward(projectList.get(a).getProject_id());
+							System.out.println(projectList.get(a).getProject_id());
+							System.out.println(projectList.get(a).getAward());
+						} 
+						
+					}
+					
 				}
-
+				
 			}
-
+			
+		//	projectList = summaryOfReviewsManager.getProjectByProjectIDList(Arrays.asList(projectIdStrList));
+			
 				List<ProjectResponse> projectResponseList = listScienceProjectManager.getListProjectByReviewerID(reviewer_id);
 				
 				List<ReviewerResponse> reviewerResponseList = new ArrayList<>();

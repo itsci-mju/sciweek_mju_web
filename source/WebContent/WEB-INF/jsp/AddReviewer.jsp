@@ -53,10 +53,10 @@
 										<label class="col-sm-2 col-form-label text-right">คำนำหน้าชื่อ</label>
 										<div class="col-sm-2" style="margin-left: -10px">
 											<select class="form-select" name="prefix" id="prefix" required>
-											<option selected disabled >--กรุณาเลือกคำนำหน้าชื่อ--</option>
+											<option value="" selected>--กรุณาเลือกคำนำหน้าชื่อ--</option>
 											<option value="อ.">อ.</option>
 											<option value="ผศ.">ผศ.</option>
-											<option value="ผศ.">รศ.</option>					
+											<option value="รศ.">รศ.</option>					
 											<option value="ศ.">ศ.</option>								
 											<option value="อ.ดร.">อ.ดร.</option>
 											<option value="ผศ.ดร.">ผศ.ดร.</option>
@@ -83,7 +83,7 @@
 									<label class="col-sm-2 col-form-label text-right">สาขา</label>
 									<div class="col-sm-3">								
 										<select name="major" id="major" class="form-select data" required>
-											<option selected disabled >--กรุณาเลือกสาขา--</option>
+											<option value="" selected>--กรุณาเลือกสาขา--</option>
 											<option value="วิทยาการคอมพิวเตอร์">วิทยาการคอมพิวเตอร์</option>
 											<option value="เทคโนโลยีชีวภาพ">เทคโนโลยีชีวภาพ</option>
 											<option value="เคมี">เคมี</option>
@@ -101,7 +101,7 @@
 									<label class="col-sm-2 col-form-label text-right">ตำแหน่ง</label>
 									<div class="col-sm-4">
 										<select name="position" id="position" class="form-select data" required>
-											<option selected disabled >--กรุณาเลือกตำแหน่ง--</option>
+											<option value="" selected>--กรุณาเลือกตำแหน่ง--</option>
 											<option value="ประธานคณะกรรมการ">ประธานคณะกรรมการ</option>
 											<option value="คณะกรรมการ">คณะกรรมการ</option>											
 										</select>

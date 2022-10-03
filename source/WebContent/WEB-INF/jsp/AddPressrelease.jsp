@@ -60,7 +60,7 @@
 									<label class="col-sm-2 col-form-label text-right">ประเภท</label>
 									<div class="col-sm-8">
 										<select class="form-select" name="type" id="type" required>
-											<option selected disabled >--กรุณาเลือกประเภท--</option>
+											<option value="" selected>--กรุณาเลือกประเภท--</option>
 											<option value="ข่าวกิจกรรม.">ข่าวกิจกรรม</option>
 											<option value="ข่าวจากแหล่งอื่น">ข่าวจากแหล่งอื่น</option>
 											<option value="ข่าวสารประชาสัมพันธ์">ข่าวสารประชาสัมพันธ์</option>											

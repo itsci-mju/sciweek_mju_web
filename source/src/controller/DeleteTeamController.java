@@ -34,8 +34,8 @@ public class DeleteTeamController {
 			}
 
 			ListTeamManager vtim = new ListTeamManager();
-			List<Team> listteam = vtim.getListTeam();
-			request.setAttribute("listteam", listteam);
+			List<Team> teamList = vtim.getListTeam();
+			request.setAttribute("teamList", teamList);
 
 			return mav;
 

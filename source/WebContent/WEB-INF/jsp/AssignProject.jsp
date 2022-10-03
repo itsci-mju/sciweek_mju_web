@@ -13,7 +13,6 @@
 	} catch (Exception e) {
 		e.printStackTrace();
 	}
-
 	try {
 		admin = (Admin) session.getAttribute("admin");
 	} catch (Exception e) {
@@ -32,7 +31,6 @@
 	} catch (Exception e) {
 		e.printStackTrace();
 	}
-
 %>
 <!DOCTYPE html>
 <html>
@@ -52,9 +50,22 @@
 <link href='https://fonts.googleapis.com/css?family=Kanit' rel='stylesheet' type='text/css'>
 <link rel="stylesheet" href="./css/web_css.css">
 </head>
+
+<script type="text/javascript">
+	function validateForm(frm) {
+		
+		var checkBox = document.getElementById('chkreviewer');
+
+		if (checkBox.checked === false) {
+			alert("<!-- กรุณาเลือกประธานคณะกรรมการและคณะกรรมการ --> ");
+			return false;
+		}
+
+	}
+</script>
 <body style="background-image: url('./image/hero-bg.png')">
 	<jsp:include page="common/navbar.jsp"></jsp:include>
-	
+
 	<div class="container" style="margin-top: 35px;">
 		<form action="isAssignProject" name="frm" method="post" >
 			<section id="content">
@@ -71,7 +82,7 @@
 										<input type="text" name="team_id" id="team_id" class="form-control data" value="<%=team.getTeam_id()%>" readonly>
 									</div>
 								</div>
-												
+
 								<div class="form-group row">
 									<label class="col-sm-2 col-form-label text-right">ชื่อทีม</label>
 									<div class="col-sm-4">
@@ -79,7 +90,6 @@
 									</div>
 								</div>																
 								<br>
-								
 								<div class="container">
 									<div class="form-group row">
 										<h5>โครงงานวิทยาศาสตร์</h5>										
@@ -96,14 +106,17 @@
 									</thead>
 									<tbody> 
 										<%
+											String teamName = team.getTeam_name();
 											if (listproject.size() != 0) {
 										%>
 										<%
 											for (int i = 0 ; i < listproject.size() ; i++) {
-												if(listproject.get(i).getTeam().getTeam_id() == 0) {
+																														
+												if ( listproject.get(i).getTeam().getTeam_id() == 0 && listproject.get(i).getProjecttype().getProjecttype_name().equalsIgnoreCase(teamName)) {
+																									
 										%>
 										<tr>
-											<td align="center"><input type="checkbox" id="chkproject" name="chkproject" value="<%=listproject.get(i).getProject_id()%>"></td>
+											<td align="center"><input type="checkbox" id="chkproject" name="chkproject" value="<%=listproject.get(i).getProject_id()%>"  checked></td>
 											<td align="center"><%=listproject.get(i).getProject_id()%></td>
 											<td><%=listproject.get(i).getProjectname()%></td>										
 										</tr>
@@ -123,7 +136,7 @@
 									</tbody>
 								</table>			
 								<br>	
-								
+
 								<%
 									String reviewer_id = null;
 									for (String reviewerIdStr : reviewerIdStrList) { 
@@ -137,12 +150,12 @@
 								%>					
 								<div class="form-group row">
 									<div class="col-sm-12 text-center">
-										<button type="submit" class="btn btn-success">บันทึกข้อมูล</button>									
-										<a class="btn btn-warning" href="doAssignReviewer?team_id=<%=team.getTeam_id()%>&team_name=<%=team.getTeam_name()%>" role="button">ย้อนกลับ</a>	
+										<button type="submit" class="btn btn-success" onclick ="return validateForm(frm)">บันทึกข้อมูล</button>									
+										<a class="btn btn-warning" href="doCreateTeam" role="button">ย้อนกลับ</a>	
 										<a class="btn btn-danger" href="doViewTeam" role="button">ยกเลิก</a>	
 									</div>
 								</div>
-								
+
 							</div>
 						</div>
 					</div>
@@ -159,6 +172,6 @@
 			alert(msg);
 		</script>
 	</c:if>
-	
+
 </body>
 </html>

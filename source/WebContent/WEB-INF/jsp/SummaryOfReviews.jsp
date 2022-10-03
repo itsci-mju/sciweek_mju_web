@@ -33,6 +33,9 @@
 		}
 
 	}
+	
+	Integer state_project = 0 ;
+	String disabled = null ;
 %>
 <!DOCTYPE html>
 <html>
@@ -113,7 +116,10 @@
 				
 				<!-- 1 -->
 				
-				<% if (reviewer != null && projectResponseList.get(i).getStateProject() == 1) { %>
+				<% 
+					if (reviewer != null && projectResponseList.get(i).getStateProject() == 1) { 
+						state_project = projectResponseList.get(i).getStateProject() ;
+				%>
 				
 				<input type="hidden" name="state_project" id="state_project" value="<%=projectResponseList.get(i).getStateProject()%>">
 
@@ -173,7 +179,10 @@
 				
 				<!-- 2 -->
 				
-				<% if (reviewer != null && projectResponseList.get(i).getStateProject() == 2) { %>
+				<% 
+					if (reviewer != null && projectResponseList.get(i).getStateProject() == 2) { 
+						state_project = projectResponseList.get(i).getStateProject() ;
+				%>
 				
 				<input type="hidden" name="state_project" id="state_project" value="<%=projectResponseList.get(i).getStateProject()%>">
 
@@ -233,7 +242,9 @@
 				
 				<!-- 3 -->
 				
-				<% if (reviewer != null && projectResponseList.get(i).getStateProject() == 3) { %>
+				<% if (reviewer != null && projectResponseList.get(i).getStateProject() == 3 ) { 
+						state_project = projectResponseList.get(i).getStateProject() ;
+				%>
 
 				<tbody>
 					<tr>		
@@ -291,9 +302,6 @@
 				
 				<!-- END -->
 				
-				
-				
-
 				<%
 					}
 				%>
@@ -309,13 +317,15 @@
 				%>
 			</table>		
 			<br>
+			
+			<% if (state_project != 3) { %>		
 			<div class="form-group row">
 				<div class="col-sm-12 text-center">
 					<button type="submit" class="btn btn-success" OnClick="return validateForm(frm)">เลือก</button>
 					<a class="btn btn-danger" href="index" role="button">ยกเลิก</a>
 				</div>
 			</div>
-			
+			<% } %>
 			
 		</div>
 	</form>

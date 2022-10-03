@@ -1,11 +1,12 @@
 <%@page import="com.sun.xml.txw2.Document"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ page import="java.util.*,manager.*,bean.*,java.text.*"%>
+<%@ page import="java.util.*,manager.*,bean.*,java.text.*, java.sql.Timestamp"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%
 	Admin admin = null;
 	List<Project> listproject = new Vector<>();
+	List<ProjectType> projectTypeList = new Vector<>();
 	Student student = null;
 	Reviewer reviewer = null;
 
@@ -29,6 +30,12 @@
 
 	try {
 		listproject = (List<Project>) request.getAttribute("listproject");
+	} catch (Exception e) {
+		e.printStackTrace();
+	}
+	
+	try {
+		projectTypeList = (List<ProjectType>) request.getAttribute("projectTypeList");
 	} catch (Exception e) {
 		e.printStackTrace();
 	}
@@ -61,46 +68,63 @@
 				<h3><i class="fa fa-bullhorn" aria-hidden="true">&nbsp;</i>ผลสรุปการประเมินโครงงานวิทยาศาสตร์</h3>
 			</div>	
 			<!-- <div class="col-auto">
-				<a href="ExportAnnounceExcel" class="btn btn-success mb-3" style="margin-left: 599px;"><i class="fa-solid fa-file-excel">&nbsp;</i>Export File Excel</a>
+				<a href="ExportAnnounceExcel" class="btn btn-success mb-3" style="margin-left: 639px;"><i class="fa-solid fa-file-excel">&nbsp;</i>Export Files</a>
 			</div> -->		
 		</div>						
 		
 		<hr class="colorgraph">
 		
 		<div class="form-group row" style="margin-left: 210px;">
+		<%  for (int p = 0 ; p < projectTypeList.size() ; p++) { %>
+			<% if (p == 0) { %>
 			<div class="col-sm-3">
-				<button name="button" class="btn btn-primary" onclick="window.location.href='isViewResult?classproject=มัธยมศึกษาตอนต้น&projecttype_id=1';" >
-					<i class="fa-sharp fa-solid fa-seedling">&nbsp;</i>มัธยมศึกษาตอนต้นสาขาวิทยาศาสตร์กายภาพ
+				<button name="button" class="btn btn-primary" onclick="window.location.href='isViewResult?projecttype_id=<%=projectTypeList.get(p).getProjecttype_id()%>';" >
+					<i class="fa-sharp fa-solid fa-seedling">&nbsp;</i><%=projectTypeList.get(p).getProjecttype_name()%>
 				</button>	
 			</div>
+			<% } %>
+			<% if (p == 1) { %>
 			<div class="col-sm-3">
-				<button name="button" class="btn btn-success" onclick="window.location.href='isViewResult?classproject=มัธยมศึกษาตอนต้น&projecttype_id=2';" >
-					<i class="fa-sharp fa-solid fa-frog">&nbsp;</i>มัธยมศึกษาตอนต้นสาขาวิทยาศาสตร์ชีวภาพ
+				<button name="button" class="btn btn-success" onclick="window.location.href='isViewResult?projecttype_id=<%=projectTypeList.get(p).getProjecttype_id()%>';" >
+					<i class="fa-sharp fa-solid fa-frog">&nbsp;</i><%=projectTypeList.get(p).getProjecttype_name()%>
 				</button>
 			</div>
+			<% } %>
+			<% if (p == 2) { %>
 			<div class="col-sm-3">
-				<button name="button" class="btn btn-info" onclick="window.location.href='isViewResult?classproject=มัธยมศึกษาตอนต้น&projecttype_id=3';" >
-					<i class="fa-solid fa-bolt">&nbsp;</i>มัธยมศึกษาตอนต้นสาขาวิทยาศาสตร์ประยุกต์
+				<button name="button" class="btn btn-info" onclick="window.location.href='isViewResult?projecttype_id=<%=projectTypeList.get(p).getProjecttype_id()%>';" >
+					<i class="fa-solid fa-bolt">&nbsp;</i><%=projectTypeList.get(p).getProjecttype_name()%>
 				</button>		
-			</div>			
+			</div>
+			<% } %>	
+			<% } %>		
 		</div>
 		
 		<div class="form-group row" style="margin-left: 210px;">
+		<%  for (int p = 3 ; p < projectTypeList.size() ; p++) { %>
+		<% if (p == 3) { %>
 			<div class="col-sm-3" >
-				<button name="button" class="btn btn-danger" onclick="window.location.href='isViewResult?classproject=มัธยมศึกษาตอนปลาย&projecttype_id=1';" style="color:white">
-					<i class="fa-solid fa-atom">&nbsp;</i>มัธยมศึกษาตอนปลายสาขาวิทยาศาสตร์กายภาพ
+				<button name="button" class="btn btn-danger" onclick="window.location.href='isViewResult?projecttype_id=<%=projectTypeList.get(p).getProjecttype_id()%>';" style="color:white">
+					<i class="fa-solid fa-atom">&nbsp;</i><%=projectTypeList.get(p).getProjecttype_name()%>
 				</button>	
 			</div>
+			<% } %>
+			<% if (p == 4) { %>
 			<div class="col-sm-3">
-				<button name="button" class="btn btn-warning" onclick="window.location.href='isViewResult?classproject=มัธยมศึกษาตอนปลาย&projecttype_id=2';" >
-					<i class="fa-sharp fa-solid fa-hippo">&nbsp;</i>มัธยมศึกษาตอนปลายสาขาวิทยาศาสตร์ชีวภาพ</button>
+				<button name="button" class="btn btn-warning" onclick="window.location.href='isViewResult?projecttype_id=<%=projectTypeList.get(p).getProjecttype_id()%>';" >
+					<i class="fa-sharp fa-solid fa-hippo">&nbsp;</i><%=projectTypeList.get(p).getProjecttype_name()%>
+				</button>
 			</div>
+			<% } %>
+			<% if (p == 5) { %>
 			<div class="col-sm-3">
-				<button name="button" class="btn btn-secondary" onclick="window.location.href='isViewResult?classproject=มัธยมศึกษาตอนปลาย&projecttype_id=3';" >
-					<i class="fa-solid fa-computer">&nbsp;</i>มัธยมศึกษาตอนปลายสาขาวิทยาศาสตร์ประยุกต์</button>		
+				<button name="button" class="btn btn-secondary" onclick="window.location.href='isViewResult?projecttype_id=<%=projectTypeList.get(p).getProjecttype_id()%>';" >
+					<i class="fa-solid fa-computer">&nbsp;</i><%=projectTypeList.get(p).getProjecttype_name()%>
+				</button>		
 			</div>	
 		</div>
-		
+		<% } %>	
+	<% } %>	
 	</div>
 
 		
@@ -110,13 +134,14 @@
 				<tr>
 					<th style="white-space: nowrap ; width: 90 " >รหัสโครงงานวิทยาศาสตร์</th>
 					<th>ชื่อโครงงานวิทยาศาสตร์</th>
-					<th style="white-space: nowrap " >โรงเรียน</th>
-					<th style="white-space: nowrap" >คะแนน</th>				
+					<th style="white-space: nowrap " >โรงเรียน</th>			
 					<th style="white-space: nowrap" >รางวัล</th>
 				</tr>
 			</thead>
-				<%
-					String award = null ;
+				<%			
+					Date date = new Date();  
+                	Timestamp timestamp = new Timestamp(date.getTime());  
+                	SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); 
 					
 					if (listproject.size() != 0) {	
 						
@@ -127,22 +152,6 @@
 							AnnounceResultManager announceResultManager = new AnnounceResultManager();
 					
 							List<StudentProject> studentProjectList = announceResultManager.getListStudentProjectByProjectID(project_id);
-										
-							int rank = i + 1 ;
-							
-							if (listproject.get(i).getAvgscore() <= 0.0) {
-								award = "ยังไม่มีรางวัล";	
-							} else {
-								if (rank ==  1) {
-									award = "รางวัลชนะเลิศอันดับที่ 1" ;
-								} else if (rank == 2) {
-									award = "รางวัลรองชนะเลิศอันดับที่ 1" ;
-								} else if (rank == 3) {
-									award = "รางวัลรองชนะเลิศอันดับที่ 2" ;
-								} else {
-									award = "รางวัลชมเชย" ;
-								}	
-							}
 				%>
 				
 			<tbody>
@@ -152,30 +161,60 @@
 					<% for (StudentProject studentProject : studentProjectList) { %>
 					<td align="left" style="white-space: nowrap " ><%=studentProject.getStudent().getSchool().getSchool_name()%></td>
 					<% } %>
-					<td align="center"><%=listproject.get(i).getAvgscore()%></td>
-					<td align="center" style="white-space: nowrap "><%=award%></td>
+					<td align="center" style="white-space: nowrap "><%=listproject.get(i).getAward()%></td>
 				</tr>			
-				<%	
-					if ( admin != null ) {
-						announceResultManager.isUpdateAward(project_id, award) ;
-					} 
-						
-					
+				<%										
 						}
-						
+	
 					} else {
 				%>
 				<tr align="center">
 					<td colspan="5"><h2>ไม่มีข้อมูล</h2></td>
 				</tr>
-				<%
-					}
-				%>
+				<% } %>
 			</tbody>
 		</table>
 	</div>
 	
 	<jsp:include page="common/footer.jsp"></jsp:include>
+	
+	
+	<script type="text/javascript">
+		$(document).ready(
+				function() {
+					$('#myTable').after(
+							'<div id="nav" class="pagination" ></div>');
+					var rowsShown = 10;
+					var rowsTotal = $('#myTable tbody tr').length;
+					var numPages = rowsTotal / rowsShown;
+					for (i = 0; i < numPages; i++) {
+						var pageNum = i + 1;
+						$('#nav')
+								.append(
+										'<a href="#" rel="'+i+'" >' + pageNum
+												+ '</a> ');
+					}
+					$('#myTable tbody tr').hide();
+					$('#myTable tbody tr').slice(0, rowsShown).show();
+					$('#nav a:first').addClass('active');
+					$('#nav a').bind(
+							'click',
+							function() {
+
+								$('#nav a').removeClass('active');
+								$(this).addClass('active');
+								var currPage = $(this).attr('rel');
+								var startItem = currPage * rowsShown;
+								var endItem = startItem + rowsShown;
+								$('#myTable tbody tr').css('opacity', '0.0')
+										.hide().slice(startItem, endItem).css(
+												'display', 'table-row')
+										.animate({
+											opacity : 1
+										}, 300);
+							});
+				});
+	</script>
 
 </body>
 </html>

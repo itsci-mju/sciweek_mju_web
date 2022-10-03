@@ -63,8 +63,7 @@ public class ViewTeamDetailController {
 			List<Project> listproject = viewTeamDetailManager.getListProjectByTeamID(team_id);
 			mav.addObject("team",team);
 			mav.addObject("listreviewer", listreviewer);
-			mav.addObject("listproject", listproject);
-			
+			mav.addObject("listproject", listproject);	
 			return mav;
 
 		} else {

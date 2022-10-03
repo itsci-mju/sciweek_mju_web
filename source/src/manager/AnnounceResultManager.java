@@ -92,7 +92,7 @@ public class AnnounceResultManager {
 			String sql = " SELECT * FROM project"
 					+ "  LEFT JOIN projecttype on project.projecttype_id = projecttype.projecttype_id"
 					+ "  LEFT JOIN team on project.team_id = team.team_id "
-					+ "  ORDER BY project.project_id ";
+					+ "  ORDER BY project.avgscore DESC";
 			ResultSet rs = stmt.executeQuery(sql);
 
 			while (rs.next()) {
@@ -110,7 +110,7 @@ public class AnnounceResultManager {
 	}
 
 	
-	public List<Project> getListProjectByClassprojectAndProjecttypeID(String classproject, String projecttype_id) throws Exception {
+	public List<Project> getListProjectByProjecttypeID(Integer projecttype_id) throws Exception {
 		ConnectionDB condb = new ConnectionDB();
 		Connection con = condb.getConnection();
 		Statement stmt = null;
@@ -121,8 +121,8 @@ public class AnnounceResultManager {
 			String sql = " SELECT * FROM project"
 					+ "  LEFT JOIN projecttype on project.projecttype_id = projecttype.projecttype_id"
 					+ "  LEFT JOIN team on project.team_id = team.team_id "
-					+ "  WHERE project.classproject = '"+ classproject +"' AND project.projecttype_id = '"+ projecttype_id +"' "
-					+ "  ORDER BY project.project_id ";
+					+ "  WHERE project.projecttype_id = '"+ projecttype_id +"' "
+					+ "  ORDER BY project.avgscore DESC ";
 			ResultSet rs = stmt.executeQuery(sql);
 
 			while (rs.next()) {
