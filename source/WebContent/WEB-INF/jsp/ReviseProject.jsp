@@ -223,7 +223,7 @@
 							<div class="form-group row">	
 														
 									<label class="col-sm-2 col-form-label text-right">ไฟล์วีดิโอ</label>
-									<% if (sproject.getProject().getVideo() != null && sproject.getProject().getVideo() != "-") {%>
+									<% if (sproject.getProject().getVideo() != null &&  !sproject.getProject().getVideo().equals("-")) {%>
 										<div class="col-sm-4">
 											<a href="<%=sproject.getProject().getVideo()%>" target="_blank" class="btn btn-link" type="button" style="margin-left: -13px; "><i class="fa fa-file-video-o">&nbsp;&nbsp;</i>วิดีโอ</a>
 										</div>						

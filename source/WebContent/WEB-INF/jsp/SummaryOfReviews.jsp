@@ -213,8 +213,8 @@
 				%>
 
 				<tbody>
-					<tr>		
-						<td align="center" width="175"><%=projectResponseList.get(i).getAwardProject()%></td>				
+					<tr>			
+						<td align="center" width="175"><%=projectResponseList.get(i).getAwardProject()%></td>			
 						<td align="center" width="50px"><%=projectResponseList.get(i).getProjectID()%></td>
 						<td align="center" width="190px"><%=projectResponseList.get(i).getReviewDate()%></td>
 						<td align="left"><%=projectResponseList.get(i).getProjectName()%></td>
@@ -238,7 +238,7 @@
 						<% } else { %>
 						<td style="background-color: #FFC7CE" align="center" width="70px"><%=avgscore%></td>
 						<% } %>
-						<td align="center" width="90"><a class="btn btn-warning" href="ViewComments?project_id=<%=projectResponseList.get(i).getProjectID()%>" role="button"><i class="fa fa-eye"></i></a></td>				
+						<td align="center" width="90"><a class="btn btn-warning" href="ViewComments?project_id=<%=projectResponseList.get(i).getProjectID()%>" role="button"><i class="fa fa-eye"></i></a></td>			
 					</tr>
 				</tbody>
 					

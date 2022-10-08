@@ -120,14 +120,14 @@
 	<h5>สรุปคำวิจารณ์ที่ได้รับและความคิดเห็น</h5>
 	<hr class="colorgraph">
 	</div>
-	<div style="margin-left: 8%; margin-right: 8%;">
+	<div style="margin-left: 6%; margin-right: 6%;">
 		<table class="table table-bordered  table-hover" id=myTable>
 			<thead class="table-info" align="center">
 				<tr>
 					<th width="70">ลำดับ</th>
 					<th width="190">วันเวลาประเมิน</th>
 					<th>ชื่อโครงงาน/สิ่งประดิษฐ์</th>
-					<th width="230">โรงเรียน</th>
+					<th width="250">โรงเรียน</th>
 					<th width="95">รวมคะแนน</th>
 					<th width="70">อันดับ</th>
 				</tr>

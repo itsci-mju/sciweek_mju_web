@@ -234,7 +234,7 @@
 								<div class="form-group row">	
 														
 									<label class="col-sm-2 col-form-label text-right">ไฟล์วีดิโอ</label>
-									<% if (sproject.getProject().getVideo() != null && sproject.getProject().getVideo() != "-") {%>
+									<% if (sproject.getProject().getVideo() != null && !sproject.getProject().getVideo().equals("-")) {%>
 										<div class="col-sm-4">
 											<a href="<%=sproject.getProject().getVideo()%>" target="_blank" class="btn btn-link" type="button" style="margin-left: -13px; "><i class="fa fa-file-video-o">&nbsp;&nbsp;</i>วิดีโอ</a>
 										</div>						
@@ -315,7 +315,7 @@
 									<input type="hidden" id="question_id" name="question_id" class="form-control data" value="<%=questions.getQuestion_id()%>">
 									<tbody>
 										<tr>
-											<td align="center"><%=questions.getQuestion_id()%></td>
+											<td align="center"><%=questions.getQuestion_id() - 1%></td>
 											<td><%=questions.getQuestion()%></td>
 											<td width="50px"><input type="text" name="answer" id="answer" class="form-control data" style="width: 100px" maxlength="5"
 												onkeyup="checkNumber<%=questions.getFullscore()%>(this)"></td>

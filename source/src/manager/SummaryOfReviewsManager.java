@@ -45,7 +45,7 @@ public class SummaryOfReviewsManager {
 					+ " LEFT JOIN projecttype on project.projecttype_id = projecttype.projecttype_id "
 					+ " WHERE reviewer.team_id = '"+ team_id + "' "
 					+ " GROUP BY project.project_id "
-					+ " ORDER BY totalscore DESC ";
+					+ " ORDER BY project.award ASC "; // totalscore DESC ;
 			ResultSet rs = stmt.executeQuery(sql);
 
 			while (rs.next()) {
