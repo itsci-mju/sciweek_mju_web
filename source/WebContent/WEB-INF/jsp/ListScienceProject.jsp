@@ -5,12 +5,19 @@
 <%@ page import="java.util.*,manager.*,bean.*,java.text.*,model.*, java.sql.Timestamp"%>
 <%
 	Reviewer reviewer = null;
+	Years years = null; 
 	List<ProjectResponse> projectResponseList  = null;
 	List<ReviewerResponse> reviewerResponseList = null;
 	List<StudentProject> studentProjectList = null;
 
 	try {
 		reviewer = (Reviewer) session.getAttribute("reviewer");
+	} catch (Exception e) {
+
+	}
+	
+	try {
+		years = (Years) request.getAttribute("years");
 	} catch (Exception e) {
 
 	}
@@ -135,7 +142,7 @@
 								</tr>
 							</thead>
 							<%
-								if (studentProjectList.size() != 0 ) {
+								if ( studentProjectList.size() != 0 ) {
 							%>
 
 							<%
@@ -160,22 +167,16 @@
 
 												List<Reviews> reviewList = listScienceProjectManager
 													.getListReviewsByProjectIDAndReviewerID(studentProjectList.get(i).getProject().getProject_id(), reviewer.getReviewer_id());
+												
+												Date date = new Date();  
+								                Timestamp timestamp = new Timestamp(date.getTime());  
+								                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); 
 
-												if (reviewList.size() != 0) {																					
+												if (reviewList.size() != 0) {						
 
 													for (Reviews reviews : reviewList) {
 														
-														Date date = new Date();  
-										                Timestamp timestamp = new Timestamp(date.getTime());  
-										                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); 
-									               
-																											
-														if (timestamp.after(reviews.getEnddate())) {
-															error = "disabled";
-															bug = "disabled";
-															status = "หมดเวลา";
-														}								
-														else if (reviews.getStatus().equals("ประเมินสำเร็จ")) {
+														if (reviews.getStatus().equals("ประเมินสำเร็จ")) {
 															error = "disabled";
 															klass = "btn btn-success";
 															status = reviews.getStatus();
@@ -188,22 +189,38 @@
 															klass = "btn btn-danger";
 															status = "ยังไม่ได้ประเมิน";
 														}
+														
+														if (timestamp.after(years.getExpreviewdate())) {
+															bug = "disabled";
+															error = "disabled";
+															klass = "btn btn-danger";
+															status = "หมดเวลา";
+														} 
 									%>
-									<td align="center"><button name="button"
-											class="<%=klass%>" disabled><%=status%></button></td>
+	
+									<td align="center"><button name="button" class="<%=klass%>" disabled><%=status%></button></td>
+											
+											<% } %>
+									
 									<%
-										}
-
-												} else {
+												} else if (timestamp.after(years.getExpreviewdate())) {
+													bug = "disabled";
+													error = "disabled";
+													klass = "btn btn-danger";
+													status = "หมดเวลา";
+									%>
+									
+									<td align="center"><button name="button" class="<%=klass%>" disabled><%=status%></button></td>
+									
+									<% } else {
 													bug = "disabled";
 													klass = "btn btn-danger";
 													status = "ยังไม่ได้ประเมิน";
 									%>
-									<td align="center"><button name="button"
-											class="<%=klass%>" disabled><%=status%></button></td>
-									<%
-										}
-									%>
+									
+									<td align="center"><button name="button" class="<%=klass%>" disabled><%=status%></button></td>
+									
+									<% } %>
 
 									<td>
 										<button name="button" class="btn btn-link"
@@ -250,6 +267,10 @@
 
 												List<Reviews> reviewList = listScienceProjectManager
 													.getListReviewsByProjectIDAndReviewerID(studentProjectList.get(i).getProject().getProject_id(), reviewer.getReviewer_id());
+												
+												Date date = new Date();  
+								                Timestamp timestamp = new Timestamp(date.getTime());  
+								                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
 												if (reviewList.size() != 0) {		
 													
@@ -257,16 +278,7 @@
 														
 														reviews_id = reviews.getReviews_id();												
 																											
-														Date date = new Date();  
-										                Timestamp timestamp = new Timestamp(date.getTime());  
-										                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); 
-									               
-																											
-														if (timestamp.after(reviews.getEnddate())) {
-															error = "disabled";
-															bug = "disabled";
-															status = "หมดเวลา";
-														} else if (reviews.getStatus().equals("ประเมินสำเร็จ")) {
+														 if (reviews.getStatus().equals("ประเมินสำเร็จ")) {
 															error = "disabled";
 															klass = "btn btn-success";
 															status = reviews.getStatus();
@@ -279,22 +291,36 @@
 															klass = "btn btn-danger";
 															status = "ยังไม่ได้ประเมิน";
 														}
+														 
+														 if (timestamp.after(years.getExpreviewdate())) {
+																error = "disabled";
+																bug = "disabled";
+																klass = "btn btn-danger";
+																status = "หมดเวลา";
+														}
 									%>
-									<td align="center"><button name="button"
-											class="<%=klass%>" disabled><%=status%></button></td>
+									<td align="center"><button name="button" class="<%=klass%>" disabled><%=status%></button></td>
+									<% } %>
+									
 									<%
-										}
-
-												} else {
+												} else if (timestamp.after(years.getExpreviewdate())) {
+													bug = "disabled";
+													error = "disabled";
+													klass = "btn btn-danger";
+													status = "หมดเวลา";
+									%>
+									
+									<td align="center"><button name="button" class="<%=klass%>" disabled><%=status%></button></td>
+									
+									<% } else {
 													bug = "disabled";
 													klass = "btn btn-danger";
 													status = "ยังไม่ได้ประเมิน";
 									%>
-									<td align="center"><button name="button"
-											class="<%=klass%>" disabled><%=status%></button></td>
-									<%
-										}
-									%>
+									
+									<td align="center"><button name="button" class="<%=klass%>" disabled><%=status%></button></td>
+									
+									<% } %>
 
 									<td>
 										<button name="button" class="btn btn-link"
@@ -342,34 +368,31 @@
 
 												List<Reviews> reviewList = listScienceProjectManager
 													.getListReviewsByProjectIDAndReviewerID(studentProjectList.get(i).getProject().getProject_id(), reviewer.getReviewer_id());
+												
+												Date date = new Date();  
+								                Timestamp timestamp = new Timestamp(date.getTime());  
+								                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
 												if (reviewList.size() != 0) {		
 													
 													for (Reviews reviews : reviewList) {
 														
 														reviews_id = reviews.getReviews_id();												
-																											
-														Date date = new Date();  
-										                Timestamp timestamp = new Timestamp(date.getTime());  
-										                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); 
-									               
-																											
-														if (timestamp.after(reviews.getEnddate())) {
-															error = "disabled";
-															bug = "disabled";
-															status = "หมดเวลา";
-														} else if (reviews.getStatus().equals("ประเมินสำเร็จ")) {
+																																																								
+														if (reviews.getStatus().equals("ประเมินสำเร็จ")) {
 															error = "disabled";
 															bug = "disabled";
 															klass = "btn btn-success";
 															status = reviews.getStatus();
 														} 
+														
+														
 									%>
 									<td align="center"><button name="button"
 											class="<%=klass%>" disabled><%=status%></button></td>
+									<%  } %>
+									
 									<%
-										}
-
 												} else {
 													bug = "disabled";
 													klass = "btn btn-danger";
@@ -403,17 +426,12 @@
 
 									<%
 										}
+									%> 
+									
+									<%
+										}
 									%>
-									
-									
-									
-
-								<%
-									}
-								%>
-
-
-
+															
 								<%						
 									} else { 
 								%>

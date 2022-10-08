@@ -53,7 +53,7 @@ public class IsEditProfileStudentController {
 			studentTemp.setSchool(school);
 
 			IsEditProfileStudentManager  isEditProfileStudentManager = new IsEditProfileStudentManager();
-			ModelAndView mav = new ModelAndView("Index");
+			ModelAndView mav = new ModelAndView("EditProfileStudent");
 			if (isEditProfileStudentManager.isEditProfileStudent(studentTemp)) {
 				mav.addObject("msg", "บันทึกข้อมูลสำเร็จ!!!!");
 				session.removeAttribute("student");

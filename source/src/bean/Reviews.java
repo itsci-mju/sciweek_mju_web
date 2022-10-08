@@ -16,7 +16,6 @@ public class Reviews {
 
 	private String reviews_id;
 	private Timestamp reviewdate;
-	private Timestamp enddate;
 	private String comments;
 	private double totalscore;
 	private String status;

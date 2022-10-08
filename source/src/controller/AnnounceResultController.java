@@ -12,6 +12,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import bean.Project;
 import bean.ProjectType;
+import bean.Years;
 import manager.AnnounceResultManager;
 
 @Controller
@@ -24,9 +25,11 @@ public class AnnounceResultController {
 
 			List<Project> listproject = announceResultManager.getListProject();
 			List<ProjectType> projectTypeList = announceResultManager.getlistProjectType();
+			Years years = announceResultManager.getDATE();
 			ModelAndView mav = new ModelAndView("AnnounceResult");
 			request.setCharacterEncoding("UTF-8");
 			request.setAttribute("listproject", listproject);
+			request.setAttribute("years", years);
 			request.setAttribute("projectTypeList", projectTypeList);
 			return mav;
 		
@@ -41,9 +44,11 @@ public class AnnounceResultController {
 
 			List<Project> listproject = announceResultManager.getListProjectByProjecttypeID(projecttype_id);
 			List<ProjectType> projectTypeList = announceResultManager.getlistProjectType();
+			Years years = announceResultManager.getDATE();
 			ModelAndView mav = new ModelAndView("AnnounceResult");
 			request.setCharacterEncoding("UTF-8");
 			request.setAttribute("listproject", listproject);
+			request.setAttribute("years", years);
 			request.setAttribute("projectTypeList", projectTypeList);
 			return mav;
 		
@@ -58,9 +63,11 @@ public class AnnounceResultController {
 
 			List<Project> listproject = announceResultManager.getListProjectByProjecttypeID(projecttype_id);
 			List<ProjectType> projectTypeList = announceResultManager.getlistProjectType();
+			Years years = announceResultManager.getDATE();
 			ModelAndView mav = new ModelAndView("ExportAnnounceExcel");
 			request.setCharacterEncoding("UTF-8");
 			request.setAttribute("listproject", listproject);
+			request.setAttribute("years", years);
 			request.setAttribute("projectTypeList", projectTypeList);
 			return mav;
 		

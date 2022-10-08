@@ -3,12 +3,12 @@ package controller;
 import java.util.ArrayList;
 // import java.util.Arrays;
 // import java.util.Collections;
-import java.util.Comparator;
+// import java.util.Comparator;
 // import java.util.ArrayList;
 // import java.util.HashMap;
 import java.util.List;
 // import java.util.stream.Collectors;
-import java.util.stream.Collectors;
+// import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -81,12 +81,13 @@ public class SummaryOfReviewsController {
 									
 			String[] state_projectStrList = request.getParameterValues("state_project");			
 			String[] projectIdStrList = request.getParameterValues("chkproject");
-			List<Project> projectList = new ArrayList<Project>();
+			String[] awardStrList = request.getParameterValues("award");
+//			List<Project> projectList = new ArrayList<Project>();
 			
 			for (int i = 0 ; i < projectIdStrList.length; i++) {
 
 				val state_project = Integer.parseInt(state_projectStrList[i]);
-				val project_id = projectIdStrList[i];
+				val project_id = projectIdStrList[i];			
 
 				Project project = new Project();
 				project.setProject_id(project_id);
@@ -97,34 +98,38 @@ public class SummaryOfReviewsController {
 				}
 				
 				if (state_project == 2) {
-					summaryOfReviewsManager.isChooseProjectSecond(project);
+					val award = awardStrList[i];
+					summaryOfReviewsManager.isChooseProjectSecond(project, award);
 					summaryOfReviewsManager.isFailedProjectSecond(team_id, state_project);
-					summaryOfReviewsManager.isUpdateFailedProject(team_id);
-					
-					projectList.add(summaryOfReviewsManager.getProjectByProjectID(project.getProject_id()));
-					
-					projectList.stream()
-		            .sorted(Comparator.comparingDouble(Project::getAvgscore)) 
-		            .filter(x2 -> x2.getAvgscore() <= 1)
-		            .collect(Collectors.toList());
-					
-					for (int a = 0 ; a < projectList.size() ; a++) {
 							
-						if (a == 0) {
-							summaryOfReviewsManager.isFirstAward(projectList.get(a).getProject_id());
-							System.out.println(projectList.get(a).getProject_id());
-							System.out.println(projectList.get(a).getAward());
-						} else if (a == 1) {
-							summaryOfReviewsManager.isSecondAward(projectList.get(a).getProject_id());
-							System.out.println(projectList.get(a).getProject_id());
-							System.out.println(projectList.get(a).getAward());
-						} else if (a == 2) {
-							summaryOfReviewsManager.isThirdAward(projectList.get(a).getProject_id());
-							System.out.println(projectList.get(a).getProject_id());
-							System.out.println(projectList.get(a).getAward());
-						} 
-						
-					}
+//					projectList.add(summaryOfReviewsManager.getProjectByProjectID(project.getProject_id()));
+//					
+//					projectList.stream()
+//		            .sorted(Comparator.comparingDouble(Project::getAvgscore)) 
+//		            .filter(x2 -> x2.getAvgscore() <= 1)
+//		            .collect(Collectors.toList());
+//					
+//					for (int a = 0 ; a < projectList.size() ; a++) {
+//							
+//						if (a == 0) {
+//							summaryOfReviewsManager.isFirstAward(projectList.get(a).getProject_id());
+//							System.out.println(projectList.get(a).getProject_id());
+//							System.out.println(projectList.get(a).getAward());
+//						} else if (a == 1) {
+//							summaryOfReviewsManager.isSecondAward(projectList.get(a).getProject_id());
+//							System.out.println(projectList.get(a).getProject_id());
+//							System.out.println(projectList.get(a).getAward());
+//						} else if (a == 2) {
+//							summaryOfReviewsManager.isThirdAward(projectList.get(a).getProject_id());
+//							System.out.println(projectList.get(a).getProject_id());
+//							System.out.println(projectList.get(a).getAward());
+//						} else {
+//							summaryOfReviewsManager.isUpdateFailedProject(projectList.get(a).getProject_id());		
+//							System.out.println(projectList.get(a).getProject_id());
+//							System.out.println(projectList.get(a).getAward());
+//						}
+//						
+//					}
 					
 				}
 				

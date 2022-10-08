@@ -7,9 +7,12 @@ import java.sql.Statement;
 
 import bean.Reviewer;
 import bean.Team;
+import resultset.ResultSetToClass;
 import util.ConnectionDB;
 
 public class ViewReviewerDetailManager {
+	
+	ResultSetToClass resultSetToClass = new ResultSetToClass();
 
 	public Reviewer getReviewerByID(Integer key) throws Exception {
 		ConnectionDB condb = new ConnectionDB();

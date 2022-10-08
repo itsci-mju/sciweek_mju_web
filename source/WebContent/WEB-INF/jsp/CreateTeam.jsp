@@ -107,6 +107,19 @@
 
 </style>
 </head>
+
+<script type="text/javascript">
+
+	function validateImportForm(frmexcel) {
+		
+		if (frmexcel.fileexcel.value == "") {
+			alert("<!-- กรุณาอัปโหลดไฟล์ Excel -->");
+			return false;
+		}
+
+	}
+		
+</script>
 <script type="text/javascript">
 	function validateForm(frm) {
 
@@ -136,7 +149,7 @@
 				<br>
 				
 				<div class="container">
-					<form action="ImportReviewer" method="post" class="row g-3" enctype="multipart/form-data">
+					<form action="ImportReviewer" id="frmexcel" method="post" class="row g-3" enctype="multipart/form-data">
 						<section id="content">
 							<div class="container" style="margin-top: -20px">
 								<div class="row">
@@ -163,7 +176,7 @@
 															</p>
 															<p>เลือกไฟล์หรือลากมาที่นี่.</p>
 														</div>
-														<input type="file" name="fileexcel" class="dropzone" accept=".csv, application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet">
+														<input type="file" name="fileexcel" id="fileexcel" class="dropzone" accept=".csv, application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet">
 													</div>
 												</div>
 											</div>
@@ -318,7 +331,7 @@
 											<br>
 											<div class="form-group row">
 												<div class="col-sm-12 text-center">
-													<button type="submit" class="btn btn-success">นำเข้าข้อมูลคณะกรรมการ</button>										
+													<button type="submit" class="btn btn-success" onclick ="return validateImportForm(frmexcel)" >นำเข้าข้อมูลคณะกรรมการ</button>										
 												</div>
 											</div>
 										</div>

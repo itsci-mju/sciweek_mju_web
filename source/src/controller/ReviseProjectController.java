@@ -19,7 +19,9 @@ import bean.Report;
 import bean.Reviewer;
 import bean.Reviews;
 import bean.StudentProject;
+import bean.Years;
 import lombok.val;
+import manager.AnnounceResultManager;
 import manager.ListScienceProjectManager;
 import manager.ReviseProjectManager;
 import model.ProjectResponse;
@@ -34,16 +36,19 @@ public class ReviseProjectController {
 		if (reviewer != null) {
 			String project_id = request.getParameter("project_id");
 			ReviseProjectManager reviseProjectManager = new ReviseProjectManager();
+			AnnounceResultManager announceResultManager = new AnnounceResultManager(); 
 			Report report = reviseProjectManager.getReportByProjectID(project_id);
 			StudentProject sproject = reviseProjectManager.getStudentProjectByID(project_id);
 			List<StudentProject> listsproject = reviseProjectManager.getListScienceProject(project_id);
 			val reviews = reviseProjectManager.getReviewsByReviewerID(reviewer.getReviewer_id(),project_id);
+			Years years = announceResultManager.getDATE();
 			ModelAndView mav = new ModelAndView("ReviseProject");
 			session.setAttribute("report", report);
 			mav.addObject("reviewer", reviewer);
 			mav.addObject("sproject", sproject);
 			mav.addObject("listsproject", listsproject);
 			mav.addObject("reviews", reviews);
+			mav.addObject("years", years);
 			return mav;
 		} else {
 			ModelAndView mav = new ModelAndView("LoginPage");
@@ -112,12 +117,14 @@ public class ReviseProjectController {
 					}
 				}
 			}
-			
+			AnnounceResultManager announceResultManager = new AnnounceResultManager();
+			Years years = announceResultManager.getDATE();
 			ModelAndView mav = new ModelAndView("ListScienceProject");
 			mav.addObject("msg", "แก้ไขประเมินสำเร็จ!!!");
 			mav.addObject("studentProjectList", studentProjectList);
 			mav.addObject("reviewerResponseList", reviewerResponseList);
 			mav.addObject("projectResponseList", projectResponseList);
+			mav.addObject("years", years);
 			return mav;
 		} else {
 			ModelAndView mav = new ModelAndView("ReviseProject");

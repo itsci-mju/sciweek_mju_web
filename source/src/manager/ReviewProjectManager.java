@@ -211,7 +211,6 @@ public class ReviewProjectManager {
 			report.setReport_id(rs.getInt("report.report_id"));
 			report.setReportname(rs.getString("report.reportname"));
 			report.setUploaddate(rs.getTimestamp("report.uploaddate"));
-			report.setExpdate(rs.getTimestamp("report.expdate"));
 			
 			report.setProject(resultSetToClass.setResultSetToProject(rs));
 			

@@ -17,6 +17,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import bean.*;
 import lombok.val;
+import manager.AnnounceResultManager;
 import manager.ListScienceProjectManager;
 import manager.ReviewProjectManager;
 import manager.ReviseProjectManager;
@@ -33,12 +34,14 @@ public class ReviewProjectController {
 			String project_id = request.getParameter("project_id");
 			String reviews_id = request.getParameter("reviews_id");
 			ReviewProjectManager reviewProjectManager = new ReviewProjectManager();
+			AnnounceResultManager announceResultManager = new AnnounceResultManager(); 
 			Report report = reviewProjectManager.getReportByProjectID(project_id);
 			Reviews reviews = reviewProjectManager.getReviewsByReviewID(reviews_id);
 			StudentProject sproject = reviewProjectManager.getStudentProjectByID(project_id);
 			List<StudentProject> listsproject = reviewProjectManager.getListScienceProject(project_id);
 			Question question = reviewProjectManager.getQuestion();
 			List<Question> listquestion = reviewProjectManager.getListQuestion();
+			Years years = announceResultManager.getDATE();
 			ModelAndView mav = new ModelAndView("ReviewProject");
 			session.setAttribute("report", report);
 			mav.addObject("reviews", reviews);
@@ -47,6 +50,7 @@ public class ReviewProjectController {
 			mav.addObject("listquestion", listquestion);
 			mav.addObject("sproject", sproject);
 			mav.addObject("listsproject", listsproject);
+			mav.addObject("years", years);
 			return mav;
 		} else {
 			ModelAndView mav = new ModelAndView("LoginPage");
@@ -83,6 +87,7 @@ public class ReviewProjectController {
 		    String date1 = new SimpleDateFormat("ddMMyyyyHHmmss").format(dd);
 
 			ReviewProjectManager reviewProjectManager = new ReviewProjectManager();
+			
 
 			Reviews reviews = new Reviews();
 			
@@ -168,12 +173,14 @@ public class ReviewProjectController {
 					}
 				}
 			}
-			
+			AnnounceResultManager announceResultManager = new AnnounceResultManager();
+			Years years = announceResultManager.getDATE();
 			ModelAndView mav = new ModelAndView("ListScienceProject");
 			mav.addObject("msg", "ประเมินสำเร็จ");
 			mav.addObject("studentProjectList", studentProjectList);
 			mav.addObject("reviewerResponseList", reviewerResponseList);
 			mav.addObject("projectResponseList", projectResponseList);
+			mav.addObject("years", years);
 			return mav;
 		} else {
 			ModelAndView mav = new ModelAndView("ReviewProject");

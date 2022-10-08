@@ -6,6 +6,7 @@
 	Student student = null ;
 	StudentProject sproject = null ;
 	Report report = null ;
+	Years years = null ;
 	List<StudentProject> listsproject = new Vector<>() ;
 	
 	try {
@@ -23,6 +24,12 @@
 	
 	try {
 		report = (Report) request.getAttribute("report");
+	} catch (Exception e) {
+		e.printStackTrace();
+	}
+	
+	try {
+		years = (Years) request.getAttribute("years");
 	} catch (Exception e) {
 		e.printStackTrace();
 	}
@@ -127,20 +134,25 @@
 				<!-- Step Wise Form Content -->
 				<!-- Step 1 Content -->
 				
-				<%
+				<% if (years.getExpuploaddate() != null ) { %>
 				
-				if (timestamp.after(report.getExpdate())) {
-					disabled = "disabled";
-				}
+					 <%
+					 	if (timestamp.after(years.getExpuploaddate())) { 
+						 	disabled = "disabled";
+						}
+					 %>
+						
 				
-				%>
+				<% } %>
 				
 				<section id="step-1" class="form-step">
 					<h2 class="font-normal">ขั้นตอนที่ 1 : อัปโหลดลิงค์วิดีโอ</h2>
 					<!-- Step 1 input fields -->
 					<div class="mt-3">
 						<h6 style="color: red">ชี้แจ้ง : ตัวอย่างลิงก์ https://www.youtube.com/embed/XXX..<br><br>
-						วันเวลากำหนดส่ง : <%=report.getExpdate()%> 
+						<% if (years.getExpuploaddate() != null ) { %>
+							วันเวลากำหนดส่ง : <%=years.getExpuploaddate()%> 
+						<% } %>
 						</h6>						
 							<div class="form-group row">
 								<div class="col-sm-4">
@@ -162,7 +174,9 @@
 					<!-- Step 2 input fields -->
 					<div class="mt-3">
 						<h6 style="color: red">ชี้แจ้ง : กรุณาอัปโหลดข้อมูลไฟล์รายงานเป็นนามสกุล .pdf..<br><br>
-						วันเวลากำหนดส่ง : <%=report.getExpdate()%> 
+						<% if (years.getExpuploaddate() != null ) { %>
+							วันเวลากำหนดส่ง : <%=years.getExpuploaddate()%> 
+						<% } %> 
 						</h6>
 						<br>
 						<div class="form-group row">
@@ -174,9 +188,10 @@
 					</div>
 					<div class="mt-3">
 						<a class="button btn-navigate-form-step" type="button" step_number="1" style="text-decoration: none;">ย้อนกลับ</a>
-						<button class="button submit-btn" type="submit" onclick ="return validateForm(frm)" >บันทึก</button>
+						<button class="button submit-btn" type="submit" onclick ="return validateForm(frm)" <%=disabled%>>บันทึก</button>
 					</div>
 				</section>
+
 				<!-- Step 3 Content, default hidden on page load. -->
 				<!--  <section id="step-3" class="form-step d-none">
                 <h2 class="font-normal">ขั้นตอนที่ 3 : บันทึกข้อมูลโครงงานวิทยาศาสตร์</h2>
@@ -189,6 +204,7 @@
                     <button class="button submit-btn" type="submit">บันทึก</button>
                 </div>
             </section>  -->
+            
 			</div>
 		</div>
 		</form>

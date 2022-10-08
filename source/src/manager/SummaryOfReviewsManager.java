@@ -31,20 +31,21 @@ public class SummaryOfReviewsManager {
 		ObjectMapper mapper = new ObjectMapper();
 		try {
 			stmt = con.createStatement();
-			String sql = " SELECT reviews.reviewdate"
-					+ " ,project.project_id"
-					+ ",project.projectname"
-					+ ",project.state_project"
-					+ " ,concat('[',(group_concat(JSON_OBJECT('reviewerName',concat(reviewer.firstname),'score',reviews.totalscore))  ),']') AS reviewer_array"
-					+ " ,sum(reviews.totalscore) AS totalscore"
-					+ " FROM reviews"
-					+ " LEFT JOIN reviewer on reviews.reviewer_id = reviewer.reviewer_id"
-					+ " LEFT JOIN team on reviewer.team_id = team.team_id"
-					+ " LEFT JOIN project on  reviews.project_id = project.project_id"
-					+ " LEFT JOIN projecttype on project.projecttype_id = projecttype.projecttype_id"
+			String sql = " SELECT reviews.reviewdate "
+					+ " ,project.project_id "
+					+ ",project.projectname "
+					+ ",project.state_project "
+					+ ",project.award "
+					+ " ,concat('[',(group_concat(JSON_OBJECT('reviewerName',concat(reviewer.firstname),'score',reviews.totalscore))  ),']') AS reviewer_array "
+					+ " ,sum(reviews.totalscore) AS totalscore "
+					+ " FROM reviews "
+					+ " LEFT JOIN reviewer on reviews.reviewer_id = reviewer.reviewer_id "
+					+ " LEFT JOIN team on reviewer.team_id = team.team_id "
+					+ " LEFT JOIN project on  reviews.project_id = project.project_id "
+					+ " LEFT JOIN projecttype on project.projecttype_id = projecttype.projecttype_id "
 					+ " WHERE reviewer.team_id = '"+ team_id + "' "
 					+ " GROUP BY project.project_id "
-					+ " ORDER BY totalscore DESC";
+					+ " ORDER BY totalscore DESC ";
 			ResultSet rs = stmt.executeQuery(sql);
 
 			while (rs.next()) {
@@ -53,6 +54,7 @@ public class SummaryOfReviewsManager {
 				projectResponse.setProjectID(rs.getString("project.project_id"));
 				projectResponse.setProjectName(rs.getString("project.projectname"));
 				projectResponse.setStateProject(rs.getInt("project.state_project"));
+				projectResponse.setAwardProject(rs.getString("project.award"));
 				projectResponse.setReviewerResponseList(mapper.readValue(rs.getString("reviewer_array"),new TypeReference<List<ReviewerResponse>>() {}));
 				projectResponse.setTotalScore(rs.getDouble("totalscore"));
 				projectResponseList.add(projectResponse);
@@ -148,15 +150,16 @@ public class SummaryOfReviewsManager {
 		return result;
 	}
 	
-	public boolean isChooseProjectSecond(Project project) {
+	public boolean isChooseProjectSecond(Project project,String award) {
 		ConnectionDB condb = new ConnectionDB();
 		Connection con = condb.getConnection();
 		
 		Boolean result = false;
 
 		try {
-			CallableStatement stmt = con.prepareCall("{call isChooseProjectSecond(?)}");
-			stmt.setString(1, project.getProject_id());		
+			CallableStatement stmt = con.prepareCall("{call isChooseProjectSecond(?,?)}");
+			stmt.setString(1, project.getProject_id());	
+			stmt.setString(2, award);	
 			stmt.execute();
 			result = true;
 			  
@@ -224,7 +227,7 @@ public class SummaryOfReviewsManager {
 		return result;
 	}
 	
-	public boolean isUpdateFailedProject(Integer team_id) {
+	public boolean isUpdateFailedProject(String project_id) {
 		ConnectionDB condb = new ConnectionDB();
 		Connection con = condb.getConnection();
 		
@@ -232,7 +235,7 @@ public class SummaryOfReviewsManager {
 
 		try {
 			CallableStatement stmt = con.prepareCall("{call isUpdateFailedProject(?)}");
-			stmt.setInt(1, team_id);
+			stmt.setString(1, project_id);
 			stmt.execute();
 			result = true;
 			  

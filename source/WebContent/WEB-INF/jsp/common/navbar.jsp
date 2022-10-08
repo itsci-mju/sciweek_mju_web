@@ -1,27 +1,31 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ page import="java.util.*,manager.*,bean.*"%>
+<%@ page import="java.util.*,manager.*,bean.*,java.text.*, java.sql.Timestamp"%>
 <%
 	Reviewer reviewer = null;
 	Student student = null;
 	Admin admin = null;
+	
 
 	try {
 		student = (Student) session.getAttribute("student");
 	} catch (Exception e) {
 
 	}
+	
 	try {
 		reviewer = (Reviewer) session.getAttribute("reviewer");
 	} catch (Exception e) {
 
 	}
+	
 	try {
 		admin = (Admin) session.getAttribute("admin");
 	} catch (Exception e) {
 
 	}
+	
 %>
 <!DOCTYPE html>
 <html>
@@ -55,8 +59,8 @@
 		<div style="width: 100%; background-color: #FF9900;">
 			<nav class="navbar navbar-expand-sm navbar-dark container">
 				<ul class="navbar-nav">
-					<li class="nav-item active "><a href="index" class="nav-link"><span style="color: white;"><i class="fa fa-home">&nbsp;</i>หน้าแรก</span></a></li>
-					<li class="nav-item active"><a href="doViewResult" class="nav-link"><span style="color: white;"><i class="fa-solid fa-trophy">&nbsp;</i>รางวัล</span></a></li>	
+					<li class="nav-item active "><a href="index" class="nav-link"><span style="color: white;"><i class="fa fa-home">&nbsp;</i>หน้าแรก</span></a></li>			
+					<li class="nav-item active"><a href="doViewResult" class="nav-link"><span style="color: white;"><i class="fa-solid fa-trophy">&nbsp;</i>รางวัล</span></a></li>
 				</ul>
 				<div class="navbar-nav ml-auto">
 					<div class="hidden-lg hidden-md hidden-sm">
@@ -84,7 +88,7 @@
 				<ul class="navbar-nav">
 					<li class="nav-item active"><a href="index" class="nav-link"><span style="color: white;"><i class="fa fa-home">&nbsp;</i>หน้าแรก</span></a></li>
 					<li class="nav-item  active"><a href="doListProject" class="nav-link"><span style="color: white;"><i class="fa fa-th-list">&nbsp;</i>รายการโครงงานวิทยาศาสตร์</span></a></li>
-					<li class="nav-item active"><a href="doViewResult" class="nav-link"><span style="color: white;"><i class="fa-solid fa-trophy">&nbsp;</i>รางวัล</span></a></li>	
+					<li class="nav-item active"><a href="doViewResult" class="nav-link"><span style="color: white;"><i class="fa-solid fa-trophy">&nbsp;</i>รางวัล</span></a></li>
 				</ul>
 				<div class="navbar-nav ml-auto">
 					<div class="hidden-lg hidden-md hidden-sm">
@@ -178,10 +182,11 @@
 			<nav class="navbar navbar-expand-sm navbar-dark container">
 				<ul class="nav navbar-nav pull-center">
 					<li class="nav-item  active "><a href="index" class="nav-link "><span style="color: white;"><i class="fa fa-home">&nbsp;</i>หน้าแรก</span></a></li>
+					<li class="nav-item  active"><a href="doViewSchedule" class="nav-link"><span style="color: white;"><i class="fa-solid fa-calendar-days">&nbsp;</i>กำหนดการ</span></a></li>
 					<li class="nav-item  active"><a href="doViewProject" class="nav-link"><span style="color: white;"><i class="fa fa-th-list">&nbsp;</i>โครงงานวิทยาศาสตร์</span></a></li>
 					<li class="nav-item  active"><a href="doViewTeam" class="nav-link"><span style="color: white;"><i class="fa-solid fa-people-group">&nbsp;</i>กลุ่มประเมินโครงงานวิทยาศาสตร์</span></a></li>
-					<li class="nav-item  active"><a href="doViewNews" class="nav-link"><span style="color: white;"><i class="fa fa-newspaper-o">&nbsp;</i>ข่าวสาร</span></a></li>
-					<li class="nav-item active"><a href="doViewResult" class="nav-link"><span style="color: white;"><i class="fa-solid fa-trophy">&nbsp;</i>รางวัล</span></a></li>								
+					<li class="nav-item  active"><a href="doViewNews" class="nav-link"><span style="color: white;"><i class="fa fa-newspaper-o">&nbsp;</i>ข่าวสาร</span></a></li>		
+					<li class="nav-item active"><a href="doViewResult" class="nav-link"><span style="color: white;"><i class="fa-solid fa-trophy">&nbsp;</i>รางวัล</span></a></li>										
 				</ul>
 				<div class="navbar-nav ml-auto">
 					<div class="hidden-lg hidden-md hidden-sm">

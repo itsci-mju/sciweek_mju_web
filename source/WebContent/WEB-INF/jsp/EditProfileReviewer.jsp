@@ -43,14 +43,16 @@
 
 	function validateForm(frm) {
 		
-		var regexp =/^[ก-์|]{2,50}$/;
-		var regex_password =/^[A-Za-z|0-9]{8,16}$/;
+		var regexp =/^[ก-์|]{2,32}$/;
+		var regex_password = /^[A-Za-z|0-9]{8,16}$/;
+		var regex_email = /^[_a-zA-Z0-9-]+(.[_a-zA-Z0-9-]+)@[a-zA-Z0-9-]+(.[a-zA-Z0-9-]+)(.([a-zA-Z]){2,4})$/;
 		
 	// prefix
 		if (frm.prefix.value == "") {
 			alert("<!-- กรุณาเลือกคำหน้าชื่อ --> ");
 			return false;
 		}
+	
 	// firstname
 		if (frm.firstname.value == "") {
 			alert("<!-- กรุณากรอกชื่อ -->");
@@ -61,6 +63,7 @@
 			frm.firstname.value = "" ;
 			return false;
 		} 		
+		
 	// lastname	
 		if (frm.lastname.value == "") {
 			alert("<!-- กรุณากรอกนามสกุล -->");
@@ -71,6 +74,7 @@
 			frm.lastname.value = "" ;
 			return false;
 		}
+		
 	// faculty
 		if (frm.faculty.value == "") {
 			alert("<!-- กรุณากรอกคณะ -->");
@@ -80,6 +84,7 @@
 			alert("<!-- กรุณากรอกคณะเป็นภาษาไทยเท่านั้น -->");
 			return false;
 		} 
+		
 	// position	
 		if (frm.position.value == "") {
 			alert("<!-- กรุณาเลือกตำแหน่ง --> ");
@@ -91,26 +96,29 @@
 			alert("<!-- ถ้าไม่มีกรุณากรอก ' - ' --> ");
 			return false;
 		}
+	
 	// facebook
 		if (frm.facebook.value == "") {
 			alert("<!-- ถ้าไม่มีกรุณากรอก ' - ' --> ");
 			return false;
 		}
+	
 	// email
-		if(frm.email.value == "") {
+		if (frm.email.value == "") {
 			alert('<!-- กรุณากรอกอีเมล -->');
 			return false;
 		}
-		if(regex_email.test(frm.email.value) == false) {
+		if (regex_email.test(frm.email.value) == false) {
 			alert("<!-- กรุณากรอกอีเมลให้ถูกต้อง -->");
 			return false ;
 		}
-	// password
-		if(frm.password.value == "") {
+		
+		// password
+		if (frm.password.value == "") {
 			alert('<!-- กรุณากรอกรหัสผ่าน -->');
 			return false;
 		}
-		if(regex_password.test(frm.password.value) == false) {
+		if (regex_password.test(frm.password.value) == false) {
 			alert("<!-- กรุณากรอกรหัสผ่าน มีความยาวอย่างน้อย 8 - 16 ตัวอักษร --> \n <!-- กรุณากรอกรหัสผ่าน ต้องเป็นตัวอักษรภาษาอังกฤษกับตัวเลขเท่านั้น -->");
 			return false ;
 		}
@@ -198,7 +206,7 @@
 									</div>
 									<label class="col-sm-2 col-form-label text-right">สาขา </label>
 									<div class="col-sm-3">
-										<select name="major" id="major" class="form-control data" >
+										<select name="major" id="major" class="form-select" >
 											<option selected disabled >--กรุณาเลือกสาขา--</option>
 											<option value="วิทยาการคอมพิวเตอร์" 
 											<%if (reviewer.getMajor().equals("วิทยาการคอมพิวเตอร์")) {%> selected
@@ -293,7 +301,7 @@
 								<br>
 								<div class="form-group row">
 									<div class="col-sm-12 text-center">
-										<button type="submit" class="btn btn-success" onclick ="return validateForm(frm)">บันทึก</button>
+										<button type="submit" class="btn btn-success" OnClick ="return validateForm(frm)">บันทึก</button>
 										<a class="btn btn-danger" href="index" role="button">ยกเลิก</a>	
 									</div>
 								</div>

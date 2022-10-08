@@ -5,6 +5,7 @@
 <%@ page import="java.util.*,manager.*,bean.*,java.text.*,java.sql.Timestamp"%>
 <%
 	Student student = null;
+	Years years = null;
 	Reviewer reviewer = null;
 	Admin admin = null;
 	String error = null; 
@@ -26,6 +27,12 @@
 		admin = (Admin) session.getAttribute("admin");
 	} catch (Exception e) {
 
+	}
+	
+	try {
+		years = (Years) request.getAttribute("years");
+	} catch (Exception e) {
+		
 	}
 	
 	try {
@@ -77,13 +84,13 @@
 	
 	<%
 		if (student != null && errors == 1) {
-			
-			Date present = new Date();  
-		    Timestamp timestamp = new Timestamp(present.getTime());  
-		    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss"); 
-			String presentdate = new SimpleDateFormat("dd/MM/yyyy").format(present.getTime());
-			String presenttime = new SimpleDateFormat("HH:mm").format(present.getTime()); 
-			
+				
+			String fmt_expuploaddate = new SimpleDateFormat("dd/MM/yyyy").format(years.getExpuploaddate());
+			String fmt_expuploadtime = new SimpleDateFormat("HH:mm").format(years.getExpuploaddate()); 
+	
+			System.out.println(fmt_expuploaddate);
+			System.out.println(fmt_expuploadtime);
+
 			error = "กรุณาอัปโหลดเอกสารรายงานและวิดีโอ";
 	%>
 	<section style="margin-top : -45px">
@@ -101,7 +108,7 @@
 							<span class="sr-only">Close</span>
 						</button>
 						<i class="start-icon far fa-times-circle faa-pulse animated"></i>
-						<strong class="font__weight-semibold">แจ้งเตือน !!!</strong>&nbsp;วันที่ : <%=presentdate%> เวลา <%=presenttime%> น. &nbsp; <a href="doListProject"><i class="fa-solid fa-hand-point-right">&nbsp;</i><%=error%></a>
+						<strong class="font__weight-semibold">แจ้งเตือน !!!</strong>&nbsp;กำหนดส่งวันที่ : <%=fmt_expuploaddate%> เวลา <%=fmt_expuploadtime%> น. &nbsp; <a href="doListProject"><i class="fa-solid fa-hand-point-right">&nbsp;</i><%=error%></a>
 					</div>
 				</div>
 			</div>
@@ -112,11 +119,11 @@
 	<% 
 		if (student != null && errors == 2) { 
 			
-			Date present = new Date();  
-		    Timestamp timestamp = new Timestamp(present.getTime());  
-		    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss"); 
-			String presentdate = new SimpleDateFormat("dd/MM/yyyy").format(present.getTime());
-			String presenttime = new SimpleDateFormat("HH:mm").format(present.getTime()); 
+			String fmt_expuploaddate = new SimpleDateFormat("dd/MM/yyyy").format(years.getExpuploaddate());
+			String fmt_expuploadtime = new SimpleDateFormat("HH:mm").format(years.getExpuploaddate()); 
+	
+			System.out.println(fmt_expuploaddate);
+			System.out.println(fmt_expuploadtime);
 			
 			error = "กรุณาอัปโหลดวิดีโอ" ;	
 	%>
@@ -135,7 +142,7 @@
 							<span class="sr-only">Close</span>
 						</button>
 						<i class="start-icon far fa-times-circle faa-pulse animated"></i>
-						<strong class="font__weight-semibold">แจ้งเตือน !!!</strong>&nbsp;วันที่ : <%=presentdate%> เวลา <%=presenttime%> น. &nbsp; <a href="doListProject"><i class="fa-solid fa-hand-point-right">&nbsp;</i><%=error%></a>
+						<strong class="font__weight-semibold">แจ้งเตือน !!!</strong>&nbsp;วันที่ : <%=fmt_expuploaddate%> เวลา <%=fmt_expuploadtime%> น. &nbsp; <a href="doListProject"><i class="fa-solid fa-hand-point-right">&nbsp;</i><%=error%></a>
 					</div>
 				</div>
 			</div>
@@ -146,11 +153,11 @@
 	<% 
 		if (student != null && errors == 3) { 
 			
-			Date present = new Date();  
-		    Timestamp timestamp = new Timestamp(present.getTime());  
-		    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss"); 
-			String presentdate = new SimpleDateFormat("dd/MM/yyyy").format(present.getTime());
-			String presenttime = new SimpleDateFormat("HH:mm").format(present.getTime()); 
+			String fmt_expuploaddate = new SimpleDateFormat("dd/MM/yyyy").format(years.getExpuploaddate());
+			String fmt_expuploadtime = new SimpleDateFormat("HH:mm").format(years.getExpuploaddate()); 
+	
+			System.out.println(fmt_expuploaddate);
+			System.out.println(fmt_expuploadtime);
 			
 			error = "กรุณาอัปโหลดเอกสารรายงาน" ;	
 	%>
@@ -169,7 +176,7 @@
 							<span class="sr-only">Close</span>
 						</button>
 						<i class="start-icon far fa-times-circle faa-pulse animated"></i>
-						<strong class="font__weight-semibold">แจ้งเตือน !!!</strong>&nbsp;วันที่ : <%=presentdate%> เวลา <%=presenttime%> น. &nbsp; <a href="doListProject"><i class="fa-solid fa-hand-point-right">&nbsp;</i><%=error%></a>
+						<strong class="font__weight-semibold">แจ้งเตือน !!!</strong>&nbsp;วันที่ : <%=fmt_expuploaddate%> เวลา <%=fmt_expuploadtime%> น. &nbsp; <a href="doListProject"><i class="fa-solid fa-hand-point-right">&nbsp;</i><%=error%></a>
 					</div>
 				</div>
 			</div>

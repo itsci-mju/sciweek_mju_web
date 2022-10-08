@@ -91,42 +91,29 @@
 									</div>									
 								</div>
 								
-								<% 
-									String video = null ;
-									String vname = null;
-									String fname = null;
-									String disabled = null ;
-
-									if (sproject.getProject().getVideo().equals("-") || sproject.getProject().getVideo() == null) {
-										video = "#";
-										vname = "ยังไม่ได้อัปโหลดวิดีโอ" ;
-										disabled = "disabled" ;
-									} else {
-										video = sproject.getProject().getVideo();
-										vname = "วิดีโอ" ;
-									}
-									
-									String file = null ;
-
-									if (report.getReportname() == null) {
-										file = "#";
-										fname = "ยังไม่ได้อัปโหลดเอกสาร" ;
-										disabled = "disabled" ;
-									} else {
-										file = "./report/"+report.getReportname()+".pdf";
-										fname = "เอกสารรายงาน" ;
-									}
-								%>
-								
-								<div class="form-group row">
+								<div class="form-group row">							
 									<label class="col-sm-2 col-form-label text-right">ไฟล์วีดิโอ</label>
-									<div class="col-sm-4">
-										<a href="<%=video%>" target="_blank" class="btn btn-link" type="button" style="margin-left: -13px;" ><i class="fa fa-file-video-o">&nbsp;&nbsp;</i><%=vname%></a>
-									</div>
+									<% if (sproject.getProject().getVideo().equals("-") || sproject.getProject().getVideo() == null) {%>
+										<div class="col-sm-4">
+											<a href="#" class="btn btn-link" ><i class="fa fa-file-video-o">&nbsp;&nbsp;</i>ไม่มีการอัปโหลดวิดีโอ</a>
+										</div>
+									<% } else { %>
+										<div class="col-sm-4">
+											<a href="<%=sproject.getProject().getVideo()%>" target="_blank" class="btn btn-link" type="button" style="margin-left: -13px; "></a>
+										</div>
+									<% } %>
+									
+									
 									<label class="col-sm-2 col-form-label text-right">ไฟล์รายงาน</label>
-									<div class="col-sm-4">							
-										<a href="<%=file%>" target="_blank" class="btn btn-link" type="button" style="margin-left: -13px ; "><i class="fa-solid fa-file-pdf">&nbsp;&nbsp;</i><%=fname%></a>
-									</div>
+									<% if (report.getReportname() == null) { %>
+										<div class="col-sm-4">
+											<a href="#" class="btn btn-link" ><i class="fa-solid fa-file-pdf">&nbsp;&nbsp;</i>ไม่มีการอัปโหลดเอกสาร</a>
+										</div>
+									<% } else { %>
+										<div class="col-sm-4">							
+											<a href="./report/<%=report.getReportname()%>.pdf " target="_blank" class="btn btn-link" type="button" style="margin-left: -13px ; "></a>
+										</div>
+									<% } %>
 								</div>
 								
 								<% String award = null;

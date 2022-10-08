@@ -32,11 +32,10 @@ public class ListScienceProjectManager {
 
 			stmt = con.createStatement();
 			String sql = " SELECT reviews.reviewdate"
-					+ ", reviews.enddate"
 					+ ", project.project_id"
-					+ " , project.projectname"
-					+ " , concat('[',(group_concat(JSON_OBJECT('reviewerName',concat(reviewer.firstname,' ',reviewer.lastname),'status',reviews.status))  ),']') AS reviewer_array"
-					+ " , sum(reviews.totalscore) AS totalscore"
+					+ ", project.projectname"
+					+ ", concat('[',(group_concat(JSON_OBJECT('reviewerName',concat(reviewer.firstname,' ',reviewer.lastname),'status',reviews.status))  ),']') AS reviewer_array"
+					+ ", sum(reviews.totalscore) AS totalscore"
 					+ " FROM reviews"
 					+ " JOIN reviewer on reviews.reviewer_id = reviewer.reviewer_id"
 					+ " JOIN team on reviewer.team_id = team.team_id"

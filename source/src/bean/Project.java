@@ -25,7 +25,6 @@ public class Project {
 	// 2 คือ ผ่านรอบแรก
 	// 3 คือ ผ่านรอบสอง
 	// 4 คือ ไม่ผ่านรอบแรก
-	// 5 คือ ไม่ผ่านรอบสอง
 
 	private ProjectType projecttype;
 	private Team team;

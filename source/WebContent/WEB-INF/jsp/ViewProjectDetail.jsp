@@ -108,7 +108,7 @@
 							<div class="form-group row">
 								<label class="col-sm-2 col-form-label text-right">วีดิโอ</label>
 								<div class="col-sm-6">
-									<button name="button" class="btn btn-link"  onclick="window.location.href='<%=studentProject.getProject().getVideo()%>';" <%=disabled%> >
+									<button name="button" class="btn btn-link" onclick="window.open('<%=studentProject.getProject().getVideo()%>', '_blank');" <%=disabled%> >
 										<i class="fa fa-file-video-o">&nbsp;&nbsp;</i>วิดีโอ
 									</button>											
 								</div>
@@ -123,7 +123,7 @@
 							<div class="form-group row">
 								<label class="col-sm-2 col-form-label text-right">เอกสารรายงาน</label>
 								<div class="col-sm-6">
-									<button name="button" class="btn btn-link"  onclick="window.location.href='./report/<%=report.getReportname()%>.pdf';" <%=disabled%> >
+									<button name="button" class="btn btn-link" target="_blank"  onclick="window.open('./report/<%=report.getReportname()%>.pdf ', '_blank');" <%=disabled%> >
 										<i class="fa-solid fa-file-pdf">&nbsp;&nbsp;</i>เอกสารรายงาน
 									</button>
 								</div>

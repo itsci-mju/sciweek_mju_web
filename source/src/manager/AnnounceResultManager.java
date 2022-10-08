@@ -11,12 +11,39 @@ import java.util.Vector;
 import bean.Project;
 import bean.ProjectType;
 import bean.StudentProject;
+import bean.Years;
 import resultset.ResultSetToClass;
 import util.ConnectionDB;
 
 public class AnnounceResultManager {
 	
 	ResultSetToClass resultSetToClass = new ResultSetToClass();
+	
+	public Years getDATE() throws Exception {
+		ConnectionDB condb = new ConnectionDB();
+		Connection con = condb.getConnection();
+		Statement stmt = null;
+		Years years = new Years();
+		
+		try {
+			stmt = con.createStatement();
+			String sql = " SELECT * FROM years ";
+			ResultSet rs = stmt.executeQuery(sql);
+
+			while (rs.next()) {		
+				
+				years = resultSetToClass.setResultSetToYear(rs);
+			
+			}
+			con.close();
+			stmt.close();
+			rs.close();
+		} catch (SQLException e) {
+			System.out.println("catch");
+			e.printStackTrace();
+		}
+		return years;
+	}	
 	
 	public List<StudentProject> getListStudentProjectByProjectID(String project_id) throws Exception {
 		ConnectionDB condb = new ConnectionDB();
@@ -90,9 +117,10 @@ public class AnnounceResultManager {
 		try {
 			stmt = con.createStatement();
 			String sql = " SELECT * FROM project"
-					+ "  LEFT JOIN projecttype on project.projecttype_id = projecttype.projecttype_id"
-					+ "  LEFT JOIN team on project.team_id = team.team_id "
-					+ "  ORDER BY project.avgscore DESC";
+					+ " LEFT JOIN projecttype on project.projecttype_id = projecttype.projecttype_id "
+					+ " LEFT JOIN team on project.team_id = team.team_id "
+					+ " WHERE project.award LIKE 'รางวัล%' "
+					+ " ORDER BY project.projecttype_id ASC , project.award ASC";
 			ResultSet rs = stmt.executeQuery(sql);
 
 			while (rs.next()) {
@@ -121,8 +149,8 @@ public class AnnounceResultManager {
 			String sql = " SELECT * FROM project"
 					+ "  LEFT JOIN projecttype on project.projecttype_id = projecttype.projecttype_id"
 					+ "  LEFT JOIN team on project.team_id = team.team_id "
-					+ "  WHERE project.projecttype_id = '"+ projecttype_id +"' "
-					+ "  ORDER BY project.avgscore DESC ";
+					+ "  WHERE project.award LIKE 'รางวัล%' AND project.projecttype_id = '"+ projecttype_id +"' "
+					+ "  ORDER BY project.award ASC ";
 			ResultSet rs = stmt.executeQuery(sql);
 
 			while (rs.next()) {

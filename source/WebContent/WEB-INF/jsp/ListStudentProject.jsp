@@ -67,6 +67,18 @@
 <link rel="stylesheet" href="./css/multi_step_form.css">
 <script type="module" src="./js/multi_step_form.js"></script>
 </head>
+<script type="text/javascript">
+
+	function validateForm(frm) {
+		
+		if (frm.fileexcel.value == "") {
+			alert("<!-- กรุณาอัปโหลดไฟล์ Excel -->");
+			return false;
+		}
+
+	}
+		
+</script>
 <body <%if (msg) {%> onload="return result()" <% } %>  style="background-image: url('./image/hero-bg.png')">
 
 	<jsp:include page="common/navbar.jsp"></jsp:include>
@@ -178,13 +190,13 @@
 						<h6 style="color: red">ชี้แจ้ง : กรุณาอัปโหลดข้อมูลไฟล์ Excel เป็นนามสกุล .xlsx..</h6>
 						<br>
 						
-						<form action="ImportExcel" name="frm" method="post" enctype="multipart/form-data">
+						<form action="ImportExcel" name="frm" id="frm" method="post" enctype="multipart/form-data">
 							<div class="form-group row">
 								<div class="col-sm-4">
 									<input class="form-control" type="file" name="fileexcel" id="fileexcel" accept=".csv, application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet">
 								</div>
 								<div class="col-sm-3">
-									<button type="submit" name="upload" class="btn btn-success">
+									<button type="submit" name="upload" class="btn btn-success" onclick ="return validateForm(frm)">
 										<i class="fa-solid fa-file-excel">&nbsp;</i>Import file
 									</button>
 								</div>

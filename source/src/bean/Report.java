@@ -16,7 +16,6 @@ public class Report {
 	private int report_id ;
 	private String reportname;
 	private Timestamp uploaddate;
-	private Timestamp expdate;
 	
 	private Project project;
 

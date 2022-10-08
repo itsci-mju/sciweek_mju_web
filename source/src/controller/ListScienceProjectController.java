@@ -12,6 +12,8 @@ import org.springframework.web.servlet.ModelAndView;
 
 import bean.Reviewer;
 import bean.StudentProject;
+import bean.Years;
+import manager.AnnounceResultManager;
 import manager.ListScienceProjectManager;
 import model.ProjectResponse;
 import model.ReviewerResponse;
@@ -26,6 +28,7 @@ public class ListScienceProjectController {
 			int team_id = reviewer.getTeam().getTeam_id();
 			int reviewer_id = reviewer.getReviewer_id();
 			ListScienceProjectManager listScienceProjectManager = new ListScienceProjectManager();
+			AnnounceResultManager announceResultManager = new AnnounceResultManager();
 			List<ProjectResponse> projectResponseList = listScienceProjectManager.getListProjectByReviewerID(reviewer_id);
 			
 			List<ReviewerResponse> reviewerResponseList = new ArrayList<>();
@@ -44,11 +47,12 @@ public class ListScienceProjectController {
 			}
 			
 			List<StudentProject> studentProjectList = listScienceProjectManager.getListScienceProjectByTeamID(team_id);
-						
+			Years years = announceResultManager.getDATE();
 			ModelAndView mav = new ModelAndView("ListScienceProject");
 			mav.addObject("projectResponseList", projectResponseList);
 			mav.addObject("reviewerResponseList", reviewerResponseList);
 			mav.addObject("studentProjectList", studentProjectList);
+			mav.addObject("years", years);
 			return mav;
 		} else {
 			ModelAndView mav = new ModelAndView("LoginPage");

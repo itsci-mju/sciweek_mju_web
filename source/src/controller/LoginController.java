@@ -1,6 +1,7 @@
 package controller;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Vector;
 
@@ -13,8 +14,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
+import manager.AnnounceResultManager;
 import manager.ListScienceProjectManager;
 import manager.LoginManager;
+import manager.ViewScheduleDetailManager;
 import model.ProjectResponse;
 import model.ReviewerResponse;
 import bean.Admin;
@@ -22,6 +25,7 @@ import bean.Report;
 import bean.Reviewer;
 import bean.Student;
 import bean.StudentProject;
+import bean.Years;
 
 @Controller
 public class LoginController {
@@ -48,6 +52,12 @@ public class LoginController {
 			// error 1 = กรุณาอัปโหลดวิดีโอ ;
 			// error 2 = กรุณาอัปโหลดเอกสารรายงาน ;
 			
+			Calendar cal = Calendar.getInstance();
+			int presentyears = cal.get(Calendar.YEAR);
+			
+			ViewScheduleDetailManager viewScheduleDetailManager = new ViewScheduleDetailManager();
+			Years years = viewScheduleDetailManager.getYearsByID(presentyears);
+			
 			listsproject = loginManager.getListStudentProjectByStudentID(student_id);
 				
 			for (StudentProject studentProject : listsproject) {		
@@ -59,6 +69,7 @@ public class LoginController {
 				System.out.println(video);
 				
 				report = loginManager.getReportByProjectID(project_id);	
+				
 				if (report != null) {
 					report_id = report.getReport_id();	
 				} else {
@@ -80,6 +91,7 @@ public class LoginController {
 			}
 			
 			request.setAttribute("errors", errors);
+			request.setAttribute("years", years);
 			session.setAttribute("student", student);
 		} 
 		
@@ -135,6 +147,12 @@ public class LoginController {
 			// error 1 = กรุณาอัปโหลดวิดีโอ ;
 			// error 2 = กรุณาอัปโหลดเอกสารรายงาน ;
 			
+			Calendar cal = Calendar.getInstance();
+			int presentyears = cal.get(Calendar.YEAR);
+			
+			ViewScheduleDetailManager viewScheduleDetailManager = new ViewScheduleDetailManager();
+			Years years = viewScheduleDetailManager.getYearsByID(presentyears);
+			
 			listsproject = loginManager.getListStudentProjectByStudentID(student_id);
 				
 			for (StudentProject studentProject : listsproject) {		
@@ -143,7 +161,8 @@ public class LoginController {
 					
 				video = studentProject.getProject().getVideo();	
 				
-				report = loginManager.getReportByProjectID(project_id);	
+				report = loginManager.getReportByProjectID(project_id);
+				
 				if (report != null) {
 					report_id = report.getReport_id();	
 				} else {
@@ -165,11 +184,13 @@ public class LoginController {
 			}
 			
 			request.setAttribute("errors", errors);
+			request.setAttribute("years", years);
 			session.setAttribute("student", student);
 		} else if (reviewer != null) {
 			int team_id = reviewer.getTeam().getTeam_id();
 			int reviewer_id = reviewer.getReviewer_id();
 			ListScienceProjectManager listScienceProjectManager = new ListScienceProjectManager();
+			AnnounceResultManager announceResultManager = new AnnounceResultManager();
 			List<ProjectResponse> projectResponseList = listScienceProjectManager
 					.getListProjectByReviewerID(reviewer_id);
 			List<StudentProject> studentProjectList = listScienceProjectManager.getListScienceProjectByTeamID(team_id);
@@ -188,15 +209,20 @@ public class LoginController {
 					}
 				}
 			}
-
+			
+			Years years = announceResultManager.getDATE();
+			
 			ModelAndView mav = new ModelAndView("ListScienceProject");
 			session.setAttribute("reviewer", reviewer);
 			mav.addObject("projectResponseList", projectResponseList);
 			mav.addObject("reviewerResponseList", reviewerResponseList);
 			mav.addObject("studentProjectList", studentProjectList);
+			mav.addObject("years", years);
 			return mav;
 		} else {
+			ModelAndView mav = new ModelAndView("CreateSchedule");
 			session.setAttribute("admin", admin);
+			return mav;
 		}
 		ModelAndView mav = new ModelAndView("Index");
 		return mav;

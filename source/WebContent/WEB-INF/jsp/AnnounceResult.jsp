@@ -1,3 +1,4 @@
+<%@page import="org.hibernate.query.criteria.internal.expression.function.AggregationFunction.MAX"%>
 <%@page import="com.sun.xml.txw2.Document"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
@@ -5,6 +6,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%
 	Admin admin = null;
+	Years years = null;
 	List<Project> listproject = new Vector<>();
 	List<ProjectType> projectTypeList = new Vector<>();
 	Student student = null;
@@ -27,6 +29,12 @@
 	} catch (Exception e) {
 
 	}
+	
+	try {
+		years = (Years) request.getAttribute("years");
+	} catch (Exception e) {
+		e.printStackTrace();
+	}
 
 	try {
 		listproject = (List<Project>) request.getAttribute("listproject");
@@ -39,6 +47,11 @@
 	} catch (Exception e) {
 		e.printStackTrace();
 	}
+	
+	Date date = new Date();  
+	Timestamp timestamp = new Timestamp(date.getTime());  
+	SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); 
+	
 %>
 <!DOCTYPE html>
 <html>
@@ -74,8 +87,13 @@
 		
 		<hr class="colorgraph">
 		
+		<% if (years.getAnnouncedate() != null) {%>
+						
+		<% if (timestamp.after(years.getAnnouncedate())) {%>
+						
 		<div class="form-group row" style="margin-left: 210px;">
 		<%  for (int p = 0 ; p < projectTypeList.size() ; p++) { %>
+		
 			<% if (p == 0) { %>
 			<div class="col-sm-3">
 				<button name="button" class="btn btn-primary" onclick="window.location.href='isViewResult?projecttype_id=<%=projectTypeList.get(p).getProjecttype_id()%>';" >
@@ -83,6 +101,7 @@
 				</button>	
 			</div>
 			<% } %>
+			
 			<% if (p == 1) { %>
 			<div class="col-sm-3">
 				<button name="button" class="btn btn-success" onclick="window.location.href='isViewResult?projecttype_id=<%=projectTypeList.get(p).getProjecttype_id()%>';" >
@@ -90,6 +109,7 @@
 				</button>
 			</div>
 			<% } %>
+			
 			<% if (p == 2) { %>
 			<div class="col-sm-3">
 				<button name="button" class="btn btn-info" onclick="window.location.href='isViewResult?projecttype_id=<%=projectTypeList.get(p).getProjecttype_id()%>';" >
@@ -97,11 +117,13 @@
 				</button>		
 			</div>
 			<% } %>	
-			<% } %>		
+			
+		<% } %>		
 		</div>
 		
 		<div class="form-group row" style="margin-left: 210px;">
 		<%  for (int p = 3 ; p < projectTypeList.size() ; p++) { %>
+		
 		<% if (p == 3) { %>
 			<div class="col-sm-3" >
 				<button name="button" class="btn btn-danger" onclick="window.location.href='isViewResult?projecttype_id=<%=projectTypeList.get(p).getProjecttype_id()%>';" style="color:white">
@@ -109,6 +131,7 @@
 				</button>	
 			</div>
 			<% } %>
+			
 			<% if (p == 4) { %>
 			<div class="col-sm-3">
 				<button name="button" class="btn btn-warning" onclick="window.location.href='isViewResult?projecttype_id=<%=projectTypeList.get(p).getProjecttype_id()%>';" >
@@ -116,6 +139,7 @@
 				</button>
 			</div>
 			<% } %>
+			
 			<% if (p == 5) { %>
 			<div class="col-sm-3">
 				<button name="button" class="btn btn-secondary" onclick="window.location.href='isViewResult?projecttype_id=<%=projectTypeList.get(p).getProjecttype_id()%>';" >
@@ -124,10 +148,10 @@
 			</div>	
 		</div>
 		<% } %>	
+		
 	<% } %>	
 	</div>
 
-		
 		<div style="margin-top: 15px ; margin-left: 6% ; margin-right: 6% ;">
 		<table class="table table-bordered  table-hover" id=myTable>
 			<thead class="table-info" align="center">
@@ -138,11 +162,7 @@
 					<th style="white-space: nowrap" >รางวัล</th>
 				</tr>
 			</thead>
-				<%			
-					Date date = new Date();  
-                	Timestamp timestamp = new Timestamp(date.getTime());  
-                	SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); 
-					
+				<%							
 					if (listproject.size() != 0) {	
 						
 						for (int i = 0 ; i < listproject.size() ; i ++)  {	
@@ -176,8 +196,11 @@
 		</table>
 	</div>
 	
-	<jsp:include page="common/footer.jsp"></jsp:include>
+	<% } %>
 	
+	<% } %>
+	
+	<jsp:include page="common/footer.jsp"></jsp:include>
 	
 	<script type="text/javascript">
 		$(document).ready(

@@ -16,9 +16,9 @@ public class ProjectResponse {
 	
 	private Integer stateProject;
 	
-	private Timestamp reviewDate;
+	private String awardProject;
 	
-	private Timestamp endDate;
+	private Timestamp reviewDate;
 	
 	private List<ReviewerResponse> reviewerResponseList;
 	

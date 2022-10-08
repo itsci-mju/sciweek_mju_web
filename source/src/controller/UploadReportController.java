@@ -21,6 +21,8 @@ import bean.Project;
 import bean.Report;
 import bean.Student;
 import bean.StudentProject;
+import bean.Years;
+import manager.AnnounceResultManager;
 import manager.IsUploadReportManager;
 import manager.ViewProjectDetailManager;
 
@@ -33,13 +35,16 @@ public class UploadReportController {
 		if (student != null) {
 			String project_id = request.getParameter("project_id");
 			IsUploadReportManager isUploadReportManager = new IsUploadReportManager();
+			AnnounceResultManager announceResultManager = new AnnounceResultManager();
 			StudentProject sproject = isUploadReportManager.getStudentProjectByID(project_id);
 			List<StudentProject> listsproject = isUploadReportManager.getListStudentProject(project_id);
 			Report report = isUploadReportManager.getReportByProjectID(project_id);
+			Years years = announceResultManager.getDATE();
 			ModelAndView mav = new ModelAndView("UploadReport");
 			mav.addObject("sproject", sproject);
 			mav.addObject("listsproject", listsproject);
 			mav.addObject("report", report);
+			mav.addObject("years", years);
 			return mav;
 		} else {
 			ModelAndView mav = new ModelAndView("LoginPage");

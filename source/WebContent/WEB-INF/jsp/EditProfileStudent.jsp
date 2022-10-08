@@ -43,7 +43,7 @@
 	function validateForm(frm) {
 		
 		var regex_phoneno = /^[0]{1}[8|9|6]{1}[0-9]{8}/;
-		var regex_name = /^[ก-์|]{2,50}$/;
+		var regex_name = /^[ก-์|]{2,32}$/;
 		var regex_email = /^[_a-zA-Z0-9-]+(.[_a-zA-Z0-9-]+)@[a-zA-Z0-9-]+(.[a-zA-Z0-9-]+)(.([a-zA-Z]){2,4})$/;
 		var regex_password = /^[A-Za-z|0-9]{8,16}$/;
 		
@@ -157,7 +157,7 @@
 								<div class="form-group row">
 									<label class="col-sm-2 col-form-label text-right">ระดับชั้น</label>
 									<div class="col-sm-3">
-										<select class="form-control" name="grade" id="grade" >
+										<select class="form-select" name="grade" id="grade" >
 											<option value="มัธยมศึกษาตอนต้น" <%if (student.getGrade().equals("มัธยมศึกษาตอนต้น")) {%> selected <%}%>>มัธยมศึกษาตอนต้น</option>
 											<option value="มัธยมศึกษาตอนปลาย" <%if (student.getGrade().equals("มัธยมศึกษาตอนปลาย")) {%> selected <%}%>>มัธยมศึกษาตอนปลาย</option>
 	

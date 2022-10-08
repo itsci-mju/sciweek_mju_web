@@ -77,45 +77,81 @@
 		
 	}
 		
-		function  checkNumber40(elm){			
-			if (elm.value.match(/[^\d|.]/)) {
-				alert("<!-- กรุณากรอกคะแนนให้ถูกต้อง -->");
-				elm.value = "";
-			} else if(elm.value > 40) {
-				alert("<!-- กรุณากรอกคะแนนไม่เกิน 40 คะแนน -->");
-				elm.value = "";
-			}
-		}
+	function  checkNumber40(elm){	
 		
-		function  checkNumber15(elm){			
-			if (elm.value.match(/[^\d|.]/)) {
+		var regex_score = /^[0-9]{1,2}([.])?$/;
+		var regex_pointscore = /^[0-9]{1,2}([.][0-9]{1,2})?$/;
+	
+		if (elm.value.match(/[^\d|.]/)) {
+			alert("<!-- กรุณากรอกคะแนนให้ถูกต้อง -->");
+			elm.value = "";
+		} else if(elm.value > 40) {
+			alert("<!-- กรุณากรอกคะแนนไม่เกิน 40 คะแนน -->");
+			elm.value = "";
+		} else if(!regex_score.test(elm.value)){
+			if(!regex_pointscore.test(elm.value)){
 				alert("<!-- กรุณากรอกคะแนนให้ถูกต้อง -->");
 				elm.value = "";
-			} else if(elm.value > 15) {
-				alert("<!-- กรุณากรอกคะแนนไม่เกิน 15 คะแนน -->");
-				elm.value = "";
-			}
+	         }
 		}
+	}
+	
+	function  checkNumber15(elm){		
 		
-		function  checkNumber25(elm) {			
-			if (elm.value.match(/[^\d|.]/)) {
-				alert("<!-- กรุณากรอกคะแนนให้ถูกต้อง -->");
-				elm.value = "";
-			} else if(elm.value > 25 ) {
-				alert("<!-- กรุณากรอกคะแนนไม่เกิน 25 คะแนน -->");
-				elm.value = "";
-			}
-		}
+		var regex_score = /^[0-9]{1,2}([.])?$/;
+		var regex_pointscore = /^[0-9]{1,2}([.][0-9]{1,2})?$/;
 		
-		function  checkNumber20(elm) {			
-			if (elm.value.match(/[^\d|.]/)) {
+		if (elm.value.match(/[^\d|.]/)) {
+			alert("<!-- กรุณากรอกคะแนนให้ถูกต้อง -->");
+			elm.value = "";
+		} else if(elm.value > 15) {
+			alert("<!-- กรุณากรอกคะแนนไม่เกิน 15 คะแนน -->");
+			elm.value = "";
+		} else if(!regex_score.test(elm.value)){
+			if(!regex_pointscore.test(elm.value)){
 				alert("<!-- กรุณากรอกคะแนนให้ถูกต้อง -->");
 				elm.value = "";
-			} else if(elm.value > 20 ) {
-				alert("<!-- กรุณากรอกคะแนนไม่เกิน 20 คะแนน -->");
-				elm.value = "";
-			}
+	         }
 		}
+	}
+	
+	function  checkNumber25(elm) {		
+		
+		var regex_score = /^[0-9]{1,2}([.])?$/;
+		var regex_pointscore = /^[0-9]{1,2}([.][0-9]{1,2})?$/;
+		
+		if (elm.value.match(/[^\d|.]/)) {
+			alert("<!-- กรุณากรอกคะแนนให้ถูกต้อง -->");
+			elm.value = "";
+		} else if (elm.value > 25 ) {
+			alert("<!-- กรุณากรอกคะแนนไม่เกิน 25 คะแนน -->");
+			elm.value = "";
+		} else if(!regex_score.test(elm.value)){
+			if(!regex_pointscore.test(elm.value)){
+				alert("<!-- กรุณากรอกคะแนนให้ถูกต้อง -->");
+				elm.value = "";
+	         }
+		}
+	}
+	
+	function  checkNumber20(elm) {			
+		
+		var regex_score = /^[0-9]{1,2}([.])?$/;
+		var regex_pointscore = /^[0-9]{1,2}([.][0-9]{1,2})?$/;
+		
+		if (elm.value.match(/[^\d|.]/)) {
+			alert("<!-- กรุณากรอกคะแนนให้ถูกต้อง -->");
+			elm.value = "";
+		} else if(elm.value > 20 ) {
+			alert("<!-- กรุณากรอกคะแนนไม่เกิน 20 คะแนน -->");
+			elm.value = "";
+		} else if(!regex_score.test(elm.value)){
+			if(!regex_pointscore.test(elm.value)){
+				alert("<!-- กรุณากรอกคะแนนให้ถูกต้อง -->");
+				elm.value = "";
+	         }
+		}
+	}
 		
 </script>
 <body style="background-image: url('./image/hero-bg.png')">
@@ -184,38 +220,31 @@
 									</div>
 								</div>
 								
-								<% 
-									String video = null ;
-
-									if (sproject.getProject().getVideo() == null ) {
-										video = "#";
-									} else {
-										video = sproject.getProject().getVideo();
-									}
+							<div class="form-group row">	
+														
+									<label class="col-sm-2 col-form-label text-right">ไฟล์วีดิโอ</label>
+									<% if (sproject.getProject().getVideo() != null && sproject.getProject().getVideo() != "-") {%>
+										<div class="col-sm-4">
+											<a href="<%=sproject.getProject().getVideo()%>" target="_blank" class="btn btn-link" type="button" style="margin-left: -13px; "><i class="fa fa-file-video-o">&nbsp;&nbsp;</i>วิดีโอ</a>
+										</div>						
+									<% } else { %>
+										<div class="col-sm-4">
+											<a href="#" class="btn btn-link" ><i class="fa fa-file-video-o">&nbsp;&nbsp;</i>ไม่มีการอัปโหลดวิดีโอ</a>
+										</div>
+									<% } %>
+	
+									<label class="col-sm-2 col-form-label text-right">ไฟล์รายงาน</label>
+									<% if (report.getReportname() != null) { %>
+										<div class="col-sm-4">							
+											<a href="./report/<%=report.getReportname()%>.pdf" target="_blank" class="btn btn-link" type="button" style="margin-left: -13px ; "><i class="fa-solid fa-file-pdf">&nbsp;&nbsp;</i>เอกสารรายงาน</a>
+										</div>
+									<% } else { %>
+										<div class="col-sm-4">
+											<a href="#" class="btn btn-link" ><i class="fa-solid fa-file-pdf">&nbsp;&nbsp;</i>ไม่มีการอัปโหลดเอกสาร</a>
+										</div>
+									<% } %>
 									
-									String file = null ;
-
-									if (report.getReportname() == null) {
-										file = "#";
-									} else {
-										file = "./report/"+report.getReportname()+".pdf";
-									}
-								%>
-
-							<div class="form-group row">
-								<label class="col-sm-2 col-form-label text-right">วีดิโอ</label>
-								<div class="col-sm-2">						
-									<a href="<%=video%>" target="_blank" class="btn btn-link" role="button" style="margin-left: -13px;">
-										<i class="fa fa-file-video-o" aria-hidden="true">&nbsp;&nbsp;</i>ไฟล์วิดีโอ
-									</a>				
-								</div>
-								<label class="col-sm-2 col-form-label text-right">เอกสารรายงาน</label>
-								<div class="col-sm-3">
-									<a href="<%=file%>" target="_blank" class="btn btn-link" role="button" style="margin-left: -13px;">
-										<i class="fa-solid fa-file-pdf">&nbsp;&nbsp;</i>ไฟล์เอกสารรายงาน
-									</a>
-								</div>
-							</div>						
+								</div>									
 
 							<br>
 							<h4>ประเมินโครงงานวิทยาศาสตร์</h4>
