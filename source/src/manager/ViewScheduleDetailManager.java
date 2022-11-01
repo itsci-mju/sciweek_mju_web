@@ -6,7 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import bean.Years;
+import bean.Schedules;
 import resultset.ResultSetToClass;
 import util.ConnectionDB;
 
@@ -14,21 +14,21 @@ public class ViewScheduleDetailManager {
 	
 	ResultSetToClass resultSetToClass = new ResultSetToClass();
 	
-	public Years getYearsByID(Integer yearsTemp) throws Exception {
+	public Schedules getSchedulesByID(Integer yearsTemp) throws Exception {
 		ConnectionDB condb = new ConnectionDB();
 		Connection con = condb.getConnection();
 		Statement stmt = null;
-		Years years = new Years ();
+		Schedules schedules = new Schedules ();
 		
 		try {
 
 			stmt = con.createStatement();
-			String sql = "SELECT * FROM years WHERE years = '"+ yearsTemp +"' ";
+			String sql = "SELECT * FROM schedules WHERE years = '"+ yearsTemp +"' ";
 			ResultSet rs = stmt.executeQuery(sql);
 
 			while (rs.next()) {
 							
-				years = resultSetToClass.setResultSetToYear(rs);
+				schedules = resultSetToClass.setResultSetToSchedules(rs);
 									
 			}
 
@@ -39,10 +39,10 @@ public class ViewScheduleDetailManager {
 			System.out.println("catch");
 			e.printStackTrace();
 		}
-		return years;
+		return schedules;
 	}
 	
-	public boolean isEditSchedule(Years years) {
+	public boolean isEditSchedule(Schedules schedules) {
 		ConnectionDB condb = new ConnectionDB();
 		Connection con = condb.getConnection();
 		Boolean result = false;
@@ -50,12 +50,12 @@ public class ViewScheduleDetailManager {
 		try {
 
 			CallableStatement stmt = con.prepareCall("{call isEditSchedule(?,?,?,?,?,?)}");
-			stmt.setInt(1, years.getYears());
-			stmt.setTimestamp(2, years.getUploaddate());
-			stmt.setTimestamp(3, years.getExpuploaddate());
-			stmt.setTimestamp(4, years.getReviewdate());
-			stmt.setTimestamp(5, years.getExpreviewdate());
-			stmt.setTimestamp(6, years.getAnnouncedate());
+			stmt.setInt(1, schedules.getYears());
+			stmt.setTimestamp(2, schedules.getUploaddate());
+			stmt.setTimestamp(3, schedules.getExpuploaddate());
+			stmt.setTimestamp(4, schedules.getReviewdate());
+			stmt.setTimestamp(5, schedules.getExpreviewdate());
+			stmt.setTimestamp(6, schedules.getAnnouncedate());
 			
 			stmt.execute();
 			result = true;

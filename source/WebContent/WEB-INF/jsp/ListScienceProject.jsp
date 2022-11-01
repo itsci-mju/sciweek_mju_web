@@ -5,10 +5,10 @@
 <%@ page import="java.util.*,manager.*,bean.*,java.text.*,model.*, java.sql.Timestamp"%>
 <%
 	Reviewer reviewer = null;
-	Years years = null; 
+	Schedules schedules = null; 
 	List<ProjectResponse> projectResponseList  = null;
 	List<ReviewerResponse> reviewerResponseList = null;
-	List<StudentProject> studentProjectList = null;
+	List<Project> projectList = null;
 
 	try {
 		reviewer = (Reviewer) session.getAttribute("reviewer");
@@ -17,13 +17,13 @@
 	}
 	
 	try {
-		years = (Years) request.getAttribute("years");
+		schedules = (Schedules) request.getAttribute("schedules");
 	} catch (Exception e) {
 
 	}
 	
 	try {
-		studentProjectList = (List<StudentProject>) request.getAttribute("studentProjectList");
+		projectList = (List<Project>) request.getAttribute("projectList");
 	} catch (Exception e) {
 		e.printStackTrace();
 	}
@@ -38,8 +38,7 @@
 		projectResponseList = (List<ProjectResponse>) request.getAttribute("projectResponseList");
 	} catch (Exception e) {
 		e.printStackTrace();
-	} 
-	
+	}
 %>
 <!DOCTYPE html>
 <html>
@@ -59,9 +58,37 @@
 <link href='https://fonts.googleapis.com/css?family=Kanit' rel='stylesheet' type='text/css'>
 <link rel="stylesheet" href="./css/web_css.css">
 </head>
-<body style="background-image: url('./image/hero-bg.png')">
+<body  style="background-image: url('./image/hero-bg.png') ; background-repeat: no-repeat ; background-attachment: fixed ; background-size: 100% 100%">
 
 	<jsp:include page="common/navbar.jsp"></jsp:include>
+	
+	<%
+	
+	String errors ;
+	String fmt_expreviewdate ;
+	String fmt_expreviewtime ;
+	
+	Date presentdate = new Date();
+	Timestamp presenttimestamp = new Timestamp(presentdate.getTime());
+	
+	if (presenttimestamp.after(schedules.getExpreviewdate())) {
+		
+		fmt_expreviewdate = new SimpleDateFormat("dd MMMM yyyy", new Locale("th", "TH")).format(schedules.getExpreviewdate());
+		fmt_expreviewtime = new SimpleDateFormat("HH:mm").format(schedules.getExpreviewdate()); 
+		
+		errors = "สิ้นสุดเวลาการประเมิน" ;
+		
+	} else {
+		
+		fmt_expreviewdate = new SimpleDateFormat("dd MMMM yyyy", new Locale("th", "TH")).format(schedules.getExpreviewdate());
+		fmt_expreviewtime = new SimpleDateFormat("HH:mm").format(schedules.getExpreviewdate()); 
+		
+		errors = "กรุณาประเมินโครงงานก่อนวันสิ้นสุดการประเมิน" ;
+	}
+	
+	
+	
+	%>
 	<div class="container" style="margin-top: 35px;">
 		<section id="content">
 			<div class="container" style="margin-top: -20px">
@@ -75,7 +102,7 @@
 						<div class="form-group row">
 							<label class="col-sm-2 col-form-label text-right">ชื่อ - นามสกุล</label>
 							<div class="col-sm-3">
-								<input type="text" id="prefix" name="prefix" class="form-control data" value="<%=reviewer.getPrefix()%> <%=reviewer.getFirstname()%>  <%=reviewer.getLastname()%>" style="background-color: white" readonly>
+								<input type="text" id="prefix" name="prefix" class="form-control data" value="<%=reviewer.getPrefix()%> <%=reviewer.getFirstname()%>  <%=reviewer.getLastname()%>" style="background-color: #ffffee" readonly>
 							</div>
 							<div class="col-sm-1">
 								<input type="hidden" id="prefix" name="prefix" class="form-control data" value="<%=reviewer.getPrefix()%>">
@@ -92,44 +119,50 @@
 						<div class="form-group row">
 							<label class="col-sm-2 col-form-label text-right">อีเมล</label>
 							<div class="col-sm-3">
-								<input type="text" id="student_id" name="student_id" class="form-control data" value="<%=reviewer.getEmail()%>" style="background-color: white" readonly>
+								<input type="text" id="student_id" name="student_id" class="form-control data" value="<%=reviewer.getEmail()%>" style="background-color: #ffffee" readonly>
 							</div>
 						</div>
 
 						<div class="form-group row">
 							<label class="col-sm-2 col-form-label text-right">คณะ </label>
 							<div class="col-sm-3">
-								<input type="text" id="faculty" name="faculty" class="form-control data" value="<%=reviewer.getFaculty()%>" style="background-color: white" readonly>
+								<input type="text" id="faculty" name="faculty" class="form-control data" value="<%=reviewer.getFaculty()%>" style="background-color: #ffffee" readonly>
 							</div>
 							<label class="col-sm-2 col-form-label text-right">สาขา </label>
 							<div class="col-sm-3">
-								<input type="text" id="major" name="major" class="form-control data" value="<%=reviewer.getMajor()%>" style="background-color: white" readonly>
+								<input type="text" id="major" name="major" class="form-control data" value="<%=reviewer.getMajor()%>" style="background-color: #ffffee" readonly>
 							</div>
 						</div>
 						<%
-							String team_name = null;
+							String projecttype_name = null;
 					
-							if (reviewer.getTeam().getTeam_name() == null) {
-								team_name = "ไม่มีกลุ่ม";
+							if (reviewer.getProjecttype().getProjecttype_name() == null) {
+								projecttype_name = "ไม่มีกลุ่ม";
 							} else {
-								team_name = reviewer.getTeam().getTeam_name();
+								projecttype_name = reviewer.getProjecttype().getProjecttype_name();
 							}
 						%>
 						<div class="form-group row">
 							<label class="col-sm-2 col-form-label text-right">กลุ่ม</label>
 							<div class="col-sm-4">
-								<input type="hidden" id="projecttype_id" name="projecttype_id" class="form-control data" value="<%=reviewer.getTeam().getTeam_id()%>">
-								<input type="text" id="projecttype_name" name="projecttype_name" class="form-control data" value="<%=team_name%>" style="background-color: white" readonly>
+								<input type="hidden" id="projecttype_id" name="projecttype_id" class="form-control data" value="<%=reviewer.getProjecttype().getProjecttype_name()%>">
+								<input type="text" id="projecttype_name" name="projecttype_name" class="form-control data" value="<%=projecttype_name%>" style="background-color: #ffffee" readonly>
 							</div>
 						</div>
 
 						<div class="form-group row">
 							<label class="col-sm-2 col-form-label text-right">ตำแหน่ง</label>
 							<div class="col-sm-3">
-								<input type="text" id="position" name="position" class="form-control data" value="<%=reviewer.getPosition()%>" style="background-color: white" readonly>
+								<input type="text" id="position" name="position" class="form-control data" value="<%=reviewer.getPosition()%>" style="background-color: #ffffee" readonly>
 							</div>
 						</div>
-						<br>
+
+						<div class="alert alert-danger" role="alert" style="text-align:center; font-weight:bold;">
+							<strong class="font__weight-semibold">แจ้งเตือน !!!</strong>&nbsp;สิ้นสุดการประเมิน
+							วันที่ : <%=fmt_expreviewdate%> เวลา <%=fmt_expreviewtime%> น. &nbsp; <i class="fa-solid fa-hand-point-right">&nbsp;</i><%=errors%>
+						</div>
+
+					
 						<h5>รายการโครงงานวิทยาศาสตร์</h5>
 						<hr class="colorgraph">
 						<table class="table table-bordered  table-hover" id=myTable>
@@ -142,20 +175,20 @@
 								</tr>
 							</thead>
 							<%
-								if ( studentProjectList.size() != 0 ) {
+								if ( projectList.size() != 0 ) {
 							%>
 
 							<%
-								for (int i = 0 ; i < studentProjectList.size() ; i++) {					
+								for (int i = 0 ; i < projectList.size() ; i++) {					
 							%>	
 									
 							<%
-								if (reviewer != null && studentProjectList.get(i).getProject().getState_project() == 1) {
+								if (reviewer != null && projectList.get(i).getReport().getReport_id() != 0 && projectList.get(i).getState_project() == 1) {
 							%>
 							<tbody>
 								<tr>
-									<td align="center"><%=studentProjectList.get(i).getProject().getProject_id()%></td>
-									<td><%=studentProjectList.get(i).getProject().getProjectname()%></td>
+									<td align="center"><%=projectList.get(i).getProject_id()%></td>
+									<td><%=projectList.get(i).getProjectname()%></td>
 
 									<%
 												String error = null;
@@ -165,8 +198,7 @@
 
 												ListScienceProjectManager listScienceProjectManager = new ListScienceProjectManager();
 
-												List<Reviews> reviewList = listScienceProjectManager
-													.getListReviewsByProjectIDAndReviewerID(studentProjectList.get(i).getProject().getProject_id(), reviewer.getReviewer_id());
+												List<Reviews> reviewList = listScienceProjectManager.getListReviewsByProjectIDAndReviewerID(projectList.get(i).getProject_id(), reviewer.getReviewer_id());
 												
 												Date date = new Date();  
 								                Timestamp timestamp = new Timestamp(date.getTime());  
@@ -176,21 +208,21 @@
 
 													for (Reviews reviews : reviewList) {
 														
-														if (reviews.getStatus().equals("ประเมินสำเร็จ")) {
+														if (reviews.getState().equals("ประเมินสำเร็จ")) {
 															error = "disabled";
 															klass = "btn btn-success";
-															status = reviews.getStatus();
-														} else if (reviews.getStatus().equals("กำลังประเมิน")) {
+															status = reviews.getState();
+														} else if (reviews.getState().equals("กำลังประเมิน")) {
 															bug = "disabled";
 															klass = "btn btn-warning";
-															status = reviews.getStatus();
+															status = reviews.getState();
 														} else {
 															bug = "disabled";
 															klass = "btn btn-danger";
 															status = "ยังไม่ได้ประเมิน";
 														}
 														
-														if (timestamp.after(years.getExpreviewdate())) {
+														if (timestamp.after(schedules.getExpreviewdate())) {
 															bug = "disabled";
 															error = "disabled";
 															klass = "btn btn-danger";
@@ -203,7 +235,7 @@
 											<% } %>
 									
 									<%
-												} else if (timestamp.after(years.getExpreviewdate())) {
+												} else if (timestamp.after(schedules.getExpreviewdate())) {
 													bug = "disabled";
 													error = "disabled";
 													klass = "btn btn-danger";
@@ -222,21 +254,21 @@
 									
 									<% } %>
 
-									<td>
+									<td align="center" width="35">
 										<button name="button" class="btn btn-link"
-											onclick="window.location.href='ReviewProject?project_id=<%=studentProjectList.get(i).getProject().getProject_id()%>';"
+											onclick="window.location.href='ReviewProject?project_id=<%=projectList.get(i).getProject_id()%>';"
 											<%=error%>>(ประเมิน)</button>
 									</td>
 
-									<td>
+									<td align="center" width="40">
 										<button name="button" class="btn btn-link"
-											onclick="window.location.href='ReviseProject?project_id=<%=studentProjectList.get(i).getProject().getProject_id()%>';"
+											onclick="window.location.href='ReviseProject?project_id=<%=projectList.get(i).getProject_id()%>&state_project=<%=projectList.get(i).getState_project()%>';"
 											<%=bug%>>(แก้ไข)</button>
 									</td>
 
-									<td align="center">
+									<td align="center" width="30">
 										<button name="button" class="btn btn-warning"
-											onclick="window.location.href='ViewScienceProjectDetail?project_id=<%=studentProjectList.get(i).getProject().getProject_id()%>';"
+											onclick="window.location.href='ViewScienceProjectDetail?project_id=<%=projectList.get(i).getProject_id()%>';"
 											<%=bug%>>
 											<i class="fa fa-eye"></i>
 										</button>
@@ -249,24 +281,24 @@
 									%>
 									
 							<%
-								if (reviewer != null && studentProjectList.get(i).getProject().getState_project() == 2) {
+								if (reviewer != null && projectList.get(i).getState_project() == 2) {
 							%>
 							<tbody>
 								<tr>
-									<td align="center"><%=studentProjectList.get(i).getProject().getProject_id()%></td>
-									<td><%=studentProjectList.get(i).getProject().getProjectname()%></td>
+									<td align="center"><%=projectList.get(i).getProject_id()%></td>
+									<td><%=projectList.get(i).getProjectname()%></td>
 
 									<%
 												String error = null;
 												String bug = null;
 												String klass = null;
 												String status = null;
-												String reviews_id = null;
+												String reviews_id = null ;
 
 												ListScienceProjectManager listScienceProjectManager = new ListScienceProjectManager();
 
 												List<Reviews> reviewList = listScienceProjectManager
-													.getListReviewsByProjectIDAndReviewerID(studentProjectList.get(i).getProject().getProject_id(), reviewer.getReviewer_id());
+													.getListReviewsByProjectIDAndReviewerID(projectList.get(i).getProject_id(), reviewer.getReviewer_id());
 												
 												Date date = new Date();  
 								                Timestamp timestamp = new Timestamp(date.getTime());  
@@ -276,23 +308,23 @@
 													
 													for (Reviews reviews : reviewList) {
 														
-														reviews_id = reviews.getReviews_id();												
+														reviews_id = reviews.getReviews_id();													
 																											
-														 if (reviews.getStatus().equals("ประเมินสำเร็จ")) {
+														 if (reviews.getState().equals("ประเมินสำเร็จ")) {
 															error = "disabled";
 															klass = "btn btn-success";
-															status = reviews.getStatus();
-														} else if (reviews.getStatus().equals("กำลังประเมิน")) {
+															status = reviews.getState();
+														} else if (reviews.getState().equals("กำลังประเมิน")) {
 															bug = "disabled";
 															klass = "btn btn-warning";
-															status = reviews.getStatus();
+															status = reviews.getState();
 														} else {
 															bug = "disabled";
 															klass = "btn btn-danger";
 															status = "ยังไม่ได้ประเมิน";
 														}
 														 
-														 if (timestamp.after(years.getExpreviewdate())) {
+														 if (timestamp.after(schedules.getExpreviewdate())) {
 																error = "disabled";
 																bug = "disabled";
 																klass = "btn btn-danger";
@@ -303,7 +335,7 @@
 									<% } %>
 									
 									<%
-												} else if (timestamp.after(years.getExpreviewdate())) {
+												} else if (timestamp.after(schedules.getExpreviewdate())) {
 													bug = "disabled";
 													error = "disabled";
 													klass = "btn btn-danger";
@@ -322,21 +354,21 @@
 									
 									<% } %>
 
-									<td>
+									<td align="center" width="35">
 										<button name="button" class="btn btn-link"
-											onclick="window.location.href='ReviewProject?project_id=<%=studentProjectList.get(i).getProject().getProject_id()%>&reviews_id=<%=reviews_id%> ';"
+											onclick="window.location.href='ReviewProject?project_id=<%=projectList.get(i).getProject_id()%>&reviews_id=<%=reviews_id%> ';"
 											<%=error%>>(ประเมิน)</button>
 									</td>
 
-									<td>
+									<td align="center" width="40">
 										<button name="button" class="btn btn-link"
-											onclick="window.location.href='ReviseProject?project_id=<%=studentProjectList.get(i).getProject().getProject_id()%>';"
+											onclick="window.location.href='ReviseProject?project_id=<%=projectList.get(i).getProject_id()%>&state_project=<%=projectList.get(i).getState_project()%>';"
 											<%=bug%>>(แก้ไข)</button>
 									</td>
 
-									<td align="center">
+									<td align="center" width="30">
 										<button name="button" class="btn btn-warning"
-											onclick="window.location.href='ViewScienceProjectDetail?project_id=<%=studentProjectList.get(i).getProject().getProject_id()%>';"
+											onclick="window.location.href='ViewScienceProjectDetail?project_id=<%=projectList.get(i).getProject_id()%>';"
 											<%=bug%>>
 											<i class="fa fa-eye"></i>
 										</button>
@@ -350,24 +382,24 @@
 									
 									
 									<%
-								if (reviewer != null && studentProjectList.get(i).getProject().getState_project() == 3) {
+								if (reviewer != null && projectList.get(i).getState_project() == 3) {
 							%>
 							<tbody>
 								<tr>
-									<td align="center"><%=studentProjectList.get(i).getProject().getProject_id()%></td>
-									<td><%=studentProjectList.get(i).getProject().getProjectname()%></td>
+									<td align="center"><%=projectList.get(i).getProject_id()%></td>
+									<td><%=projectList.get(i).getProjectname()%></td>
 
 									<%
 												String error = null;
 												String bug = null;
 												String klass = null;
 												String status = null;
-												String reviews_id = null;
+												String reviews_id = null ;
 
 												ListScienceProjectManager listScienceProjectManager = new ListScienceProjectManager();
 
 												List<Reviews> reviewList = listScienceProjectManager
-													.getListReviewsByProjectIDAndReviewerID(studentProjectList.get(i).getProject().getProject_id(), reviewer.getReviewer_id());
+													.getListReviewsByProjectIDAndReviewerID(projectList.get(i).getProject_id(), reviewer.getReviewer_id());
 												
 												Date date = new Date();  
 								                Timestamp timestamp = new Timestamp(date.getTime());  
@@ -377,20 +409,24 @@
 													
 													for (Reviews reviews : reviewList) {
 														
-														reviews_id = reviews.getReviews_id();												
+														reviews_id = reviews.getReviews_id();														
 																																																								
-														if (reviews.getStatus().equals("ประเมินสำเร็จ")) {
+														if (reviews.getState().equals("ประเมินสำเร็จ")) {
 															error = "disabled";
 															bug = "disabled";
 															klass = "btn btn-success";
-															status = reviews.getStatus();
-														} 
+															status = reviews.getState();
+														} else {
+															error = "disabled";
+															//bug = "disabled";
+															klass = "btn btn-danger";
+															status = "ยังไม่ได้ประเมิน" ;
+														}
 														
 														
 									%>
-									<td align="center"><button name="button"
-											class="<%=klass%>" disabled><%=status%></button></td>
-									<%  } %>
+									<td align="center"><button name="button" class="<%=klass%>" disabled><%=status%></button></td>
+												 <%  } %>
 									
 									<%
 												} else {
@@ -404,20 +440,20 @@
 										}
 									%>
 
-									<td>
+									<td align="center" width="35">
 										<button name="button" class="btn btn-link"
-											onclick="window.location.href='ReviewProject?project_id=<%=studentProjectList.get(i).getProject().getProject_id()%>&reviews_id=<%=reviews_id%> ';"
+											onclick="window.location.href='ReviewProject?project_id=<%=projectList.get(i).getProject_id()%>&reviews_id=<%=reviews_id%> ';"
 											<%=error%>>(ประเมิน)</button>
 									</td>
 
-									<td>
+									<td align="center" width="40">
 										<button name="button" class="btn btn-link"
-											onclick="window.location.href='ReviseProject?project_id=<%=studentProjectList.get(i).getProject().getProject_id()%>';"
+											onclick="window.location.href='ReviseProject?project_id=<%=projectList.get(i).getProject_id()%>&state_project=<%=projectList.get(i).getState_project()%>';"
 											<%=bug%>>(แก้ไข)</button>
 									</td>
 
-									<td align="center">
-										<button name="button" class="btn btn-warning" onclick="window.location.href='ViewScienceProjectDetail?project_id=<%=studentProjectList.get(i).getProject().getProject_id()%>';">
+									<td align="center" width="30">
+										<button name="button" class="btn btn-warning" onclick="window.location.href='ViewScienceProjectDetail?project_id=<%=projectList.get(i).getProject_id()%>';">
 											<i class="fa fa-eye"></i>
 										</button>
 									</td>

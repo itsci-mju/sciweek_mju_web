@@ -7,8 +7,9 @@ import java.sql.Statement;
 import java.util.List;
 import java.util.Vector;
 
+import bean.Project;
 import bean.Reviews;
-import bean.StudentProject;
+import bean.Student;
 import resultset.ResultSetToClass;
 import util.ConnectionDB;
 
@@ -16,29 +17,29 @@ public class SummaryResultManager {
 	
 	ResultSetToClass resultSetToClass = new ResultSetToClass();
 	
-	public List<StudentProject> getListStudentProjectByProjectID(String project_id) throws Exception {
+	public List<Student> getListStudentProjectByProjectID(String project_id) throws Exception {
 		ConnectionDB condb = new ConnectionDB();
 		Connection con = condb.getConnection();
 		Statement stmt = null;
-		List<StudentProject> listsproject = new Vector<>();
-
+		List<Student> studentList = new Vector<>();
+		
 		try {
+			
 			stmt = con.createStatement();
-			String sql = " SELECT * " + "  FROM studentproject"
-					+ "  LEFT JOIN project on  studentproject.project_id = project.project_id"
+			String sql = " SELECT * FROM student"
+					+ "  LEFT JOIN project on student.project_id = project.project_id"
 					+ "  LEFT JOIN projecttype on project.projecttype_id = projecttype.projecttype_id"
-					+ "  LEFT JOIN team on project.team_id = team.team_id"
-					+ "  LEFT JOIN student on studentproject.student_id = student.student_id"
 					+ "  LEFT JOIN school on student.school_id = school.school_id"
-					+ "  LEFT JOIN advisor on studentproject.advisor_id = advisor.advisor_id  "
-					+ "  WHERE studentproject.project_id like '" + project_id + "' "
-					+ "  GROUP BY project.project_id ";
+					+ "  LEFT JOIN advisor on project.advisor_id = advisor.advisor_id  "
+					+ "  WHERE student.project_id = '" + project_id + "'  "
+					+ "  GROUP BY student.school_id ";
 			ResultSet rs = stmt.executeQuery(sql);
 
 			while (rs.next()) {
-				listsproject.add(resultSetToClass.setResultSetToStudentProject(rs));
+					
+				studentList.add(resultSetToClass.setResultSetToStudent(rs));		
+				
 			}
-
 			con.close();
 			stmt.close();
 			rs.close();
@@ -46,7 +47,7 @@ public class SummaryResultManager {
 			System.out.println("catch");
 			e.printStackTrace();
 		}
-		return listsproject;
+		return studentList;
 	}
 	
 	public List<Reviews> getListReviews() throws Exception {
@@ -61,7 +62,7 @@ public class SummaryResultManager {
 					+ "  LEFT JOIN reviewer on reviews.reviewer_id = reviewer.reviewer_id"
 					+ "  LEFT JOIN project on  reviews.project_id = project.project_id"
 					+ "  LEFT JOIN projecttype on project.projecttype_id = projecttype.projecttype_id"
-					+ "  LEFT JOIN team on project.team_id = team.team_id"
+					+ "  LEFT JOIN advisor on project.advisor_id = advisor.advisor_id  "
 					+ "  GROUP BY reviews.project_id";
 			ResultSet rs = stmt.executeQuery(sql);
 
@@ -94,7 +95,7 @@ public class SummaryResultManager {
 					+ "  LEFT JOIN reviewer on reviews.reviewer_id = reviewer.reviewer_id"
 					+ "  LEFT JOIN project on  reviews.project_id = project.project_id"
 					+ "  LEFT JOIN projecttype on project.projecttype_id = projecttype.projecttype_id"
-					+ "  LEFT JOIN team on project.team_id = team.team_id"
+					+ "  LEFT JOIN advisor on project.advisor_id = advisor.advisor_id  "
 					+ "  WHERE reviews.reviewer_id like '" + rid + "' "
 					+ "  ORDER BY reviews.totalscore DESC ";
 			ResultSet rs = stmt.executeQuery(sql);
@@ -115,32 +116,27 @@ public class SummaryResultManager {
 		return listreviews;
 	}
 
-	public StudentProject getStudentProjectByID(String key) throws Exception {
+	public Project getStudentProjectByID(String key) throws Exception {
 		ConnectionDB condb = new ConnectionDB();
 		Connection con = condb.getConnection();
 		Statement stmt = null;
-		StudentProject sproject = new StudentProject();
+		Project project = new Project();
 		
 		try {
 			
 			stmt = con.createStatement();
-			String sql = " SELECT * FROM studentproject"
-					+ "  LEFT JOIN project on  studentproject.project_id = project.project_id"
+			String sql = " SELECT * FROM project"
 					+ "  LEFT JOIN projecttype on project.projecttype_id = projecttype.projecttype_id"
-					+ "  LEFT JOIN team on project.team_id = team.team_id"
-					+ "  LEFT JOIN student on studentproject.student_id = student.student_id"
-					+ "  LEFT JOIN school on student.school_id = school.school_id"
-					+ "  LEFT JOIN advisor on studentproject.advisor_id = advisor.advisor_id  "
-					+ "  WHERE studentproject.project_id like '"+ key +"' ";
+					+ "  LEFT JOIN advisor on project.advisor_id = advisor.advisor_id  "
+					+ "  WHERE project.project_id like '"+ key +"'";
 			ResultSet rs = stmt.executeQuery(sql);
 
 			while (rs.next()) {
 				
-				sproject.setProject(resultSetToClass.setResultSetToProject(rs));	
-				sproject.setStudent(resultSetToClass.setResultSetToStudent(rs));
-				sproject.setAdvisor(resultSetToClass.setResultSetToAdvisor(rs));
+				project = resultSetToClass.setResultSetToProject(rs);
 				
 			}
+
 			con.close();
 			stmt.close();
 			rs.close();
@@ -148,6 +144,7 @@ public class SummaryResultManager {
 			System.out.println("catch");
 			e.printStackTrace();
 		}
-		return sproject;
+		return project;
 	}
+	
 }

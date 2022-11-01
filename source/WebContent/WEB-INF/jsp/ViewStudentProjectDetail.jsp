@@ -5,8 +5,7 @@
 <%
 	Admin admin = null;
 	Report report = null;
-	StudentProject sproject = null;
-	List<StudentProject> listsproject = new Vector<>();
+	Project project = new Project();
 	
 	try {
 		report = (Report) session.getAttribute("report");
@@ -15,18 +14,11 @@
 	}
 	
 	try {
-		sproject = (StudentProject) request.getAttribute("sproject");
-		session.setAttribute("key",sproject.getProject().getProject_id());
+		project = (Project) request.getAttribute("project");
 	} catch (Exception e) {
 		e.printStackTrace();
 	}
 
-	try {
-		listsproject = (List<StudentProject>) request.getAttribute("listsproject");
-	} catch (Exception e) {
-		e.printStackTrace();
-	}
-	
 	try {
 		admin = (Admin) session.getAttribute("admin");
 	} catch (Exception e) {
@@ -55,7 +47,7 @@
 
 </script>
 
-<body style="background-image: url('./image/hero-bg.png')">
+<body style="background-image: url('./image/hero-bg.png') ; background-repeat: no-repeat ; background-attachment: fixed ; background-size: 100% 100%">
 	<jsp:include page="common/navbar.jsp"></jsp:include>
 	
 	<div class="container" style="margin-top: 35px;">
@@ -73,33 +65,33 @@
 								<div class="form-group row">
 									<label class="col-sm-2 col-form-label text-right">รหัสโครงงานวิทยาศาสตร์</label>
 									<div class="col-sm-2">
-										<input type="text" name="project_id" id="project_id" class="form-control data" value="<%=sproject.getProject().getProject_id()%>" style="background-color: white" readonly>
+										<input type="text" name="project_id" id="project_id" class="form-control data" value="<%=project.getProject_id()%>" style="background-color: #ffffee" readonly>
 									</div>
 								</div>
 								
 								<div class="form-group row">
 									<label class="col-sm-2 col-form-label text-right">ชื่อโครงงานวิทยาศาสตร์</label>
 									<div class="col-sm-8">
-										<input type="text" name="projectname" id="projectname" class="form-control data" value="<%=sproject.getProject().getProjectname()%>" style="background-color: white" readonly>
+										<input type="text" name="projectname" id="projectname" class="form-control data" value="<%=project.getProjectname()%>" style="background-color: #ffffee" readonly>
 									</div>
 								</div>
 								
 								<div class="form-group row">
 									<label class="col-sm-2 col-form-label text-right">ประเภทโครงงานวิทยาศาสตร์</label>
 									<div class="col-sm-4">
-										<input type="text" name="projecttype_name" id="projecttype_name" class="form-control data" value="<%=sproject.getProject().getProjecttype().getProjecttype_name()%>" style="background-color: white" readonly>
+										<input type="text" name="projecttype_name" id="projecttype_name" class="form-control data" value="<%=project.getProjecttype().getProjecttype_name()%>" style="background-color: #ffffee" readonly>
 									</div>									
 								</div>
 								
 								<div class="form-group row">							
 									<label class="col-sm-2 col-form-label text-right">ไฟล์วีดิโอ</label>
-									<% if (sproject.getProject().getVideo().equals("-") || sproject.getProject().getVideo() == null) {%>
+									<% if (project.getVideo().equals("-") || project.getVideo() == null) {%>
 										<div class="col-sm-4">
 											<a href="#" class="btn btn-link" ><i class="fa fa-file-video-o">&nbsp;&nbsp;</i>ไม่มีการอัปโหลดวิดีโอ</a>
 										</div>
 									<% } else { %>
 										<div class="col-sm-4">
-											<a href="<%=sproject.getProject().getVideo()%>" target="_blank" class="btn btn-link" type="button" style="margin-left: -13px; "></a>
+											<a href="<%=project.getVideo()%>" target="_blank" class="btn btn-link" type="button" style="margin-left: -13px; "></a>
 										</div>
 									<% } %>
 									
@@ -118,65 +110,69 @@
 								
 								<% String award = null;
 								
-								if (sproject.getProject().getAward().equals("-") || sproject.getProject().getAvgscore() == 0) {
+								if (project.getAward().equals("-") || project.getAvgscore() == 0) {
 									award = "ยังไม่มีรางวัล" ;
 								} else { 
-									award = sproject.getProject().getAward() ;
+									award = project.getAward() ;
 								}
 								%>
 								
 								<div class="form-group row">
 									<label class="col-sm-2 col-form-label text-right">รางวัล</label>
 									<div class="col-sm-4">
-										<input type="text" name="award" id="award" class="form-control data" value="<%=award%>" style="background-color: white" readonly>
+										<input type="text" name="award" id="award" class="form-control data" value="<%=award%>" style="background-color: #ffffee" readonly>
 									</div>
 								</div>
 								
+								
 								<%
-									for (int i = 0; i < listsproject.size(); i++) {
+									List<Student> studentList = project.getStudentList() ;
+
+									for (int i = 0; i < studentList.size(); i++) {
 								%>
+								
 							<h5>
 								นักเรียนคนที่&nbsp;<%=i + 1%></h5>
 							<hr class="colorgraph">
-							<input type="hidden" name="student_id" id="student_id" class="form-control data" value="<%=listsproject.get(i).getStudent().getStudent_id()%>" readonly>
+							<input type="hidden" name="student_id" id="student_id" class="form-control data" value="<%=studentList.get(i).getStudent_id()%>" readonly>
 							<div class="form-group row">
 									<label class="col-sm-2 col-form-label text-right">ชื่อ - นามสกุล</label>
 									<div class="col-sm-3">
-										<input type="text" name="fullname" id="fullname" class="form-control data" value="<%=listsproject.get(i).getStudent().getPrefix() +" "+ listsproject.get(i).getStudent().getFirstname() +" "+ listsproject.get(i).getStudent().getLastname()%>" style="background-color: white" readonly>
+										<input type="text" name="fullname" id="fullname" class="form-control data" value="<%=studentList.get(i).getPrefix() +" "+ studentList.get(i).getFirstname() +" "+ studentList.get(i).getLastname()%>" style="background-color: #ffffee" readonly>
 									</div>
-									<input type="hidden" name="prefix" id="prefix" class="form-control data" value="<%=listsproject.get(i).getStudent().getPrefix()%>" readonly>
-									<input type="hidden" name="firstname" id="firstname" class="form-control data" value="<%=listsproject.get(i).getStudent().getFirstname()%>" readonly>
-									<input type="hidden" name="lastname" id="lastname" class="form-control data" value="<%=listsproject.get(i).getStudent().getLastname()%>" readonly>
+									<input type="hidden" name="prefix" id="prefix" class="form-control data" value="<%=studentList.get(i).getPrefix()%>" readonly>
+									<input type="hidden" name="firstname" id="firstname" class="form-control data" value="<%=studentList.get(i).getFirstname()%>" readonly>
+									<input type="hidden" name="lastname" id="lastname" class="form-control data" value="<%=studentList.get(i).getLastname()%>" readonly>
 								</div>
 
 							<div class="form-group row">
 								<label class="col-sm-2 col-form-label text-right">เบอร์โทรศัพท์</label>
 								<div class="col-sm-3">
-									<input type="text" name="mobileno" id="mobileno" class="form-control data" value="<%=listsproject.get(i).getStudent().getMobileno()%>" style="background-color: white" readonly>
+									<input type="text" name="mobileno" id="mobileno" class="form-control data" value="<%=studentList.get(i).getMobileno()%>" style="background-color: #ffffee" readonly>
 								</div>
 							</div>
 
 							<div class="form-group row">
 								<label class="col-sm-2 col-form-label text-right">ระดับชั้น</label>
 								<div class="col-sm-3">
-									<input type="text" name="grade" id="grade" class="form-control data" value="<%=listsproject.get(i).getStudent().getGrade()%>" style="background-color: white" readonly>
+									<input type="text" name="grade" id="grade" class="form-control data" value="<%=studentList.get(i).getGrade()%>" style="background-color: #ffffee" readonly>
 								</div>
 								<label class="col-sm-2 col-form-label text-right">โรงเรียน</label>
 								<div class="col-sm-3">
-									<input type="text" name="school_name" id="school_name" class="form-control data" value="<%=listsproject.get(i).getStudent().getSchool().getSchool_name()%>" style="background-color: white" readonly>
+									<input type="text" name="school_name" id="school_name" class="form-control data" value="<%=studentList.get(i).getSchool().getSchool_name()%>" style="background-color: #ffffee" readonly>
 								</div>
 							</div>
 							<br>
 							<%
 									}
-							%>
+							%> 
 							<h5>อาจารย์ที่ปรึกษา</h5>
 							<hr class="colorgraph">
-							<input type="hidden" name="advisor_id" id="advisor_id" class="form-control data" value="<%=sproject.getAdvisor().getAdvisor_id()%>" readonly>
+							<input type="hidden" name="advisor_id" id="advisor_id" class="form-control data" value="<%=project.getAdvisor().getAdvisor_id()%>" readonly>
 								<div class="form-group row">
 									<label class="col-sm-2 col-form-label text-right">อาจารย์ที่ปรึกษา</label>
 										<div class="col-sm-4">
-											<input type="text" name="advisorname" id="advisorname" class="form-control data" value="<%=sproject.getAdvisor().getPrefix() +" "+ sproject.getAdvisor().getFirstname() +" "+ sproject.getAdvisor().getLastname()%>" style="background-color: white" readonly>
+											<input type="text" name="advisorname" id="advisorname" class="form-control data" value="<%=project.getAdvisor().getPrefix() +" "+ project.getAdvisor().getFirstname() +" "+ project.getAdvisor().getLastname()%>" style="background-color: #ffffee" readonly>
 										</div>								
 								</div>
 								<br>

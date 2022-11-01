@@ -1,14 +1,15 @@
+<%@page import="model.StudentResponse"%>
+<%@page import="model.StudentProjectResponse"%>
 <%@page import="org.hibernate.query.criteria.internal.expression.function.AggregationFunction.MAX"%>
 <%@page import="com.sun.xml.txw2.Document"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ page import="java.util.*,manager.*,bean.*,java.text.*, java.sql.Timestamp"%>
+<%@ page import="java.util.*,manager.*,bean.*,java.text.*,java.sql.Timestamp"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%
 	Admin admin = null;
-	Years years = null;
-	List<Project> listproject = new Vector<>();
-	List<ProjectType> projectTypeList = new Vector<>();
+	Schedules schedules = null;
+	List<StudentProjectResponse> studentProjectResponseList = new Vector<>();
 	Student student = null;
 	Reviewer reviewer = null;
 
@@ -31,27 +32,20 @@
 	}
 	
 	try {
-		years = (Years) request.getAttribute("years");
-	} catch (Exception e) {
-		e.printStackTrace();
-	}
-
-	try {
-		listproject = (List<Project>) request.getAttribute("listproject");
+		schedules = (Schedules) request.getAttribute("schedules");
 	} catch (Exception e) {
 		e.printStackTrace();
 	}
 	
 	try {
-		projectTypeList = (List<ProjectType>) request.getAttribute("projectTypeList");
+		studentProjectResponseList = (List<StudentProjectResponse>) request.getAttribute("studentProjectResponseList");
 	} catch (Exception e) {
 		e.printStackTrace();
 	}
 	
 	Date date = new Date();  
 	Timestamp timestamp = new Timestamp(date.getTime());  
-	SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); 
-	
+	SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 %>
 <!DOCTYPE html>
 <html>
@@ -70,132 +64,78 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <link href='https://fonts.googleapis.com/css?family=Kanit' rel='stylesheet' type='text/css'>
 <link rel="stylesheet" href="./css/web_css.css">
+<link rel="stylesheet" href="./css/index_css.css">
 </head>
-<body style="background-image: url('./image/hero-bg.png')">
+<body  style="background-image: url('./image/hero-bg.png') ; background-repeat: no-repeat ; background-attachment: fixed ; background-size: 100% 100%">
 
 	<jsp:include page="common/navbar.jsp"></jsp:include>
-	
+
 	<div class="container" style="margin-top: 35px;">
 		<div class="form-group row">
 			<div class="col-auto">
-				<h3><i class="fa fa-bullhorn" aria-hidden="true">&nbsp;</i>ผลสรุปการประเมินโครงงานวิทยาศาสตร์</h3>
+				<h3><i class="fa-solid fa-trophy">&nbsp;</i>ผลรางวัล</h3>
 			</div>	
 			<!-- <div class="col-auto">
 				<a href="ExportAnnounceExcel" class="btn btn-success mb-3" style="margin-left: 639px;"><i class="fa-solid fa-file-excel">&nbsp;</i>Export Files</a>
 			</div> -->		
-		</div>						
-		
-		<hr class="colorgraph">
-		
-		<% if (years.getAnnouncedate() != null) {%>
-						
-		<% if (timestamp.after(years.getAnnouncedate())) {%>
-						
-		<div class="form-group row" style="margin-left: 210px;">
-		<%  for (int p = 0 ; p < projectTypeList.size() ; p++) { %>
-		
-			<% if (p == 0) { %>
-			<div class="col-sm-3">
-				<button name="button" class="btn btn-primary" onclick="window.location.href='isViewResult?projecttype_id=<%=projectTypeList.get(p).getProjecttype_id()%>';" >
-					<i class="fa-sharp fa-solid fa-seedling">&nbsp;</i><%=projectTypeList.get(p).getProjecttype_name()%>
-				</button>	
-			</div>
-			<% } %>
-			
-			<% if (p == 1) { %>
-			<div class="col-sm-3">
-				<button name="button" class="btn btn-success" onclick="window.location.href='isViewResult?projecttype_id=<%=projectTypeList.get(p).getProjecttype_id()%>';" >
-					<i class="fa-sharp fa-solid fa-frog">&nbsp;</i><%=projectTypeList.get(p).getProjecttype_name()%>
-				</button>
-			</div>
-			<% } %>
-			
-			<% if (p == 2) { %>
-			<div class="col-sm-3">
-				<button name="button" class="btn btn-info" onclick="window.location.href='isViewResult?projecttype_id=<%=projectTypeList.get(p).getProjecttype_id()%>';" >
-					<i class="fa-solid fa-bolt">&nbsp;</i><%=projectTypeList.get(p).getProjecttype_name()%>
-				</button>		
-			</div>
-			<% } %>	
-			
-		<% } %>		
-		</div>
-		
-		<div class="form-group row" style="margin-left: 210px;">
-		<%  for (int p = 3 ; p < projectTypeList.size() ; p++) { %>
-		
-		<% if (p == 3) { %>
-			<div class="col-sm-3" >
-				<button name="button" class="btn btn-danger" onclick="window.location.href='isViewResult?projecttype_id=<%=projectTypeList.get(p).getProjecttype_id()%>';" style="color:white">
-					<i class="fa-solid fa-atom">&nbsp;</i><%=projectTypeList.get(p).getProjecttype_name()%>
-				</button>	
-			</div>
-			<% } %>
-			
-			<% if (p == 4) { %>
-			<div class="col-sm-3">
-				<button name="button" class="btn btn-warning" onclick="window.location.href='isViewResult?projecttype_id=<%=projectTypeList.get(p).getProjecttype_id()%>';" >
-					<i class="fa-sharp fa-solid fa-hippo">&nbsp;</i><%=projectTypeList.get(p).getProjecttype_name()%>
-				</button>
-			</div>
-			<% } %>
-			
-			<% if (p == 5) { %>
-			<div class="col-sm-3">
-				<button name="button" class="btn btn-secondary" onclick="window.location.href='isViewResult?projecttype_id=<%=projectTypeList.get(p).getProjecttype_id()%>';" >
-					<i class="fa-solid fa-computer">&nbsp;</i><%=projectTypeList.get(p).getProjecttype_name()%>
-				</button>		
-			</div>	
-		</div>
-		<% } %>	
-		
-	<% } %>	
+		</div>		
+		<hr class="colorgraph">	
+		<%String announce = "";%>
+		ประกาศข้อมูล : <%=announce = new SimpleDateFormat("EEEE ที่ dd เดือน MMMM พ.ศ. yyyy เวลา hh:mm น.", new Locale("th", "TH")).format(schedules.getAnnouncedate())%>
+		&nbsp;&nbsp; &nbsp;&nbsp; ที่มา : สัปดาห์วิทยาศาสตร์ คณะวิทยาศาสตร์ มหาวิทยาลัยแม่โจ้
+		<br>			
 	</div>
-
-		<div style="margin-top: 15px ; margin-left: 6% ; margin-right: 6% ;">
+	
+	<%
+		if (schedules.getAnnouncedate() != null) {
+	%>
+						
+		<%
+			if (timestamp.after(schedules.getAnnouncedate())) {
+		%>
+						
+		<div style="margin-top: 20px ; margin-left: 2% ; margin-right: 2% ;">
 		<table class="table table-bordered  table-hover" id=myTable>
 			<thead class="table-info" align="center">
 				<tr>
-					<th style="white-space: nowrap ; width: 90 " >รหัสโครงงานวิทยาศาสตร์</th>
-					<th>ชื่อโครงงานวิทยาศาสตร์</th>
-					<th style="white-space: nowrap " >โรงเรียน</th>			
+					<th style="white-space: nowrap ; width: 90 " >รหัสโครงงาน</th>
+					<th>ชื่อโครงงาน/สิ่งประดิษฐ์</th>			
+					<th style="white-space: nowrap " colspan="3" >ชื่อผู้จัดทำ</th>
+					<th style="white-space: nowrap " >ที่ปรึกษา</th>		
+					<th style="white-space: nowrap " >โรงเรียน</th>		
 					<th style="white-space: nowrap" >รางวัล</th>
 				</tr>
 			</thead>
-				<%							
-					if (listproject.size() != 0) {	
-						
-						for (int i = 0 ; i < listproject.size() ; i ++)  {	
-							
-							String project_id = listproject.get(i).getProject_id() ;
-							
-							AnnounceResultManager announceResultManager = new AnnounceResultManager();
-					
-							List<StudentProject> studentProjectList = announceResultManager.getListStudentProjectByProjectID(project_id);
-				%>
-				
-			<tbody>
+				<% if (studentProjectResponseList.size() != 0) {	 %>
+						<% for (int i = 0 ; i < studentProjectResponseList.size() ; i ++)  { %>
+			<tbody style="font-size: 12px;">
 				<tr>
-					<td align="center"><%=listproject.get(i).getProject_id()%></td>
-					<td><%=listproject.get(i).getProjectname()%></td>
-					<% for (StudentProject studentProject : studentProjectList) { %>
-					<td align="left" style="white-space: nowrap " ><%=studentProject.getStudent().getSchool().getSchool_name()%></td>
+					<td align="center" ><%=studentProjectResponseList.get(i).getProjectID()%></td>
+					<td><%=studentProjectResponseList.get(i).getProjectName()%></td>
+					<% 
+						List<StudentResponse> studentList = studentProjectResponseList.get(i).getStudentResponseList();
+							for (int x = 0 ; x < studentList.size() ; x++) {
+					%>
+					<td width="190" align="center" ><%=studentList.get(x).getStudentName()%></td>
 					<% } %>
-					<td align="center" style="white-space: nowrap "><%=listproject.get(i).getAward()%></td>
+					<% 
+						int round ;
+						for (round = studentProjectResponseList.get(i).getStudentResponseList().size() ; round < 3 ; round++) {%>
+						<td width="190" align="center"> - </td>
+					<% } %>
+					<td align="center" style="white-space: nowrap "><%=studentProjectResponseList.get(i).getAdvisorName()%></td>
+					<td align="center" style="white-space: nowrap "><%=studentProjectResponseList.get(i).getSchoolName()%></td>
+					<td align="center" style="white-space: nowrap "><%=studentProjectResponseList.get(i).getAwardProject()%></td>
 				</tr>			
-				<%										
-						}
-	
-					} else {
-				%>
+				<% } %>
+				<% } else { %>
 				<tr align="center">
-					<td colspan="5"><h2>ไม่มีข้อมูล</h2></td>
+					<td colspan="8" align="center"><h2>ไม่มีข้อมูล</h2></td>
 				</tr>
 				<% } %>
 			</tbody>
 		</table>
 	</div>
-	
 	<% } %>
 	
 	<% } %>
@@ -238,6 +178,6 @@
 							});
 				});
 	</script>
-
+	
 </body>
 </html>

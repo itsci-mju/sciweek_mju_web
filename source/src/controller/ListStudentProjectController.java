@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import bean.Admin;
-import bean.StudentProject;
+import bean.Project;
 import manager.ListStudentProjectManager;
 
 @Controller
@@ -22,9 +22,9 @@ public class ListStudentProjectController  {
 		Admin admin = (Admin) session.getAttribute("admin");
 		if (admin != null) {
 			ListStudentProjectManager vpjm = new ListStudentProjectManager();
-			List<StudentProject> listsproject = vpjm.getListStudentProject();
+			List<Project> listproject = vpjm.getListStudentProject();
 			ModelAndView mav = new ModelAndView("ListStudentProject");
-			mav.addObject("listsproject", listsproject);
+			mav.addObject("listproject", listproject);
 			return mav;
 		} else {
 			ModelAndView mav = new ModelAndView("LoginPage");
@@ -41,9 +41,9 @@ public class ListStudentProjectController  {
 			request.setCharacterEncoding("UTF-8");
 			String keyword = request.getParameter("keyword");
 			ListStudentProjectManager viewProjectManager = new ListStudentProjectManager();
-			List<StudentProject> listsproject = viewProjectManager.searchproject(keyword);
+			List<Project> listproject = viewProjectManager.searchproject(keyword);
 
-			request.setAttribute("listsproject", listsproject);
+			request.setAttribute("listproject", listproject);
 			request.setAttribute("keyword", keyword);
 			ModelAndView mav = new ModelAndView("ListStudentProject");
 			return mav;

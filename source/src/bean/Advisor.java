@@ -18,7 +18,4 @@ public class Advisor {
 	private String email;
 	private String mobileno;
 	
-	private Student student;
-	private Project project;
-
 }

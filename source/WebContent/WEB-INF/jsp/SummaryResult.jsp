@@ -36,7 +36,7 @@
 <link href='https://fonts.googleapis.com/css?family=Kanit' rel='stylesheet' type='text/css'>
 <link rel="stylesheet" href="./css/web_css.css">
 </head>
-<body style="background-image: url('./image/hero-bg.png')">
+<body style="background-image: url('./image/hero-bg.png') ; background-repeat: no-repeat ; background-attachment: fixed ; background-size: 100% 100%">
 
 	<jsp:include page="common/navbar.jsp"></jsp:include>
 
@@ -54,7 +54,7 @@
 									<input type="hidden" id="reviewer_id" name="reviewer_id" class="form-control data" value="<%=reviewer.getReviewer_id()%>" >
 									<label class="col-sm-2 col-form-label text-right">ชื่อ - นามสกุล</label>
 									<div class="col-sm-3">
-										<input type="text" id="prefix" name="prefix" class="form-control data" value="<%=reviewer.getPrefix()%> <%=reviewer.getFirstname()%>  <%=reviewer.getLastname()%>" style="background-color: white" readonly>
+										<input type="text" id="prefix" name="prefix" class="form-control data" value="<%=reviewer.getPrefix()%> <%=reviewer.getFirstname()%>  <%=reviewer.getLastname()%>" style="background-color: #ffffee" readonly>
 									</div>
 									<div class="col-sm-1">
 										<input type="hidden" id="prefix" name="prefix" class="form-control data" value="<%=reviewer.getPrefix()%>" >
@@ -71,7 +71,7 @@
 								<div class="form-group row">
 									<label class="col-sm-2 col-form-label text-right">อีเมล</label>
 									<div class="col-sm-3">
-										<input type="text" id="student_id" name="student_id" class="form-control data" value="<%=reviewer.getEmail()%>" style="background-color: white" readonly>
+										<input type="text" id="student_id" name="student_id" class="form-control data" value="<%=reviewer.getEmail()%>" style="background-color: #ffffee" readonly>
 									</div>
 								</div>
 																		
@@ -79,35 +79,35 @@
 									<label class="col-sm-2 col-form-label text-right">คณะ
 									</label>
 									<div class="col-sm-3">
-										<input type="text" id="faculty" name="faculty" class="form-control data" value="<%=reviewer.getFaculty()%>" style="background-color: white" readonly>
+										<input type="text" id="faculty" name="faculty" class="form-control data" value="<%=reviewer.getFaculty()%>" style="background-color: #ffffee" readonly>
 									</div>
 									<label class="col-sm-2 col-form-label text-right">สาขา
 									</label>
 									<div class="col-sm-3">
-										<input type="text" id="major" name="major" class="form-control data" value="<%=reviewer.getMajor()%>" style="background-color: white" readonly>
+										<input type="text" id="major" name="major" class="form-control data" value="<%=reviewer.getMajor()%>" style="background-color: #ffffee" readonly>
 									</div>
 								</div>
 						<%
-							String team_name = null;
+							String projecttype_name = null;
 					
-							if (reviewer.getTeam().getTeam_name() == null) {
-								team_name = "ไม่มีกลุ่ม";
+							if (reviewer.getProjecttype().getProjecttype_name() == null) {
+								projecttype_name = "ไม่มีกลุ่ม";
 							} else {
-								team_name = reviewer.getTeam().getTeam_name();
+								projecttype_name = reviewer.getProjecttype().getProjecttype_name();
 							}
 						%>
 						<div class="form-group row">
 							<label class="col-sm-2 col-form-label text-right">กลุ่ม</label>
 							<div class="col-sm-4">
-								<input type="hidden" id="team_id" name="team_id" class="form-control data" value="<%=reviewer.getTeam().getTeam_id()%>">
-								<input type="text" id="team_name" name="team_name" class="form-control data" value="<%=team_name%>" style="background-color: white" readonly>
+								<input type="hidden" id="projecttype_id" name="projecttype_id" class="form-control data" value="<%=reviewer.getProjecttype().getProjecttype_id()%>">
+								<input type="text" id="projecttype_name" name="projecttype_name" class="form-control data" value="<%=projecttype_name%>" style="background-color: #ffffee" readonly>
 							</div>
 						</div>
 
 						<div class="form-group row">																
 									<label class="col-sm-2 col-form-label text-right">ตำแหน่ง</label>
 									<div class="col-sm-3">								
-										<input type="text" id="position" name="position" class="form-control data" value="<%=reviewer.getPosition()%>" style="background-color: white" readonly>
+										<input type="text" id="position" name="position" class="form-control data" value="<%=reviewer.getPosition()%>" style="background-color: #ffffee" readonly>
 									</div>					
 								</div>
 																																						
@@ -125,7 +125,7 @@
 			<thead class="table-info" align="center">
 				<tr>
 					<th width="70">ลำดับ</th>
-					<th width="190">วันเวลาประเมิน</th>
+					<th width="200">วันเวลาประเมิน</th>
 					<th>ชื่อโครงงาน/สิ่งประดิษฐ์</th>
 					<th width="250">โรงเรียน</th>
 					<th width="95">รวมคะแนน</th>
@@ -138,26 +138,32 @@
 
 			<%
 				for (int i = 0 ; i < listreviews.size() ; i++ ) {
+					
 					int num = i + 1 ;
 					
 					String project_id = listreviews.get(i).getProject().getProject_id() ;
 					
 					SummaryResultManager summaryResultManager = new SummaryResultManager();
 					
-					List<StudentProject> studentProjectList = summaryResultManager.getListStudentProjectByProjectID(project_id);
+					List<Student> studentList = summaryResultManager.getListStudentProjectByProjectID(project_id);
 			%>
 			
 			<%
 				if (reviewer != null && listreviews.get(i).getProject().getState_project().equals(1)) {
+					
+					String fmt_expreviewdate = new SimpleDateFormat("dd MMM yyyy", new Locale("th", "TH")).format(listreviews.get(i).getReviewdate());
+					String fmt_expreviewtime = new SimpleDateFormat("HH:mm").format(listreviews.get(i).getReviewdate()); 
+					
+					
 			%>
 			
 			<tbody align="center">
 				<tr>
 					<td><%=listreviews.get(i).getProject().getProject_id()%></td>
-					<td><%=listreviews.get(i).getReviewdate()%></td>
+					<td><%=fmt_expreviewdate%> เวลา <%=fmt_expreviewtime%> น.</td>
 					<td align="left"><%=listreviews.get(i).getProject().getProjectname()%></td>
-					<% for (StudentProject studentProject : studentProjectList) { %>
-					<td align="center"><%=studentProject.getStudent().getSchool().getSchool_name()%></td>
+					<% for (Student student : studentList) { %>
+					<td align="center"><%=student.getSchool().getSchool_name()%></td>
 					<% } %>
 					<td><%=listreviews.get(i).getTotalscore()%></td>
 					<% if (num == 1) { %>
@@ -182,19 +188,22 @@
 				<%
 					}
 				%>
-				
-				
+						
 				<%
 					if (reviewer != null &&  listreviews.get(i).getProject().getState_project().equals(2) ) {
+						
+						String fmt_expreviewdate = new SimpleDateFormat("dd MMM yyyy", new Locale("th", "TH")).format(listreviews.get(i).getReviewdate());
+						String fmt_expreviewtime = new SimpleDateFormat("HH:mm").format(listreviews.get(i).getReviewdate()); 
+						
 				%>
 			
 			<tbody align="center">
 				<tr>
 					<td><%=listreviews.get(i).getProject().getProject_id()%></td>
-					<td><%=listreviews.get(i).getReviewdate()%></td>
+					<td><%=fmt_expreviewdate%> เวลา <%=fmt_expreviewtime%> น.</td>
 					<td align="left"><%=listreviews.get(i).getProject().getProjectname()%></td>
-					<% for (StudentProject studentProject : studentProjectList) { %>
-					<td align="center"><%=studentProject.getStudent().getSchool().getSchool_name()%></td>
+					<% for (Student student : studentList) { %>
+					<td align="center"><%=student.getSchool().getSchool_name()%></td>
 					<% } %>
 					<td><%=listreviews.get(i).getTotalscore()%></td>
 					<% if (num == 1) { %>
@@ -219,19 +228,22 @@
 				<%
 					}
 				%>
-				
 				
 				<%
 					if (reviewer != null &&  listreviews.get(i).getProject().getState_project().equals(3)) {
+						
+						String fmt_expreviewdate = new SimpleDateFormat("dd MMM yyyy", new Locale("th", "TH")).format(listreviews.get(i).getReviewdate());
+						String fmt_expreviewtime = new SimpleDateFormat("HH:mm").format(listreviews.get(i).getReviewdate()); 
+						
 				%>
 			
 			<tbody align="center">
 				<tr>
 					<td><%=listreviews.get(i).getProject().getProject_id()%></td>
-					<td><%=listreviews.get(i).getReviewdate()%></td>
+					<td><%=fmt_expreviewdate%> เวลา <%=fmt_expreviewtime%> น.</td>
 					<td align="left"><%=listreviews.get(i).getProject().getProjectname()%></td>
-					<% for (StudentProject studentProject : studentProjectList) { %>
-					<td align="center"><%=studentProject.getStudent().getSchool().getSchool_name()%></td>
+					<% for (Student student : studentList) { %>
+					<td align="center"><%=student.getSchool().getSchool_name()%></td>
 					<% } %>
 					<td><%=listreviews.get(i).getTotalscore()%></td>
 					<% if (num == 1) { %>
@@ -257,14 +269,9 @@
 					}
 				%>
 				
-				
-				
-				
 				<%
 					}
 				%>
-				
-				  
 				  
 				<%
 					} else {

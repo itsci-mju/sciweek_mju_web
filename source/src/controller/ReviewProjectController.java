@@ -1,9 +1,6 @@
 package controller;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -35,22 +32,18 @@ public class ReviewProjectController {
 			String reviews_id = request.getParameter("reviews_id");
 			ReviewProjectManager reviewProjectManager = new ReviewProjectManager();
 			AnnounceResultManager announceResultManager = new AnnounceResultManager(); 
-			Report report = reviewProjectManager.getReportByProjectID(project_id);
-			Reviews reviews = reviewProjectManager.getReviewsByReviewID(reviews_id);
-			StudentProject sproject = reviewProjectManager.getStudentProjectByID(project_id);
-			List<StudentProject> listsproject = reviewProjectManager.getListScienceProject(project_id);
+			Reviews reviews = reviewProjectManager.getReviewsByReviewID(reviews_id);		
+			Student student = reviewProjectManager.getStudentProjectByID(project_id);
 			Question question = reviewProjectManager.getQuestion();
 			List<Question> listquestion = reviewProjectManager.getListQuestion();
-			Years years = announceResultManager.getDATE();
+			Schedules schedules = announceResultManager.getDATE();
 			ModelAndView mav = new ModelAndView("ReviewProject");
-			session.setAttribute("report", report);
 			mav.addObject("reviews", reviews);
 			mav.addObject("reviewer", reviewer);
 			mav.addObject("question", question);
 			mav.addObject("listquestion", listquestion);
-			mav.addObject("sproject", sproject);
-			mav.addObject("listsproject", listsproject);
-			mav.addObject("years", years);
+			mav.addObject("student", student);
+			mav.addObject("schedules", schedules);
 			return mav;
 		} else {
 			ModelAndView mav = new ModelAndView("LoginPage");
@@ -78,20 +71,15 @@ public class ReviewProjectController {
 		Integer state_project = Integer.parseInt(request.getParameter("state_project"));
 		
 		if (state_project == 1) { 
-			
-			Date dd = new Date();
-		    Calendar c1 = Calendar.getInstance();
-		    c1.setTime(dd);
-		    c1.add(Calendar.YEAR,543);
-		    dd = c1.getTime();
-		    String date1 = new SimpleDateFormat("ddMMyyyyHHmmss").format(dd);
-
+		    
 			ReviewProjectManager reviewProjectManager = new ReviewProjectManager();
 			
-
+			int id = reviewProjectManager.getMaxReview();
+			String report_id = String.valueOf(id);
+			
 			Reviews reviews = new Reviews();
 			
-			reviews.setReviews_id(date1);
+			reviews.setReviews_id(report_id);
 			reviews.setComments(request.getParameter("comments"));
 			reviews.setReviewer(reviewer);
 			reviews.setProject(project);
@@ -110,8 +98,6 @@ public class ReviewProjectController {
 				answer.setAnswer(answers);
 				answer.setQuestion(new Question(questionId));
 				answer.setReview(reviews);
-				answer.setReviewer(reviewer);
-				answer.setProject(project);
 				reviewProjectManager.isAnswerReview(answer);
 			}
 	
@@ -143,20 +129,17 @@ public class ReviewProjectController {
 				answer.setAnswer(answers);
 				answer.setQuestion(new Question(questionId));
 				answer.setReview(reviews);
-				answer.setReviewer(reviewer);
-				answer.setProject(project);
 				reviewProjectManager.isAnswerReview(answer);
 				
 			}
-		
+	
 		}
 		
-
 		if (statusresult) {
-			int team_id = Integer.parseInt(request.getParameter("team_id"));
+			int projecttype_id = Integer.parseInt(request.getParameter("projecttype_id"));
 			int reviewer_id = Integer.parseInt(request.getParameter("reviewer_id"));
 			ListScienceProjectManager listScienceProjectManager = new ListScienceProjectManager();
-			List<StudentProject> studentProjectList = listScienceProjectManager.getListScienceProjectByTeamID(team_id);
+			List<Project> projectList = listScienceProjectManager.getListScienceProjectByTeamID(projecttype_id);
 			List<ProjectResponse> projectResponseList = listScienceProjectManager.getListProjectByReviewerID(reviewer_id);
 			
 			List<ReviewerResponse> reviewerResponseList = new ArrayList<>();
@@ -174,13 +157,13 @@ public class ReviewProjectController {
 				}
 			}
 			AnnounceResultManager announceResultManager = new AnnounceResultManager();
-			Years years = announceResultManager.getDATE();
+			Schedules schedules = announceResultManager.getDATE();
 			ModelAndView mav = new ModelAndView("ListScienceProject");
 			mav.addObject("msg", "ประเมินสำเร็จ");
-			mav.addObject("studentProjectList", studentProjectList);
+			mav.addObject("projectList", projectList);
 			mav.addObject("reviewerResponseList", reviewerResponseList);
 			mav.addObject("projectResponseList", projectResponseList);
-			mav.addObject("years", years);
+			mav.addObject("schedules", schedules);
 			return mav;
 		} else {
 			ModelAndView mav = new ModelAndView("ReviewProject");

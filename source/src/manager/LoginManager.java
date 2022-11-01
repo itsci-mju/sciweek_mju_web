@@ -4,8 +4,6 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.List;
-import java.util.Vector;
 
 import bean.*;
 import resultset.ResultSetToClass;
@@ -23,10 +21,12 @@ public class LoginManager {
 
 		try {
 			stmt = con.createStatement();
-			String sql = "SELECT * "
-					+ "FROM student "
-					+ "JOIN school ON student.school_id = school.school_id "
-					+ "WHERE email = '" + student.getEmail() + "' and password = '" + student.getPassword() + "'";
+			String sql = " SELECT * FROM student "
+					+ " JOIN school ON student.school_id = school.school_id "
+					+ " JOIN project ON student.project_id = project.project_id "
+					+ " JOIN projecttype ON project.projecttype_id = projecttype.projecttype_id "
+					+ " JOIN advisor ON project.advisor_id = advisor.advisor_id "
+					+ " WHERE student.email = '" + student.getEmail() + "' and student.password = '" + student.getPassword() + "'";
 			ResultSet rs = stmt.executeQuery(sql);
 			if (rs.next() && rs.getRow() == 1) {
 				stu = resultSetToClass.setResultSetToStudent(rs);
@@ -51,8 +51,8 @@ public class LoginManager {
 		try {
 			stmt = con.createStatement();
 			String sql = "SELECT * FROM reviewer "
-					+ "LEFT JOIN team ON reviewer.team_id = team.team_id "
-					+ "WHERE email = '" + reviewer.getEmail() + "' and password = '" + reviewer.getPassword() + "'";
+					+ "LEFT JOIN projecttype ON reviewer.projecttype_id = projecttype.projecttype_id "
+					+ "WHERE reviewer.email = '" + reviewer.getEmail() + "' and reviewer.password = '" + reviewer.getPassword() + "'";
 			ResultSet rs = stmt.executeQuery(sql);
 			if (rs.next() && rs.getRow() == 1) {
 				rev = resultSetToClass.setResultSetToReviewer(rs);
@@ -76,7 +76,7 @@ public class LoginManager {
 
 		try {
 			stmt = con.createStatement();
-			String sql = "SELECT * FROM admin WHERE email = '" + admin.getEmail() + "' and password = '" + admin.getPassword() + "'";
+			String sql = "SELECT * FROM admin WHERE admin.email = '" + admin.getEmail() + "' and admin.password = '" + admin.getPassword() + "'";
 			ResultSet rs = stmt.executeQuery(sql);
 			if (rs.next() && rs.getRow() == 1) {
 				adm = resultSetToClass.setResultSetToAdmin(rs);
@@ -92,27 +92,25 @@ public class LoginManager {
 		return adm;
 	}
 	
-	public List<StudentProject> getListStudentProjectByStudentID(Integer student_id) throws Exception {
+	public Project getProjectByStudentID(Integer student_id) throws Exception {
 		ConnectionDB condb = new ConnectionDB();
 		Connection con = condb.getConnection();
 		Statement stmt = null;
-		List<StudentProject> studentProjectList = new Vector<>();
+		Project project = new Project();
 
 		try {
 			stmt = con.createStatement();
-			String sql = " SELECT * FROM studentproject"
-					+ "  LEFT JOIN project on  studentproject.project_id = project.project_id"
-					+ "  LEFT JOIN projecttype on project.projecttype_id = projecttype.projecttype_id"
-					+ "  LEFT JOIN team on project.team_id = team.team_id"
-					+ "  LEFT JOIN student on studentproject.student_id = student.student_id"
+			String sql = " SELECT * FROM student"
 					+ "  LEFT JOIN school on student.school_id = school.school_id"
-					+ "  LEFT JOIN advisor on studentproject.advisor_id = advisor.advisor_id  "
-					+ "  WHERE studentproject.student_id = '"+ student_id +"' ";
+					+ "  LEFT JOIN project on  student.project_id = project.project_id"
+					+ "  LEFT JOIN projecttype on project.projecttype_id = projecttype.projecttype_id"
+					+ "  LEFT JOIN advisor on project.advisor_id = advisor.advisor_id  "
+					+ "  WHERE student.student_id = '"+ student_id +"' ";
 			ResultSet rs = stmt.executeQuery(sql);
 			if (rs.next() && rs.getRow() == 1) {
-				studentProjectList.add(resultSetToClass.setResultSetToStudentProject(rs));
+				project = resultSetToClass.setResultSetToProject(rs);
 			} else {
-				studentProjectList = null;
+				project = null;
 			}
 			con.close();
 			stmt.close();
@@ -120,7 +118,7 @@ public class LoginManager {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		return studentProjectList;
+		return project;
 	}
 	
 	public Report getReportByProjectID(String project_id) throws Exception {
@@ -134,7 +132,7 @@ public class LoginManager {
 			String sql = " SELECT * FROM report " 
 					+ "  LEFT JOIN project on  report.project_id = project.project_id"
 					+ "  LEFT JOIN projecttype on project.projecttype_id = projecttype.projecttype_id"
-					+ "  LEFT JOIN team on project.team_id = team.team_id" 
+					+ "  LEFT JOIN advisor on project.advisor_id = advisor.advisor_id  "
 					+ "  WHERE report.project_id = '" + project_id + "' ";
 			ResultSet rs = stmt.executeQuery(sql);
 			if (rs.next() && rs.getRow() == 1) {

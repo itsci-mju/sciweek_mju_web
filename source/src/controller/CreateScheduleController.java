@@ -61,7 +61,7 @@ public class CreateScheduleController {
 		val fmt_expreviewdate =  simpleDateFormat.format(d_expreviewdate);
 		val fmt_announcedate =  simpleDateFormat.format(d_announcedate);
 
-		Years years = new Years();
+		Schedules schedules = new Schedules();
 		
 		Calendar cal = Calendar.getInstance();
 		int presentyears = cal.get(Calendar.YEAR);
@@ -79,18 +79,18 @@ public class CreateScheduleController {
 		System.out.println(ts_expreviewdate);
 		System.out.println(ts_announcedate);
 		
-		years.setYears(presentyears);
-		years.setUploaddate(ts_uploaddate);
-		years.setExpuploaddate(ts_expuploaddate);
-		years.setReviewdate(ts_reviewdate);
-		years.setExpreviewdate(ts_expreviewdate);
-		years.setAnnouncedate(ts_announcedate);
+		schedules.setYears(presentyears);
+		schedules.setUploaddate(ts_uploaddate);
+		schedules.setExpuploaddate(ts_expuploaddate);
+		schedules.setReviewdate(ts_reviewdate);
+		schedules.setExpreviewdate(ts_expreviewdate);
+		schedules.setAnnouncedate(ts_announcedate);
 	
-		boolean statusresult = createScheduleManager.isCreateSchedule(years);
+		boolean statusresult = createScheduleManager.isCreateSchedule(schedules);
 
 		if (statusresult) {
-			ModelAndView mav = new ModelAndView("ViewScheduleDetail");
-			mav.addObject("years",years);
+			ModelAndView mav = new ModelAndView("Index");
+			mav.addObject("schedules",schedules);
 			mav.addObject("msg", "สร้างกำหนดการสำเร็จ");
 			return mav;
 		} else {

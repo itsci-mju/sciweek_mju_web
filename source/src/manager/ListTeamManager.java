@@ -7,7 +7,7 @@ import java.sql.Statement;
 import java.util.List;
 import java.util.Vector;
 
-import bean.Team;
+import bean.ProjectType;
 import resultset.ResultSetToClass;
 import util.ConnectionDB;
 
@@ -15,23 +15,21 @@ public class ListTeamManager {
 	
 	ResultSetToClass resultSetToClass = new ResultSetToClass();
 	
-	public List<Team> getListTeam() {
+	public List<ProjectType> getListProjectType() throws Exception {
 		ConnectionDB condb = new ConnectionDB();
 		Connection con = condb.getConnection();
 		Statement stmt = null;
-		List<Team> listteam = new Vector<>();
+		List<ProjectType> projectTypeList = new Vector<>();
 		
 		try {
 			stmt = con.createStatement();
-			String sql = "SELECT * FROM team ";
+			String sql = "SELECT * FROM projecttype ";
 			ResultSet rs = stmt.executeQuery(sql);
 
 			while (rs.next()) {	
-				Team team = new Team();
-				team.setTeam_id(rs.getInt("team_id"));
-				team.setTeam_name(rs.getString("team_name"));	
-			
-				listteam.add(team);
+	
+			projectTypeList.add(resultSetToClass.setResultSetToProjectType(rs));
+				
 			}
 
 			con.close();
@@ -41,7 +39,7 @@ public class ListTeamManager {
 			System.out.println("catch");
 			e.printStackTrace();
 		}
-		return listteam;
+		return projectTypeList;
 	}
 	
 }

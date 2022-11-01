@@ -28,7 +28,7 @@ public class ViewCommentsManager {
 					+ "  LEFT JOIN reviewer ON reviews.reviewer_id = reviewer.reviewer_id"
 					+ "  LEFT JOIN project ON reviews.project_id = project.project_id"
 					+ "  LEFT JOIN projecttype ON project.projecttype_id = projecttype.projecttype_id"
-					+ "  LEFT JOIN team ON project.team_id = team.team_id"
+					+ "  LEFT JOIN advisor ON project.advisor_id = advisor.advisor_id"
 					+ "  WHERE reviews.project_id = '"+ project_id +"' ";
 			ResultSet rs = stmt.executeQuery(sql);
 

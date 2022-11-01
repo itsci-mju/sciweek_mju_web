@@ -4,10 +4,8 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.List;
-import java.util.Vector;
 
-import bean.StudentProject;
+import bean.Project;
 import resultset.ResultSetToClass;
 import util.ConnectionDB;
 
@@ -15,26 +13,26 @@ public class ListProjectManager {
 	
 	ResultSetToClass resultSetToClass = new ResultSetToClass();
 
-	public List<StudentProject> getListStudentProject(Integer sid) throws Exception {
+	public Project getStudentProjectByID(Integer student_id) throws Exception {
 		ConnectionDB condb = new ConnectionDB();
 		Connection con = condb.getConnection();
 		Statement stmt = null;
-		List<StudentProject> listsproject = new Vector<>();
+		Project project = new Project();
 
 		try {
 			stmt = con.createStatement();
-			String sql = " SELECT * " + "  FROM studentproject"
-					+ "  LEFT JOIN project on  studentproject.project_id = project.project_id"
-					+ "  LEFT JOIN projecttype on project.projecttype_id = projecttype.projecttype_id"
-					+ "  LEFT JOIN team on project.team_id = team.team_id"
-					+ "  LEFT JOIN student on studentproject.student_id = student.student_id"
+			String sql = " SELECT * FROM student"
 					+ "  LEFT JOIN school on student.school_id = school.school_id"
-					+ "  LEFT JOIN advisor on studentproject.advisor_id = advisor.advisor_id  "
-					+ "  WHERE student.student_id = '"+ sid +"'";
+					+ "  LEFT JOIN project on  student.project_id = project.project_id"
+					+ "  LEFT JOIN projecttype on project.projecttype_id = projecttype.projecttype_id"
+					+ "  LEFT JOIN advisor on project.advisor_id = advisor.advisor_id  "
+					+ "  WHERE student.student_id = '"+ student_id +"' ";
 			ResultSet rs = stmt.executeQuery(sql);
 
 			while (rs.next()) {
-				listsproject.add(resultSetToClass.setResultSetToStudentProject(rs));
+				
+				project = resultSetToClass.setResultSetToProject(rs);
+				
 			}
 
 			con.close();
@@ -44,7 +42,7 @@ public class ListProjectManager {
 			System.out.println("catch");
 			e.printStackTrace();
 		}
-		return listsproject;
+		return project;
 	}
 
 }

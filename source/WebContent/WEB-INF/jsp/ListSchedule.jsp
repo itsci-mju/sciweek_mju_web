@@ -4,7 +4,7 @@
 <%@ page import="java.util.*,manager.*,bean.*,java.text.*"%>
 <%
 	Admin admin = null;
-	List<Years> yearsList = new Vector<>();
+	List<Schedules> schedulesList = new Vector<>();
 
 	try {
 		admin = (Admin) session.getAttribute("admin");
@@ -13,11 +13,10 @@
 	}
 	
 	try {
-		yearsList = (List<Years>) request.getAttribute("yearsList");
+		schedulesList = (List<Schedules>) request.getAttribute("schedulesList");
 	} catch (Exception e) {
 		e.printStackTrace();
 	}
-	
 %>
 <!DOCTYPE html>
 <html>
@@ -37,7 +36,7 @@
 <link href='https://fonts.googleapis.com/css?family=Kanit' rel='stylesheet' type='text/css'>
 <link rel="stylesheet" href="./css/web_css.css">
 </head>
-<body style="background-image: url('./image/hero-bg.png')">
+<body  style="background-image: url('./image/hero-bg.png') ; background-repeat: no-repeat ; background-attachment: fixed ; background-size: 100% 100%">
 
 	<jsp:include page="common/navbar.jsp"></jsp:include>
 
@@ -54,11 +53,14 @@
 					<i class="fa-solid fa-calendar-days">&nbsp;</i>สร้างกำหนดการ
 				</button>
 			</div>
+			<hr class="colorgraph">
 		</div>						
 
-		<hr class="colorgraph">
+		<div class="alert alert-danger" role="alert" style="text-align:center; font-weight:bold;">
+			ชี้แจ้ง : กรุณาสร้างกำหนดการ
+		</div>
 		
-		<table class="table table-bordered  table-hover" id=myTable  style="width: 40%">
+		<table class="table table-bordered  table-hover" id=myTable  style="width: 40%; align-self: center;">
 			<thead class="table-info" align="center">
 				<tr>
 					<th width="100">ปี</th>			
@@ -67,14 +69,14 @@
 			</thead>
 			<tbody align="center">
 				<%
-					if (yearsList.size() != 0) {
+					if (schedulesList.size() != 0) {
 				%>
 				<%
-					for (Years years : yearsList) {
+					for (Schedules schedule : schedulesList) {
 				%>
 				<tr>
-					<td><%=years.getYears()%></td>
-					<td><a href="ViewScheduleDetail?years=<%=years.getYears()%>">
+					<td><%=schedule.getYears()%></td>
+					<td><a href="ViewScheduleDetail?years=<%=schedule.getYears()%>">
 							<button name="button" class="btn btn-warning">
 								<i class="fa fa-eye"></i>&nbsp;ดูรายละเอียด
 							</button>

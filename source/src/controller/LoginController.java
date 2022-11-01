@@ -3,7 +3,6 @@ package controller;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-import java.util.Vector;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -21,11 +20,11 @@ import manager.ViewScheduleDetailManager;
 import model.ProjectResponse;
 import model.ReviewerResponse;
 import bean.Admin;
+import bean.Project;
 import bean.Report;
 import bean.Reviewer;
 import bean.Student;
-import bean.StudentProject;
-import bean.Years;
+import bean.Schedules;
 
 @Controller
 public class LoginController {
@@ -40,7 +39,7 @@ public class LoginController {
 		if (student != null) {	
 			
 			Report report = new Report();
-			List<StudentProject> listsproject = new Vector<>();
+			Project project = new Project();
 			
 			Integer student_id = student.getStudent_id();
 			String video = null ;
@@ -56,17 +55,16 @@ public class LoginController {
 			int presentyears = cal.get(Calendar.YEAR);
 			
 			ViewScheduleDetailManager viewScheduleDetailManager = new ViewScheduleDetailManager();
-			Years years = viewScheduleDetailManager.getYearsByID(presentyears);
 			
-			listsproject = loginManager.getListStudentProjectByStudentID(student_id);
+			Schedules schedules = viewScheduleDetailManager.getSchedulesByID(presentyears);
+			
+			project = loginManager.getProjectByStudentID(student_id);
+			
+			if (project != null) {
 				
-			for (StudentProject studentProject : listsproject) {		
-				
-				project_id = studentProject.getProject().getProject_id();	
-				System.out.println(project_id);
+				project_id = project.getProject_id();	
 					
-				video = studentProject.getProject().getVideo();	
-				System.out.println(video);
+				video = project.getVideo();	
 				
 				report = loginManager.getReportByProjectID(project_id);	
 				
@@ -89,13 +87,11 @@ public class LoginController {
 				}
 	
 			}
-			
+
 			request.setAttribute("errors", errors);
-			request.setAttribute("years", years);
+			request.setAttribute("schedules", schedules);
 			session.setAttribute("student", student);
 		} 
-		
-
 		session.setAttribute("student", student);
 		session.setAttribute("reviewer", reviewer);
 		session.setAttribute("admin", admin);
@@ -109,6 +105,7 @@ public class LoginController {
 
 	@RequestMapping(value = "/verifylogin", method = RequestMethod.POST)
 	public ModelAndView verifylogin(HttpServletRequest request, Model model, HttpSession session) throws Exception {
+		
 		String email = request.getParameter("email");
 		String password = request.getParameter("password");
 
@@ -130,12 +127,15 @@ public class LoginController {
 		admin = loginManager.doLoginAdmin(admin);
 
 		if (student == null && reviewer == null && admin == null) {
+			
 			ModelAndView mav = new ModelAndView("LoginPage");
 			mav.addObject("error_msg", "กรุณาอีเมลหรือรหัสผ่านให้ถูกต้อง");
 			return mav;
+			
 		} else if (student != null) {	
+			
 			Report report = new Report();
-			List<StudentProject> listsproject = new Vector<>();
+			Project project = new Project();
 			
 			Integer student_id = student.getStudent_id();
 			String video = null ;
@@ -151,17 +151,18 @@ public class LoginController {
 			int presentyears = cal.get(Calendar.YEAR);
 			
 			ViewScheduleDetailManager viewScheduleDetailManager = new ViewScheduleDetailManager();
-			Years years = viewScheduleDetailManager.getYearsByID(presentyears);
 			
-			listsproject = loginManager.getListStudentProjectByStudentID(student_id);
+			Schedules schedules = viewScheduleDetailManager.getSchedulesByID(presentyears);
+			
+			project = loginManager.getProjectByStudentID(student_id);
+			
+			if (project != null) {
 				
-			for (StudentProject studentProject : listsproject) {		
-				
-				project_id = studentProject.getProject().getProject_id();	
+				project_id = project.getProject_id();	
 					
-				video = studentProject.getProject().getVideo();	
+				video = project.getVideo();	
 				
-				report = loginManager.getReportByProjectID(project_id);
+				report = loginManager.getReportByProjectID(project_id);	
 				
 				if (report != null) {
 					report_id = report.getReport_id();	
@@ -182,18 +183,19 @@ public class LoginController {
 				}
 	
 			}
-			
 			request.setAttribute("errors", errors);
-			request.setAttribute("years", years);
-			session.setAttribute("student", student);
+			request.setAttribute("schedules", schedules);
+			session.setAttribute("student", student);	
+			
 		} else if (reviewer != null) {
-			int team_id = reviewer.getTeam().getTeam_id();
+			
+			int projecttype_id = reviewer.getProjecttype().getProjecttype_id();
 			int reviewer_id = reviewer.getReviewer_id();
 			ListScienceProjectManager listScienceProjectManager = new ListScienceProjectManager();
 			AnnounceResultManager announceResultManager = new AnnounceResultManager();
 			List<ProjectResponse> projectResponseList = listScienceProjectManager
 					.getListProjectByReviewerID(reviewer_id);
-			List<StudentProject> studentProjectList = listScienceProjectManager.getListScienceProjectByTeamID(team_id);
+			List<Project> projectList = listScienceProjectManager.getListScienceProjectByTeamID(projecttype_id);
 
 			List<ReviewerResponse> reviewerResponseList = new ArrayList<>();
 			for (ProjectResponse reviews : projectResponseList) {
@@ -210,17 +212,17 @@ public class LoginController {
 				}
 			}
 			
-			Years years = announceResultManager.getDATE();
+			Schedules schedules = announceResultManager.getDATE();
 			
 			ModelAndView mav = new ModelAndView("ListScienceProject");
 			session.setAttribute("reviewer", reviewer);
 			mav.addObject("projectResponseList", projectResponseList);
 			mav.addObject("reviewerResponseList", reviewerResponseList);
-			mav.addObject("studentProjectList", studentProjectList);
-			mav.addObject("years", years);
+			mav.addObject("projectList", projectList);
+			mav.addObject("schedules", schedules);
 			return mav;
 		} else {
-			ModelAndView mav = new ModelAndView("CreateSchedule");
+			ModelAndView mav = new ModelAndView("Index");
 			session.setAttribute("admin", admin);
 			return mav;
 		}
@@ -228,7 +230,6 @@ public class LoginController {
 		return mav;
 	}
 	
-
 	@RequestMapping(value = "/verifylogout", method = RequestMethod.GET)
 	public ModelAndView verifylogout(HttpServletRequest request, HttpSession session) {
 		ModelAndView mav = new ModelAndView("Index");

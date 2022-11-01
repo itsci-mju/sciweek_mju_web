@@ -5,6 +5,8 @@ import java.util.*;
 import lombok.*;
 import manager.ImportExcelManager;
 import manager.ListStudentProjectManager;
+import manager.ListTeamManager;
+import manager.ViewTeamDetailManager;
 import bean.*;
 import util.*;
 //import manager.*;
@@ -110,17 +112,7 @@ public class ImportExcelController {
 							school.setSchool_id(school_id);
 							school.setSchool_name(school_name);
 							school.setSchool_address(school_address);
-							
-							student.setStudent_id(student_id);
-							student.setPrefix(prefix);
-							student.setFirstname(firstname);
-							student.setLastname(lastname);
-							student.setGrade(grade);
-							student.setMobileno(mobileno);
-							student.setEmail(email);
-							student.setPassword(password);
-							student.setSchool(school);			
-
+									
 							advisor.setAdvisor_id(advisor_id);
 							advisor.setPrefix(advprefix);
 							advisor.setFirstname(advfirstname);
@@ -136,8 +128,21 @@ public class ImportExcelController {
 							project.setVideo(video);
 							project.setAward(award);
 							project.setAvgscore(avgscore);
+							project.setStatus_project(0);
 							project.setState_project(1);
 							project.setProjecttype(projecttype);
+							project.setAdvisor(advisor);
+							
+							student.setStudent_id(student_id);
+							student.setPrefix(prefix);
+							student.setFirstname(firstname);
+							student.setLastname(lastname);
+							student.setGrade(grade);
+							student.setMobileno(mobileno);
+							student.setEmail(email);
+							student.setPassword(password);
+							student.setSchool(school);		
+							student.setProject(project);
 														
 							School schoolTemp = importExcelManager.getSchoolByID(school_id);
 							Student studentTemp = importExcelManager.getStudentByID(student_id);
@@ -149,8 +154,8 @@ public class ImportExcelController {
 								importExcelManager.isImportSchool(school);
 							};
 							
-							if (studentTemp.getStudent_id() != student_id) {
-								importExcelManager.isImportStudent(student);
+							if (advisorTemp.getAdvisor_id() != advisor_id) {
+								importExcelManager.isImportAdvisor(advisor);
 							};
 							
 							if (projectTypeTemp.getProjecttype_id() != projecttype_id) {
@@ -161,12 +166,10 @@ public class ImportExcelController {
 								importExcelManager.isImportProject(project);
 							};
 							
-							if (advisorTemp.getAdvisor_id() != advisor_id) {
-								importExcelManager.isImportAdvisor(advisor);
+							if (studentTemp.getStudent_id() != student_id) {
+								importExcelManager.isImportStudent(student);
 							};
-					
-							importExcelManager.isImportStudentData(student, project, advisor);
-							
+																
 						}
 
 					} catch (Exception e) {
@@ -178,9 +181,103 @@ public class ImportExcelController {
 				}
 			}
 			ListStudentProjectManager vpjm = new ListStudentProjectManager();
-			List<StudentProject> listsproject = vpjm.getListStudentProject();
+			List<Project> listproject = vpjm.getListStudentProject();
 			ModelAndView mav = new ModelAndView("ListStudentProject");
-			mav.addObject("listsproject", listsproject);
+			mav.addObject("listproject", listproject);
+			return mav;
+		} else {
+			ModelAndView mav = new ModelAndView("LoginPage");
+			mav.addObject("msg", "กรุณาเข้าสู่ระบบใหม่อีกครั้ง!!!!");
+			session.removeAttribute("admin");
+			return mav;
+		}
+
+	}
+	
+	@RequestMapping(value = "/ImportReviewer", method = RequestMethod.POST)
+	public ModelAndView isImportReviewer(HttpSession session, HttpServletRequest request, HttpServletResponse response)throws Exception {
+		Admin admin = (Admin) session.getAttribute("admin");
+		if (admin != null) {
+			ImportExcelManager importExcelManager = new ImportExcelManager();
+			ListTeamManager listTeamManager = new ListTeamManager();
+			ViewTeamDetailManager viewTeamDetailManager = new ViewTeamDetailManager();
+			
+			if (ServletFileUpload.isMultipartContent(request)) {
+				request.setCharacterEncoding("UTF-8");		
+				try {
+//					ImportExcelManager importExcelManager = new ImportExcelManager();
+					
+					List<FileItem> multiFileItem = new ServletFileUpload(new DiskFileItemFactory()).parseRequest(request);
+
+					val fileName = multiFileItem.get(0).getName();
+
+					System.out.println("fileName : " + fileName);
+					
+					String path = request.getSession().getServletContext().getRealPath("/") + "WEB-INF/resources/excels";
+					
+					val file = path + File.separator + System.currentTimeMillis() +"_"+ fileName;
+					
+					multiFileItem.get(0).write(new File(file));
+
+					ReadWriteExcel readWriteExcel = new ReadWriteExcel();
+					
+					System.out.println(file);
+					
+					try {
+						readWriteExcel.xlRead(file, 0);
+						// System.out.println(readWriteExcel.getxRows()); 
+						String[][] data = readWriteExcel.getData();
+						// System.out.println(data[0][0]); 
+						for (int i = 1; i < data.length; i++) {
+
+							val reviewer_id = Integer.parseInt(data[i][0]);
+							val prefix = data[i][1];
+							val firstname = data[i][2];
+							val lastname = data[i][3];
+							val faculty = data[i][4];
+							val major = data[i][5];
+							val position = data[i][6];
+							val line = data[i][7];
+							val facebook = data[i][8];
+							val email = data[i][9];
+							val password = data[i][10];
+							val projecttype_id = Integer.parseInt(data[i][11]);
+							
+							ProjectType projecttype = new ProjectType();
+							projecttype.setProjecttype_id(projecttype_id);
+
+							Reviewer reviewer = new Reviewer();
+							reviewer.setReviewer_id(reviewer_id);
+							reviewer.setPrefix(prefix);
+							reviewer.setFirstname(firstname);
+							reviewer.setLastname(lastname);
+							reviewer.setFaculty(faculty);
+							reviewer.setMajor(major);
+							reviewer.setPosition(position);
+							reviewer.setLine(line);
+							reviewer.setFacebook(facebook);
+							reviewer.setEmail(email);
+							reviewer.setPassword(password);
+							reviewer.setProjecttype(projecttype);
+							
+							importExcelManager.isAddReviewer(reviewer);
+
+						}
+
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+			List<ProjectType> projectTypeList = listTeamManager.getListProjectType();
+			List<Reviewer> reviewerList = viewTeamDetailManager.getListReviewer();		
+			ModelAndView mav = new ModelAndView("ListTeam");
+			mav.addObject("projectTypeList", projectTypeList);
+			mav.addObject("reviewerList", reviewerList);
+			mav.addObject("msg", "นำเข้าข้อมูลคณะกรรมการสำเร็จ");
 			return mav;
 		} else {
 			ModelAndView mav = new ModelAndView("LoginPage");

@@ -38,37 +38,23 @@ public class ResultSetToClass {
 		
 		answer.setQuestion(this.setResultSetToQuestion(rs));
 		answer.setReview(this.setResultSetToReview(rs));
-		answer.setReviewer(this.setResultSetToReviewer(rs));
-		answer.setProject(this.setResultSetToProject(rs));
 		
 		return answer;
-	}
-	
-	public Pressrelease setResultSetToPressrelease (ResultSet rs) throws Exception {
-		Pressrelease pressrelease = new Pressrelease();
-		
-		pressrelease.setNewsid(rs.getInt("pressrelease.newsid"));
-		pressrelease.setType(rs.getString("pressrelease.type"));
-		pressrelease.setTitle(rs.getString("pressrelease.title"));		
-		pressrelease.setDetail(rs.getString("pressrelease.detail"));
-		pressrelease.setCreatedate(rs.getTimestamp("pressrelease.createdate"));
-		
-		return pressrelease;
 	}
 	
 	public Project setResultSetToProject (ResultSet rs) throws Exception {
 		Project project = new Project();
 		
 		project.setProject_id(rs.getString("project.project_id"));
-		project.setImportdate(rs.getTimestamp("project.importdate"));
 		project.setProjectname(rs.getString("project.projectname"));		
 		project.setVideo(rs.getString("project.video"));
 		project.setAward(rs.getString("project.award"));
 		project.setAvgscore(rs.getDouble("project.avgscore"));
+		project.setStatus_project(rs.getInt("project.status_project"));
 		project.setState_project(rs.getInt("project.state_project"));
 	
 		project.setProjecttype(this.setResultSetToProjectType(rs));
-		project.setTeam(this.setResultSetToTeam(rs));
+		project.setAdvisor(this.setResultSetToAdvisor(rs));
 		
 		return project;
 	}
@@ -111,7 +97,7 @@ public class ResultSetToClass {
 		reviews.setReviewdate(rs.getTimestamp("reviews.reviewdate"));
 		reviews.setComments(rs.getString("reviews.comments"));
 		reviews.setTotalscore(rs.getDouble("reviews.totalscore"));
-		reviews.setStatus(rs.getString("reviews.status"));
+		reviews.setState(rs.getString("reviews.state"));
 		
 		reviews.setReviewer(this.setResultSetToReviewer(rs));
 		reviews.setProject(this.setResultSetToProject(rs));
@@ -134,7 +120,7 @@ public class ResultSetToClass {
 		reviewer.setEmail(rs.getString("reviewer.email"));
 		reviewer.setPassword(rs.getString("reviewer.password"));
 		
-		reviewer.setTeam(this.setResultSetToTeam(rs));
+		reviewer.setProjecttype(this.setResultSetToProjectType(rs));
 		
 		return reviewer;
 	}
@@ -153,7 +139,6 @@ public class ResultSetToClass {
 		Student student = new Student();
 		
 		student.setStudent_id(rs.getInt("student.student_id"));
-		student.setImportdate(rs.getTimestamp("student.importdate"));
 		student.setPrefix(rs.getString("student.prefix"));
 		student.setFirstname(rs.getString("student.firstname"));
 		student.setLastname(rs.getString("student.lastname"));
@@ -163,41 +148,22 @@ public class ResultSetToClass {
 		student.setPassword(rs.getString("student.password"));	
 		
 		student.setSchool(this.setResultSetToSchool(rs));
+		student.setProject(this.setResultSetToProject(rs));
 		
 		return student;
 	}
 	
-	public StudentProject setResultSetToStudentProject (ResultSet rs) throws Exception {
-		StudentProject studentproject = new StudentProject();
+	public Schedules setResultSetToSchedules (ResultSet rs) throws Exception {
+		Schedules schedules = new Schedules();
 		
-		studentproject.setStudent(this.setResultSetToStudent(rs));
-		studentproject.setProject(this.setResultSetToProject(rs));
-		studentproject.setAdvisor(this.setResultSetToAdvisor(rs));
+		schedules.setYears(rs.getInt("schedules.years"));
+		schedules.setUploaddate(rs.getTimestamp("schedules.uploaddate"));
+		schedules.setExpuploaddate(rs.getTimestamp("schedules.expuploaddate"));
+		schedules.setReviewdate(rs.getTimestamp("schedules.reviewdate"));
+		schedules.setExpreviewdate(rs.getTimestamp("schedules.expreviewdate"));
+		schedules.setAnnouncedate(rs.getTimestamp("schedules.announcedate"));
 			
-		return studentproject;
-	}
-	
-	public Team setResultSetToTeam (ResultSet rs) throws Exception {
-		Team team = new Team();
-		
-		team.setTeam_id(rs.getInt("team.team_id"));
-		team.setTeam_name(rs.getString("team.team_name"));
-			
-		return team;
-	}
-	
-
-	public Years setResultSetToYear (ResultSet rs) throws Exception {
-		Years years = new Years();
-		
-		years.setYears(rs.getInt("years.years"));
-		years.setUploaddate(rs.getTimestamp("years.uploaddate"));
-		years.setExpuploaddate(rs.getTimestamp("years.expuploaddate"));
-		years.setReviewdate(rs.getTimestamp("years.reviewdate"));
-		years.setExpreviewdate(rs.getTimestamp("years.expreviewdate"));
-		years.setAnnouncedate(rs.getTimestamp("years.announcedate"));
-			
-		return years;
+		return schedules;
 	}
 	
 	

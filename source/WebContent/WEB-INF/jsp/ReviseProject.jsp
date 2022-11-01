@@ -4,8 +4,7 @@
 <%
 	Report report = null;
 	Reviewer reviewer = null ;
-	StudentProject sproject = null;
-	List<StudentProject> listsproject = new Vector<>();
+	Student student = null;
 	Reviews reviews = new Reviews();
 	
 	try {
@@ -21,23 +20,17 @@
 	}
 	
 	try {
+		student = (Student)  request.getAttribute("student");
+	} catch (Exception e) {
+
+	}
+	
+	try {
 		report = (Report) session.getAttribute("report");
 	} catch (Exception e) {
 		e.printStackTrace();
 	}
 
-	try {
-		listsproject = (List<StudentProject>) request.getAttribute("listsproject");
-	} catch (Exception e) {
-		e.printStackTrace();
-	}
-	
-	try {
-		sproject = (StudentProject) request.getAttribute("sproject");
-		session.setAttribute("key",sproject.getProject().getProject_id());
-	} catch (Exception e) {
-		e.printStackTrace();
-	}
 %>
 <!DOCTYPE html>
 <html>
@@ -60,11 +53,7 @@
 <script type="text/javascript">
 
 	function validateForm(frm) {
-		if (frm.answer.value == "") {
-			alert("<!-- กรุณากรอกคะแนนให้ครบทุกช่อง --> ");
-			return false;
-		}
-	
+		
 		var regexp = /^[ก-์|A-Za-z|0-9| ]{3,250}$/;
 		if (frm.comments.value == "") {
 			alert("<!-- กรุณากรอกคำอธิบาย -->");
@@ -154,7 +143,7 @@
 	}
 		
 </script>
-<body style="background-image: url('./image/hero-bg.png')">
+<body style="background-image: url('./image/hero-bg.png') ; background-repeat: no-repeat ; background-attachment: fixed ; background-size: 100% 100%">
 
 	<jsp:include page="common/navbar.jsp"></jsp:include>
 
@@ -171,31 +160,34 @@
 							<br>
 							
 								<input type="hidden" id="reviewer_id" name="reviewer_id" class="form-control data" value="<%=reviewer.getReviewer_id()%>" >
-								<input type="hidden" id="team_id" name="team_id" class="form-control data" value="<%=reviewer.getTeam().getTeam_id()%>" >
-								<input type="hidden" id="review_id" name="review_id" class="form-control data" value="<%=reviews.getReviews_id()%>" >
+								<input type="hidden" id="projecttype_id" name="projecttype_id" class="form-control data" value="<%=reviewer.getProjecttype().getProjecttype_id()%>" >
+								<input type="hidden" id="reviews_id" name="reviews_id" class="form-control data" value="<%=reviews.getReviews_id()%>" >
 								
 								<div class="form-group row">
 									<label class="col-sm-3 col-form-label text-left">รหัสโครงงานวิทยาศาสตร์</label>
 									<div class="col-sm-3" style="margin-left: -105px">
-										<input type="text" id="project_id" name="project_id" class="form-control data" value="<%=sproject.getProject().getProject_id()%>" readonly>
+										<input type="text" id="project_id" name="project_id" class="form-control data" value="<%=student.getProject().getProject_id()%>" readonly>
 									</div>
 								</div>
 										
 								<div class="form-group row">
 									<label class="col-sm-3 col-form-label text-left">ชื่อโครงงานวิทยาศาสตร์</label>
 									<div class="col-sm-7" style="margin-left: -105px">
-										<input type="text" id="projectname" name="projectname" class="form-control data" value="<%=sproject.getProject().getProjectname()%>" readonly>
+										<input type="text" id="projectname" name="projectname" class="form-control data" value="<%=student.getProject().getProjectname()%>" readonly>
 									</div>
 								</div>
 								
 								<div class="form-group row">
 									<label class="col-sm-2 col-form-label text-right">ชื่อผู้จัดทำ</label>
 									<%
-									for (int i = 0 ; i < listsproject.size() ; i++) {					
-									%>		
+									List<Student> studentList = student.getProject().getStudentList() ;
+							
+									for (int i = 0 ; i < studentList.size() ; i++) {
+																	
+									%>			
 									<div class="col-sm-3 text-left">
-										<input type="hidden" id="student_id" name="student_id" class="form-control data" value="<%=listsproject.get(i).getStudent().getStudent_id()%>">
-										<input type="text" id="studentname" name="studentname" class="form-control data" value="<%=listsproject.get(i).getStudent().getPrefix() +" "+listsproject.get(i).getStudent().getFirstname() +" "+ listsproject.get(i).getStudent().getLastname()%>" readonly>																																
+										<input type="hidden" id="student_id" name="student_id" class="form-control data" value="<%=studentList.get(i).getStudent_id()%>">
+										<input type="text" id="studentname" name="studentname" class="form-control data" value="<%=studentList.get(i).getPrefix() +" "+studentList.get(i).getFirstname() +" "+ studentList.get(i).getLastname()%>" readonly>																																
 									</div>
 									<%
 									}
@@ -205,27 +197,27 @@
 								<div class="form-group row">
 									<label class="col-sm-2 col-form-label text-right">โรงเรียน</label>
 									<div class="col-sm-3">
-										<input type="text" id="schoolname" name="schoolname" class="form-control data" value="<%=sproject.getStudent().getSchool().getSchool_name()%>" readonly>
+										<input type="text" id="schoolname" name="schoolname" class="form-control data" value="<%=student.getSchool().getSchool_name()%>" readonly>
 									</div>
 								</div>
 								
 								<div class="form-group row">
 									<label class="col-sm-2 col-form-label text-right">ที่ปรึกษา</label>
 									<div class="col-sm-3">
-										<input type="text" id="advisorname" name="advisorname" class="form-control data" value="<%=sproject.getAdvisor().getPrefix() +" "+ sproject.getAdvisor().getFirstname() +" "+ sproject.getAdvisor().getLastname()%>" readonly>
+										<input type="text" id="advisorname" name="advisorname" class="form-control data" value="<%=student.getProject().getAdvisor().getPrefix() +" "+ student.getProject().getAdvisor().getFirstname() +" "+ student.getProject().getAdvisor().getLastname()%>" readonly>
 									</div>
 									<label class="col-sm-2 col-form-label text-right">เบอร์โทรศัพท์</label>
 									<div class="col-sm-3">
-										<input type="text" id="advisorno" name="advisorno" class="form-control data" value="<%=sproject.getAdvisor().getMobileno()%>" readonly>
+										<input type="text" id="advisorno" name="advisorno" class="form-control data" value="<%=student.getProject().getAdvisor().getMobileno()%>" readonly>
 									</div>
 								</div>
 								
 							<div class="form-group row">	
 														
 									<label class="col-sm-2 col-form-label text-right">ไฟล์วีดิโอ</label>
-									<% if (sproject.getProject().getVideo() != null &&  !sproject.getProject().getVideo().equals("-")) {%>
+									<% if (student.getProject().getVideo() != null &&  !student.getProject().getVideo().equals("-")) {%>
 										<div class="col-sm-4">
-											<a href="<%=sproject.getProject().getVideo()%>" target="_blank" class="btn btn-link" type="button" style="margin-left: -13px; "><i class="fa fa-file-video-o">&nbsp;&nbsp;</i>วิดีโอ</a>
+											<a href="<%=student.getProject().getVideo()%>" target="_blank" class="btn btn-link" type="button" style="margin-left: -13px; "><i class="fa fa-file-video-o">&nbsp;&nbsp;</i>วิดีโอ</a>
 										</div>						
 									<% } else { %>
 										<div class="col-sm-4">
@@ -234,9 +226,9 @@
 									<% } %>
 	
 									<label class="col-sm-2 col-form-label text-right">ไฟล์รายงาน</label>
-									<% if (report.getReportname() != null) { %>
+									<% if (student.getProject().getReport().getReportname() != null) { %>
 										<div class="col-sm-4">							
-											<a href="./report/<%=report.getReportname()%>.pdf" target="_blank" class="btn btn-link" type="button" style="margin-left: -13px ; "><i class="fa-solid fa-file-pdf">&nbsp;&nbsp;</i>เอกสารรายงาน</a>
+											<a href="./report/<%=student.getProject().getReport().getReportname()%>.pdf" target="_blank" class="btn btn-link" type="button" style="margin-left: -13px ; "><i class="fa-solid fa-file-pdf">&nbsp;&nbsp;</i>เอกสารรายงาน</a>
 										</div>
 									<% } else { %>
 										<div class="col-sm-4">
@@ -272,7 +264,13 @@
 									<tr>
 										<td align="center"><%=question.getQuestion_id()%></td>
 										<td><%=question.getQuestion()%></td>
-										<td width="50px"><input type="text" name="answer" id="answer" class="form-control data" style="width: 100px" value="<%=answer.getAnswer()%>" maxlength="5" onkeyup="checkNumber<%=question.getFullscore()%>(this)"> </td>	
+										<% 
+											String readonly = null ;
+											if (question.getFullscore() == 15 && student.getProject().getState_project() == 2) { 
+												readonly = "readonly" ;							
+											}
+										%>
+										<td width="50px"><input type="text" name="answer" id="answer" class="form-control data" style="width: 100px" value="<%=answer.getAnswer()%>" maxlength="5" onkeyup="checkNumber<%=question.getFullscore()%>(this)" required="required" <%=readonly%>> </td>						
 										<td align="center" width="130px">&nbsp;&nbsp;/&nbsp; <%=question.getFullscore()%></td>						
 									</tr>
 								</tbody>

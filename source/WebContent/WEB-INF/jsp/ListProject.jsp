@@ -4,7 +4,7 @@
 <%@ page import="java.util.*,manager.*,bean.*,java.text.*"%>
 <%
 	Student student = null;
- 	List<StudentProject> listsproject = new Vector<>();
+ 	Project project = new Project();
  	
  	try {
  		student = (Student) session.getAttribute("student");
@@ -13,7 +13,7 @@
 	}
 
 	try {
-		listsproject = (List<StudentProject>) request.getAttribute("listsproject");
+		project = (Project) request.getAttribute("project");
 	} catch (Exception e) {
 		e.printStackTrace();
 	}
@@ -37,7 +37,7 @@
 <link href='https://fonts.googleapis.com/css?family=Kanit' rel='stylesheet' type='text/css'>
 <link rel="stylesheet" href="./css/web_css.css">
 </head>
-<body style="background-image: url('./image/hero-bg.png')">
+<body  style="background-image: url('./image/hero-bg.png') ; background-repeat: no-repeat ; background-attachment: fixed ; background-size: 100% 100%">
 <div class="square_box box_three"></div>
 <div class="square_box box_four"></div>
 <jsp:include page="common/navbar.jsp"></jsp:include>
@@ -57,31 +57,22 @@
 			</thead>
 			<tbody >
 				<%
-					if (listsproject != null) {
-				%>
-				<%
-				for (StudentProject studentProject : listsproject) {
-					Project project = studentProject.getProject();	
-				%>
+					if (project.getProject_id() != null) {
+				%>		
 				<tr>
 					<td align="center" ><%=project.getProject_id()%></td>
 					<td><%=project.getProjectname()%></td>
 					<td align="center">
-						<button name="button" class="btn btn-success" 
-							onclick="window.location.href='doViewUploadReport?project_id=<%=project.getProject_id()%>';">
-							<i class="fa-solid fa-cloud-arrow-up"></i>
-						</button>
+						<form action="doViewUploadReport" method="post">
+							<button name="button" class="btn btn-success"><i class="fa-solid fa-cloud-arrow-up"></i></button>
+						</form>
 					</td>
 					<td align="center">
-						<button name="button" class="btn btn-warning" 
-							onclick="window.location.href='ViewProjectDetail?project_id=<%=project.getProject_id()%>';">
-							<i class="fa fa-eye"></i>
-						</button>				
+						<form action="doViewProjectDetail" method="post">
+							<button name="button" class="btn btn-warning"><i class="fa fa-eye"></i></button>
+						</form>				
 					</td>					
 				</tr>
-				<%
-					}
-				%>
 				<%
 					} else {
 				%>
@@ -96,43 +87,6 @@
 	</div>
 
 	<jsp:include page="common/footer.jsp"></jsp:include>
-
-	<script type="text/javascript">
-		$(document).ready(
-				function() {
-					$('#myTable').after(
-							'<div id="nav" class="pagination"></div>');
-					var rowsShown = 30;
-					var rowsTotal = $('#myTable tbody tr').length;
-					var numPages = rowsTotal / rowsShown;
-					for (i = 0; i < numPages; i++) {
-						var pageNum = i + 1;
-						$('#nav')
-								.append(
-										'<a href="#" rel="'+i+'" >' + pageNum
-												+ '</a> ');
-					}
-					$('#myTable tbody tr').hide();
-					$('#myTable tbody tr').slice(0, rowsShown).show();
-					$('#nav a:first').addClass('active');
-					$('#nav a').bind(
-							'click',
-							function() {
-
-								$('#nav a').removeClass('active');
-								$(this).addClass('active');
-								var currPage = $(this).attr('rel');
-								var startItem = currPage * rowsShown;
-								var endItem = startItem + rowsShown;
-								$('#myTable tbody tr').css('opacity', '0.0')
-										.hide().slice(startItem, endItem).css(
-												'display', 'table-row')
-										.animate({
-											opacity : 1
-										}, 300);
-							});
-				});
-	</script>
 
 	<c:if test="${msg != null }">
 		<script type="text/javascript">

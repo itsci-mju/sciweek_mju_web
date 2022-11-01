@@ -6,32 +6,30 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import bean.ProjectType;
 import bean.Reviewer;
-import bean.Team;
+import resultset.ResultSetToClass;
 import util.ConnectionDB;
 
 public class IsEditProfileReviewerManager {
-
-	public IsEditProfileReviewerManager() {
-		// TODO Auto-generated constructor stub
-	}
 	
-	public Team getTeamByID(Integer key) {
+	ResultSetToClass resultSetToClass = new ResultSetToClass();
+	
+	public ProjectType getTeamByID(Integer key) throws Exception {
 		ConnectionDB condb = new ConnectionDB();
 		Connection con = condb.getConnection();
 		Statement stmt = null;
-		Team team = new Team();
+		ProjectType projecttype = new ProjectType();
 		
 		try {
 
 			stmt = con.createStatement();
-			String sql = "SELECT * FROM team WHERE team_id like '"+ key +"'";
+			String sql = "SELECT * FROM projecttype WHERE projecttype_id like '"+ key +"'";
 			ResultSet rs = stmt.executeQuery(sql);
 
 			while (rs.next()) {
 						
-				team.setTeam_id(rs.getInt("team_id"));
-				team.setTeam_name(rs.getString("team_name"));			
+				projecttype = resultSetToClass.setResultSetToProjectType(rs);
 
 			}
 
@@ -42,7 +40,7 @@ public class IsEditProfileReviewerManager {
 			System.out.println("catch");
 			e.printStackTrace();
 		}
-		return team;
+		return projecttype;
 	}
 
 	public boolean isEditProfileReviewer(Reviewer reviewer) {
@@ -64,7 +62,7 @@ public class IsEditProfileReviewerManager {
 			stmt.setString(9, reviewer.getFacebook());
 			stmt.setString(10, reviewer.getEmail());
 			stmt.setString(11, reviewer.getPassword());
-			stmt.setInt(12, reviewer.getTeam() != null ? reviewer.getTeam().getTeam_id() : 0 );
+			stmt.setInt(12, reviewer.getProjecttype() != null ? reviewer.getProjecttype().getProjecttype_id() : 0 );
 			
 			stmt.execute();
 			result = true;

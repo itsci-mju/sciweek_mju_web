@@ -10,8 +10,9 @@ import java.util.Vector;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import bean.Project;
+import bean.Report;
 import bean.Reviews;
-import bean.StudentProject;
 import lombok.val;
 import model.ProjectResponse;
 import model.ReviewerResponse;
@@ -34,13 +35,13 @@ public class ListScienceProjectManager {
 			String sql = " SELECT reviews.reviewdate"
 					+ ", project.project_id"
 					+ ", project.projectname"
-					+ ", concat('[',(group_concat(JSON_OBJECT('reviewerName',concat(reviewer.firstname,' ',reviewer.lastname),'status',reviews.status))  ),']') AS reviewer_array"
+					+ ", concat('[',(group_concat(JSON_OBJECT('reviewerName',concat(reviewer.firstname,' ',reviewer.lastname),'status',reviews.state))  ),']') AS reviewer_array"
 					+ ", sum(reviews.totalscore) AS totalscore"
 					+ " FROM reviews"
 					+ " JOIN reviewer on reviews.reviewer_id = reviewer.reviewer_id"
-					+ " JOIN team on reviewer.team_id = team.team_id"
 					+ " JOIN project on  reviews.project_id = project.project_id"
 					+ " JOIN projecttype on project.projecttype_id = projecttype.projecttype_id"
+					+ " JOIN advisor ON project.advisor_id = advisor.advisor_id"
 					+ " WHERE reviewer.reviewer_id like '"+ reviewer_id + "' "
 					+ " GROUP BY project.project_id ";
 			ResultSet rs = stmt.executeQuery(sql);
@@ -64,29 +65,28 @@ public class ListScienceProjectManager {
 		return projectResponseList;
 	}
 	
-	public List<StudentProject> getListScienceProjectByTeamID(Integer team_id) throws Exception {
-		List<StudentProject> studentProjectList = new Vector<>();
+	public List<Project> getListScienceProjectByTeamID(Integer projecttype_id) throws Exception {
 		ConnectionDB condb = new ConnectionDB();
 		Connection con = condb.getConnection();
 		Statement stmt = null;
+		List<Project> projectList = new Vector<>();
+		Project project = new Project() ;
 
 		try {
 
 			stmt = con.createStatement();
-			String sql = " SELECT * FROM studentproject"
-					+ "  LEFT JOIN project on  studentproject.project_id = project.project_id"
+			String sql = " SELECT * FROM project"
 					+ "  LEFT JOIN projecttype on project.projecttype_id = projecttype.projecttype_id"
-					+ "  LEFT JOIN team on project.team_id = team.team_id"
-					+ "  LEFT JOIN student on studentproject.student_id = student.student_id"
-					+ "  LEFT JOIN school on student.school_id = school.school_id"
-					+ "  LEFT JOIN advisor on studentproject.advisor_id = advisor.advisor_id  "
-					+ "  WHERE project.team_id like '" + team_id + "' "
-					+ "  GROUP BY studentproject.project_id";
+					+ "  LEFT JOIN advisor on project.advisor_id = advisor.advisor_id "
+					+ "  WHERE project.projecttype_id like '" + projecttype_id + "' "
+					+ "  GROUP BY project.project_id";
 			ResultSet rs = stmt.executeQuery(sql);
 
 			while (rs.next()) {
-				
-				studentProjectList.add(resultSetToClass.setResultSetToStudentProject(rs));
+							
+				project = resultSetToClass.setResultSetToProject(rs);
+				project.setReport(getReportByProjectID(project.getProject_id()));
+				projectList.add(project);
 				
 			}
 
@@ -97,7 +97,37 @@ public class ListScienceProjectManager {
 			e.printStackTrace();
 		}
 
-		return studentProjectList;
+		return projectList;
+	}
+	
+	public Report getReportByProjectID(String project_id) throws Exception {	
+		ConnectionDB condb = new ConnectionDB();
+		Connection con = condb.getConnection();
+		Statement stmt = null;
+		Report report = new Report() ;
+		
+		try {		
+			stmt = con.createStatement();
+			String sql = " SELECT * FROM report "
+					+ "  LEFT JOIN project on  report.project_id = project.project_id"
+					+ "  LEFT JOIN projecttype on project.projecttype_id = projecttype.projecttype_id"
+					+ "  LEFT JOIN advisor on project.advisor_id = advisor.advisor_id  "
+					+ " WHERE report.project_id = '"+ project_id +"' ";
+			ResultSet rs = stmt.executeQuery(sql);
+
+			while (rs.next()) {		
+				
+			report = resultSetToClass.setResultSetToReport(rs);
+			
+			}
+			con.close();
+			stmt.close();
+			rs.close();
+		} catch (SQLException e) {
+			System.out.println("catch");
+			e.printStackTrace();
+		}
+		return report;
 	}
 	
 	public List<Reviews> getListReviewsByProjectIDAndReviewerID(String project_id,Integer reviewer_id) throws Exception {
@@ -112,7 +142,7 @@ public class ListScienceProjectManager {
 					+ "  LEFT JOIN reviewer on reviews.reviewer_id = reviewer.reviewer_id"
 					+ "  LEFT JOIN project on  reviews.project_id = project.project_id"
 					+ "  LEFT JOIN projecttype on project.projecttype_id = projecttype.projecttype_id"
-					+ "  LEFT JOIN team on project.team_id = team.team_id"
+					+ "  LEFT JOIN advisor on project.advisor_id = advisor.advisor_id"
 					+ "  WHERE reviews.project_id like '"+ project_id + "' AND reviews.reviewer_id like '"+ reviewer_id + "' "
 					+ "  GROUP BY reviews.project_id";
 			ResultSet rs = stmt.executeQuery(sql);

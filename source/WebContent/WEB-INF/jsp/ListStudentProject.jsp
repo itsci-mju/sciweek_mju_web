@@ -4,20 +4,20 @@
 <%@ page import="java.util.*,manager.*,bean.*,java.text.*"%>
 <%
 	Admin admin = null;
-	List<StudentProject> listsproject = new Vector<>();
-	List<StudentProject> studentProjectList = new Vector<>();
+	List<Project> listproject = new Vector<>();
+	List<Project> ProjectList = new Vector<>();
 	String keyword = "";
-	StudentProject sproject = null;
+	Project project = null;
 	
 	try {
-		sproject = (StudentProject) request.getAttribute("sproject");
-		session.setAttribute("key",sproject.getProject().getProject_id());
+		project = (Project) request.getAttribute("project");
+		session.setAttribute("key",project.getProject_id());
 	} catch (Exception e) {
 		e.printStackTrace();
 	}
 
 	try {
-		listsproject = (List<StudentProject>) request.getAttribute("listsproject");
+		listproject = (List<Project>) request.getAttribute("listproject");
 	} catch (Exception e) {
 		e.printStackTrace();
 	}
@@ -79,7 +79,7 @@
 	}
 		
 </script>
-<body <%if (msg) {%> onload="return result()" <% } %>  style="background-image: url('./image/hero-bg.png')">
+<body <%if (msg) {%> onload="return result()" <% } %>  style="background-image: url('./image/hero-bg.png') ; background-repeat: no-repeat ; background-attachment: fixed ; background-size: 100% 100%">
 
 	<jsp:include page="common/navbar.jsp"></jsp:include>
 
@@ -137,10 +137,11 @@
 					
 					<!-- Step 1 input fields -->
 					<div class="mt-3">
-						<h6 style="color: red">ชี้แจ้ง : ถ้าไม่มีข้อมูลโครงงานวิทยาศาสตร์ กรุณากด " ต่อไป " เพื่อนำเข้าข้อมูล..</h6>
-						<br>
+						<div class="alert alert-danger" role="alert" style="text-align:center; font-weight:bold;">
+							ชี้แจ้ง : ถ้าไม่มีข้อมูลโครงงานวิทยาศาสตร์ กรุณากด " ต่อไป " เพื่อนำเข้าข้อมูล..
+						</div>
 						<%
-							if (listsproject.size() != 0) {
+							if (listproject.size() != 0) {
 						%>
 
 						<table class="table table-bordered  table-hover" id=myTable>
@@ -154,14 +155,13 @@
 							<tbody>
 
 								<%
-									for (StudentProject studentProject : listsproject) {
-											Project project = studentProject.getProject();
+									for (Project projects : listproject) {					
 								%>
 								<tr>
-									<td><%=project.getProject_id()%></td>
-									<td><%=project.getProjectname()%></td>
+									<td><%=projects.getProject_id()%></td>
+									<td><%=projects.getProjectname()%></td>
 									<td align="center"><a
-										href="ViewStudentProjectDetail?project_id=<%=project.getProject_id()%>">
+										href="ViewStudentProjectDetail?project_id=<%=projects.getProject_id()%>">
 											<button type="button" class="btn btn-warning">
 												<i class="fa fa-eye"></i>
 											</button>
@@ -186,10 +186,11 @@
 				<h2 class="font-normal">ขั้นตอนที่ 2 : นำเข้าข้อมูลโครงงานวิทยาศาสตร์</h2>
 					
 					<!-- Step 2 input fields -->
-					<div class="mt-3">					
-						<h6 style="color: red">ชี้แจ้ง : กรุณาอัปโหลดข้อมูลไฟล์ Excel เป็นนามสกุล .xlsx..</h6>
-						<br>
-						
+					<div class="mt-3">	
+						<div class="alert alert-danger" role="alert" style="text-align:center; font-weight:bold;">
+							ชี้แจ้ง : กรุณาอัปโหลดข้อมูลไฟล์ Excel เป็นนามสกุล .xlsx..
+						</div>				
+				
 						<form action="ImportExcel" name="frm" id="frm" method="post" enctype="multipart/form-data">
 							<div class="form-group row">
 								<div class="col-sm-4">

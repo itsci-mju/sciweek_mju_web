@@ -20,8 +20,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import bean.Project;
 import bean.Reviewer;
-import bean.StudentProject;
-import bean.Years;
+import bean.Schedules;
 import lombok.val;
 import manager.AnnounceResultManager;
 import manager.ListScienceProjectManager;
@@ -38,10 +37,10 @@ public class SummaryOfReviewsController {
 	public ModelAndView LoadSummaryOfReviews(HttpSession session, HttpServletRequest request) throws Exception {
 		Reviewer reviewer = (Reviewer) session.getAttribute("reviewer");
 		if (reviewer != null) {
-			Integer team_id = reviewer.getTeam().getTeam_id();
+			Integer projecttype_id = reviewer.getProjecttype().getProjecttype_id();
 			SummaryOfReviewsManager summaryOfReviewsManager = new SummaryOfReviewsManager();
-			List<ProjectResponse> projectResponseList = summaryOfReviewsManager.getListReviewsByTeamID(team_id);
-			
+			List<ProjectResponse> projectResponseList = summaryOfReviewsManager.getListReviewsByTeamID(projecttype_id);
+			Reviewer reviewers = summaryOfReviewsManager.getCount(projecttype_id);
 //			List<Reviewer> reviewerList = new ArrayList<>();
 //			for (val reviews : listreviews) {
 //				boolean check = reviewerList.stream()
@@ -58,8 +57,70 @@ public class SummaryOfReviewsController {
 //		}
 			ModelAndView mav = new ModelAndView("SummaryOfReviews");
 			mav.addObject("projectResponseList", projectResponseList);
-//			mav.addObject("reviewerList", reviewerList);
+		    mav.addObject("reviewers", reviewers);
 //			mav.addObject("hashMap", hashMap);
+			return mav;
+		} else {
+			ModelAndView mav = new ModelAndView("LoginPage");
+			mav.addObject("msg", "กรุณาเข้าสู่ระบบใหม่อีกครั้ง!!!!");
+			session.removeAttribute("reviewer");
+			return mav;
+		}
+	}
+	
+	@RequestMapping(value = "/isEditSelectFinal", method = RequestMethod.GET)
+	public ModelAndView isEditSelectFinal(HttpSession session, HttpServletRequest request) throws Exception {
+		Reviewer reviewer = (Reviewer) session.getAttribute("reviewer");
+		if (reviewer != null) {
+			Integer projecttype_id = reviewer.getProjecttype().getProjecttype_id();
+			Integer state_project = Integer.parseInt(request.getParameter("state_project"));
+			SummaryOfReviewsManager summaryOfReviewsManager = new SummaryOfReviewsManager();
+			
+			System.out.println(projecttype_id);
+			System.out.println(state_project);
+			
+			ModelAndView mav = new ModelAndView("SummaryOfReviews");
+			if (summaryOfReviewsManager.isEditSelectFinal(state_project,projecttype_id)) {
+				mav.addObject("msg", "ย้อนกลับสำเร็จ!!!");
+			} else {
+				mav.addObject("msg", "ย้อนกลับไม่สำเร็จ!!!");
+			}
+		
+			List<ProjectResponse> projectResponseList = summaryOfReviewsManager.getListReviewsByTeamID(projecttype_id);
+			Reviewer reviewers = summaryOfReviewsManager.getCount(projecttype_id);	
+			mav.addObject("projectResponseList", projectResponseList);
+		    mav.addObject("reviewers", reviewers);
+			return mav;
+		} else {
+			ModelAndView mav = new ModelAndView("LoginPage");
+			mav.addObject("msg", "กรุณาเข้าสู่ระบบใหม่อีกครั้ง!!!!");
+			session.removeAttribute("reviewer");
+			return mav;
+		}
+	}
+	
+	@RequestMapping(value = "/isEditDecideAwards", method = RequestMethod.GET)
+	public ModelAndView isEditDecideAwards(HttpSession session, HttpServletRequest request) throws Exception {
+		Reviewer reviewer = (Reviewer) session.getAttribute("reviewer");
+		if (reviewer != null) {
+			Integer projecttype_id = reviewer.getProjecttype().getProjecttype_id();
+			Integer state_project = Integer.parseInt(request.getParameter("state_project"));
+			SummaryOfReviewsManager summaryOfReviewsManager = new SummaryOfReviewsManager();
+			
+			System.out.println(projecttype_id);
+			System.out.println(state_project);
+			ModelAndView mav = new ModelAndView("SummaryOfReviews");
+			
+			if (summaryOfReviewsManager.isEditDecideAward(state_project,projecttype_id)) {
+				mav.addObject("msg", "ย้อนกลับสำเร็จ!!!");
+			} else {
+				mav.addObject("msg", "ย้อนกลับไม่สำเร็จ!!!");
+			}
+			
+			List<ProjectResponse> projectResponseList = summaryOfReviewsManager.getListReviewsByTeamID(projecttype_id);
+			Reviewer reviewers = summaryOfReviewsManager.getCount(projecttype_id);
+			mav.addObject("projectResponseList", projectResponseList);
+		    mav.addObject("reviewers", reviewers);
 			return mav;
 		} else {
 			ModelAndView mav = new ModelAndView("LoginPage");
@@ -75,8 +136,9 @@ public class SummaryOfReviewsController {
 		if (reviewer != null) {
 			request.setCharacterEncoding("UTF-8");
 			
-			Integer team_id = Integer.parseInt(request.getParameter("team_id"));		
+			Integer projecttype_id = Integer.parseInt(request.getParameter("projecttype_id"));		
 			Integer reviewer_id = Integer.parseInt(request.getParameter("reviewer_id"));	
+				
 			
 			AnnounceResultManager announceResultManager = new AnnounceResultManager();
 			SummaryOfReviewsManager summaryOfReviewsManager = new SummaryOfReviewsManager();
@@ -85,6 +147,7 @@ public class SummaryOfReviewsController {
 			String[] state_projectStrList = request.getParameterValues("state_project");			
 			String[] projectIdStrList = request.getParameterValues("chkproject");
 			String[] awardStrList = request.getParameterValues("award");
+			String[] avgscoreStrList = request.getParameterValues("avgscore");
 //			List<Project> projectList = new ArrayList<Project>();
 			
 			for (int i = 0 ; i < projectIdStrList.length; i++) {
@@ -96,14 +159,19 @@ public class SummaryOfReviewsController {
 				project.setProject_id(project_id);
 				
 				if (state_project == 1) {
-					summaryOfReviewsManager.isChooseProjectFirst(project);
-					summaryOfReviewsManager.isFailedProject(team_id, state_project);
+					double avgscore = Double.parseDouble(avgscoreStrList[i]);
+					if (avgscore > 20) {
+						summaryOfReviewsManager.isEditChooseProjectFirst(project);
+					} else {
+						summaryOfReviewsManager.isChooseProjectFirst(project);
+						summaryOfReviewsManager.isFailedProject(projecttype_id, state_project);
+					}
 				}
 				
 				if (state_project == 2) {
 					val award = awardStrList[i];
 					summaryOfReviewsManager.isChooseProjectSecond(project, award);
-					summaryOfReviewsManager.isFailedProjectSecond(team_id, state_project);
+					summaryOfReviewsManager.isFailedProjectSecond(projecttype_id, state_project);
 							
 //					projectList.add(summaryOfReviewsManager.getProjectByProjectID(project.getProject_id()));
 //					
@@ -138,7 +206,7 @@ public class SummaryOfReviewsController {
 				
 			}
 			
-		//	projectList = summaryOfReviewsManager.getProjectByProjectIDList(Arrays.asList(projectIdStrList));
+//				projectList = summaryOfReviewsManager.getProjectByProjectIDList(Arrays.asList(projectIdStrList));
 			
 				List<ProjectResponse> projectResponseList = listScienceProjectManager.getListProjectByReviewerID(reviewer_id);
 				
@@ -157,13 +225,13 @@ public class SummaryOfReviewsController {
 					}
 				}
 				
-				List<StudentProject> studentProjectList = listScienceProjectManager.getListScienceProjectByTeamID(team_id);
-				Years years = announceResultManager.getDATE();
+				List<Project> projectList = listScienceProjectManager.getListScienceProjectByTeamID(projecttype_id);
+				Schedules schedules = announceResultManager.getDATE();
 				ModelAndView mav = new ModelAndView("ListScienceProject");
 				mav.addObject("projectResponseList", projectResponseList);
 				mav.addObject("reviewerResponseList", reviewerResponseList);
-				mav.addObject("studentProjectList", studentProjectList);
-				mav.addObject("years", years);
+				mav.addObject("projectList", projectList);
+				mav.addObject("schedules", schedules);
 				return mav;	
 		} else {
 			ModelAndView mav = new ModelAndView("LoginPage");
@@ -177,9 +245,9 @@ public class SummaryOfReviewsController {
 	public ModelAndView LoadExportSummaryExcel(HttpSession session, HttpServletRequest request) throws Exception {
 		Reviewer reviewer = (Reviewer) session.getAttribute("reviewer");
 		if (reviewer != null) {
-			Integer team_id = reviewer.getTeam().getTeam_id();
+			Integer projecttype_id = Integer.parseInt(request.getParameter("projecttype_id"));
 			SummaryOfReviewsManager summaryOfReviewsManager = new SummaryOfReviewsManager();
-			List<ProjectResponse> projectResponseList = summaryOfReviewsManager.getListReviewsByTeamID(team_id);
+			List<ProjectResponse> projectResponseList = summaryOfReviewsManager.getListReviewsByTeamID(projecttype_id);
 			ModelAndView mav = new ModelAndView("ExportSummaryExcel");
 			mav.addObject("projectResponseList", projectResponseList);
 			return mav;

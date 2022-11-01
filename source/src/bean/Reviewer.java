@@ -23,6 +23,8 @@ public class Reviewer {
 	private String email;
 	private String password;
 	
-	private Team team;
+	private ProjectType projecttype;
+	
+	private Integer count;
 
 }

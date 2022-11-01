@@ -18,7 +18,7 @@ public class Reviews {
 	private Timestamp reviewdate;
 	private String comments;
 	private double totalscore;
-	private String status;
+	private String state;
 
 	private Reviewer reviewer;
 	private Project project;

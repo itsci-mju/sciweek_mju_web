@@ -125,7 +125,7 @@
 		
 	}
 </script>
-<body style="background-image: url('./image/hero-bg.png')">
+<body  style="background-image: url('./image/hero-bg.png') ; background-repeat: no-repeat ; background-attachment: fixed ; background-size: 100% 100%">
 	
 	<jsp:include page="common/navbar.jsp"></jsp:include>
 
@@ -279,20 +279,20 @@
 									</div>
 								</div>
 								
-								<%	String team_name = null ;
+								<%	String projecttype_name = null ;
 								
-										if (reviewer.getTeam().getTeam_name() == null) {
-											team_name = "ไม่มีกลุ่ม" ;
+										if (reviewer.getProjecttype().getProjecttype_name() == null) {
+											projecttype_name = "ไม่มีกลุ่ม" ;
 										} else { 
-											team_name = reviewer.getTeam().getTeam_name();
+											projecttype_name = reviewer.getProjecttype().getProjecttype_name();
 										}					
 								%>
 								
 								<div class="form-group row">								
 									<label class="col-sm-2 col-form-label text-right">ทีม</label>
 									<div class="col-sm-4">
-										<input type="hidden" name="team_id" id="team_id" class="form-control data" value="<%=reviewer.getTeam().getTeam_id()%>">
-										<input type="text" name="team_name" id="team_name" class="form-control data" value="<%=team_name%>" readonly>
+										<input type="hidden" name="projecttype_id" id="projecttype_id" class="form-control data" value="<%=reviewer.getProjecttype().getProjecttype_id()%>">
+										<input type="text" name="projecttype_name" id="projecttype_name" class="form-control data" value="<%=projecttype_name%>" readonly>
 									</div>
 								</div>
 								

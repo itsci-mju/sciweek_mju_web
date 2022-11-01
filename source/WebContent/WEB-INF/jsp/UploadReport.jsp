@@ -4,14 +4,11 @@
 <%@ page import="java.util.*, manager.*, bean.*, java.text.*, java.sql.Timestamp"%>
 <%
 	Student student = null ;
-	StudentProject sproject = null ;
-	Report report = null ;
-	Years years = null ;
-	List<StudentProject> listsproject = new Vector<>() ;
+	Project project = null ;
+	Schedules schedules = null ;
 	
 	try {
-		sproject = (StudentProject) request.getAttribute("sproject");
-		session.setAttribute("key",sproject.getProject().getProject_id());
+		project = (Project) request.getAttribute("project");
 	} catch (Exception e) {
 		e.printStackTrace();
 	}
@@ -23,19 +20,7 @@
 	}
 	
 	try {
-		report = (Report) request.getAttribute("report");
-	} catch (Exception e) {
-		e.printStackTrace();
-	}
-	
-	try {
-		years = (Years) request.getAttribute("years");
-	} catch (Exception e) {
-		e.printStackTrace();
-	}
-	
-	try {
-		listsproject = (List<StudentProject>) request.getAttribute("listsproject");
+		schedules = (Schedules) request.getAttribute("schedules");
 	} catch (Exception e) {
 		e.printStackTrace();
 	}
@@ -61,18 +46,12 @@
 <link rel="stylesheet" href="./css/multi_step_form.css">
 <script type="module" src="./js/multi_step_form.js"></script>
 </head>
-<body style="background-image: url('./image/hero-bg.png')">
+<body style="background-image: url('./image/hero-bg.png') ; background-repeat: no-repeat ; background-attachment: fixed ; background-size: 100% 100%">
 <script type="text/javascript">
 
 	function validateForm(frm) {
 		
-		if (frm.filevideo.value == "" && frm.filepdf.value == "")  {
-			alert("<!-- กรุณาอัปโหลดเอกสารรายงานและวิดีโอ -->");
-			return false;
-		} else if (frm.filevideo.value == "") {
-			alert("<!-- กรุณาอัปโหลดวิดีโอ -->");
-			return false;
-		} else if (frm.filepdf.value == "") {
+		if (frm.filepdf.value == "") {
 			alert("<!-- กรุณาอัปโหลดเอกสารรายงาน -->");
 			return false;
 		}
@@ -88,10 +67,10 @@
 		String video = null ;
 		String disabled = null ;
 	
-		if (sproject.getProject().getVideo().equals("-")) {
+		if (project.getVideo().equals("-")) {
 			video = "กรุณาอัปโหลดวิดีโอ" ;
 		} else {
-			video = sproject.getProject().getVideo();
+			video = project.getVideo();
 		}
 		
 	%>
@@ -100,7 +79,7 @@
 	<div class="container" style="margin-top: 35px;">
 		<form action="UploadReport" id="frm" method="POST" enctype="multipart/form-data" >
 		<div>
-			<h1><i class="fa-solid fa-cloud-arrow-up">&nbsp;</i>อัปโหลดเอกสาร</h1>
+			<h1><i class="fa-solid fa-cloud-arrow-up">&nbsp;</i>อัปโหลดเอกสารรายงานและวิด๊โอ</h1>
 			<div id="multi-step-form-container">
 				<!-- Form Steps / Progress Bar -->
 				<ul class="form-stepper form-stepper-horizontal text-center mx-auto pl-0">
@@ -134,10 +113,10 @@
 				<!-- Step Wise Form Content -->
 				<!-- Step 1 Content -->
 				
-				<% if (years.getExpuploaddate() != null ) { %>
+				<% if (schedules.getExpuploaddate() != null ) { %>
 				
 					 <%
-					 	if (timestamp.after(years.getExpuploaddate())) { 
+					 	if (timestamp.after(schedules.getExpuploaddate())) { 
 						 	disabled = "disabled";
 						}
 					 %>
@@ -149,18 +128,23 @@
 					<h2 class="font-normal">ขั้นตอนที่ 1 : อัปโหลดลิงค์วิดีโอ</h2>
 					<!-- Step 1 input fields -->
 					<div class="mt-3">
-						<h6 style="color: red">ชี้แจ้ง : ตัวอย่างลิงก์ https://www.youtube.com/embed/XXX..<br><br>
-						<% if (years.getExpuploaddate() != null ) { %>
-							วันเวลากำหนดส่ง : <%=years.getExpuploaddate()%> 
-						<% } %>
-						</h6>						
+						<h6 style="color: red"><i class="fa-solid fa-hand-point-right">&nbsp;</i><strong class="font__weight-semibold">ชี้แจง !!!</strong>&nbsp;ตัวอย่างลิงก์ https://www.youtube.com/embed/XXX..<br><br>
+						<% if (schedules.getExpuploaddate() != null ) { 
+							
+							String fmt_expuploaddate = new SimpleDateFormat("EEEE ที่ dd เดือน MMMM พ.ศ. yyyy", new Locale("th", "TH")).format(schedules.getExpuploaddate());
+							String fmt_expuploadtime = new SimpleDateFormat("HH:mm").format(schedules.getExpuploaddate()); 
+							
+						%>
+						<i class="fa-solid fa-hand-point-right">&nbsp;</i><strong class="font__weight-semibold">แจ้งเตือน !!!</strong>&nbsp;สิ้นสุดการส่งเอกสาร
+								<%=fmt_expuploaddate%> เวลา <%=fmt_expuploadtime%> น. &nbsp; 
+						<% } %>	
+						</h6>				
 							<div class="form-group row">
 								<div class="col-sm-4">
 									<label style="color: green; text-align: left;">${msg}</label>
-									<input type="hidden" name="project_id" id="project_id" class="form-control data" value="<%=sproject.getProject().getProject_id()%>">
-									<input type="text" name="filevideo" id="filevideo" class="form-control data" placeholder="<%=video%>" required <%=disabled%>>
-								</div>
-								
+									<input type="hidden" name="project_id" id="project_id" class="form-control data" value="<%=project.getProject_id()%>">
+									<input type="text" name="filevideo" id="filevideo" class="form-control data" placeholder="<%=video%>" <%=disabled%>>
+								</div>			
 								<br>
 							</div>
 					</div>
@@ -173,9 +157,15 @@
 					<h2 class="font-normal">ขั้นตอนที่ 2 : อัปโหลดเอกสารรายงาน</h2>
 					<!-- Step 2 input fields -->
 					<div class="mt-3">
-						<h6 style="color: red">ชี้แจ้ง : กรุณาอัปโหลดข้อมูลไฟล์รายงานเป็นนามสกุล .pdf..<br><br>
-						<% if (years.getExpuploaddate() != null ) { %>
-							วันเวลากำหนดส่ง : <%=years.getExpuploaddate()%> 
+						<h6 style="color: red"><i class="fa-solid fa-hand-point-right">&nbsp;</i><strong class="font__weight-semibold">ชี้แจง !!!</strong>&nbsp;กรุณาอัปโหลดข้อมูลไฟล์รายงานเป็นนามสกุล .pdf..<br><br>
+						<% if (schedules.getExpuploaddate() != null ) { 
+							
+							String fmt_expuploaddate = new SimpleDateFormat("EEEE ที่ dd เดือน MMMM พ.ศ. yyyy", new Locale("th", "TH")).format(schedules.getExpuploaddate());
+							String fmt_expuploadtime = new SimpleDateFormat("HH:mm").format(schedules.getExpuploaddate()); 
+							
+						%>
+							<i class="fa-solid fa-hand-point-right">&nbsp;</i><strong class="font__weight-semibold">แจ้งเตือน !!!</strong>&nbsp;สิ้นสุดการส่งเอกสาร
+								<%=fmt_expuploaddate%> เวลา <%=fmt_expuploadtime%> น. &nbsp; 
 						<% } %> 
 						</h6>
 						<br>

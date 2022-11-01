@@ -20,8 +20,7 @@ import org.springframework.web.servlet.ModelAndView;
 import bean.Project;
 import bean.Report;
 import bean.Student;
-import bean.StudentProject;
-import bean.Years;
+import bean.Schedules;
 import manager.AnnounceResultManager;
 import manager.IsUploadReportManager;
 import manager.ViewProjectDetailManager;
@@ -29,22 +28,17 @@ import manager.ViewProjectDetailManager;
 @Controller
 public class UploadReportController {
 	
-	@RequestMapping(value = "/doViewUploadReport", method = RequestMethod.GET)
+	@RequestMapping(value = "/doViewUploadReport", method = RequestMethod.POST)
 	public ModelAndView loaddoViewUploadReport(HttpSession session, HttpServletRequest request) throws Exception {
 		Student student = (Student) session.getAttribute("student");
 		if (student != null) {
-			String project_id = request.getParameter("project_id");
 			IsUploadReportManager isUploadReportManager = new IsUploadReportManager();
 			AnnounceResultManager announceResultManager = new AnnounceResultManager();
-			StudentProject sproject = isUploadReportManager.getStudentProjectByID(project_id);
-			List<StudentProject> listsproject = isUploadReportManager.getListStudentProject(project_id);
-			Report report = isUploadReportManager.getReportByProjectID(project_id);
-			Years years = announceResultManager.getDATE();
+			Project project = isUploadReportManager.getStudentProjectByID(student.getStudent_id());
+			Schedules schedules = announceResultManager.getDATE();
 			ModelAndView mav = new ModelAndView("UploadReport");
-			mav.addObject("sproject", sproject);
-			mav.addObject("listsproject", listsproject);
-			mav.addObject("report", report);
-			mav.addObject("years", years);
+			mav.addObject("project", project);
+			mav.addObject("schedules", schedules);
 			return mav;
 		} else {
 			ModelAndView mav = new ModelAndView("LoginPage");
@@ -58,7 +52,7 @@ public class UploadReportController {
 	public ModelAndView uploadReport(HttpServletRequest request, HttpSession session) throws Exception {
 		Student student = (Student) session.getAttribute("student");
 		if (student != null) {
-			Project project = new Project();
+			Project projectTemp = new Project();
 			Report report = new Report();
 			if (ServletFileUpload.isMultipartContent(request)) {
 				request.setCharacterEncoding("UTF-8");
@@ -75,10 +69,10 @@ public class UploadReportController {
 				    date = calendar.getTime();
 				    String date1 = new SimpleDateFormat("ddMMyyyyHHmmss").format(date);
 													
-					project.setProject_id(data.get(0).getString("UTF-8"));
-					project.setVideo(data.get(1).getString("UTF-8"));
+				    projectTemp.setProject_id(data.get(0).getString("UTF-8"));
+				    projectTemp.setVideo(data.get(1).getString("UTF-8"));
 					
-					isUploadReportManager.isUploadVideo(project);
+					isUploadReportManager.isUploadVideo(projectTemp);
 																	
 					isUploadReportManager.isDeleteUpload(report.getReport_id());
 					
@@ -99,13 +93,9 @@ public class UploadReportController {
 				}
 			}		
 			ViewProjectDetailManager viewProjectDetailManager = new ViewProjectDetailManager();
-			Report reports = viewProjectDetailManager.getReportByProjectID(project.getProject_id());
-			StudentProject studentProject = viewProjectDetailManager.getStudentProjectByID(project.getProject_id());
-			List<StudentProject> listsproject = viewProjectDetailManager.getListStudentProjectByProjectID(project.getProject_id());
+			Project project = viewProjectDetailManager.getStudentProjectByID(student.getStudent_id());
 			ModelAndView mav = new ModelAndView("ViewProjectDetail");
-			session.setAttribute("report", reports);
-			mav.addObject("listsproject", listsproject);
-			mav.addObject("studentProject", studentProject);
+			mav.addObject("project", project);
 			return mav;
 		} else {
 			ModelAndView mav = new ModelAndView("LoginPage");

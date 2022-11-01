@@ -11,32 +11,36 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import bean.Admin;
-import bean.Team;
+import bean.ProjectType;
+import bean.Reviewer;
 import manager.DeleteTeamManager;
 import manager.ListTeamManager;
+import manager.ViewTeamDetailManager;
 
 @Controller
 public class DeleteTeamController {
 	
 	@RequestMapping(value = "/doDeleteTeam", method = RequestMethod.GET)
-	public ModelAndView doDeleteTeam(HttpSession session, HttpServletRequest request) {
+	public ModelAndView doDeleteTeam(HttpSession session, HttpServletRequest request) throws Exception {
 
 		Admin admin = (Admin) session.getAttribute("admin");
-		Integer team_id = Integer.parseInt(request.getParameter("team_id"));
+		Integer projecttype_id = Integer.parseInt(request.getParameter("projecttype_id"));
 		if (admin != null) {
 			ModelAndView mav = new ModelAndView("ListTeam");
 			
 			DeleteTeamManager deleteTeamManager = new DeleteTeamManager();
-			if (deleteTeamManager.isDeleteTeam(team_id)) {
+			if (deleteTeamManager.isDeleteTeam(projecttype_id)) {
 				mav.addObject("msg", "ลบข้อมูลทีมสำเร็จแล้ว!!!! ");
 			} else {
 				mav.addObject("msg", "ลบข้อมูลทีมไม่สำเร็จแล้ว!!!! ");
 			}
 
-			ListTeamManager vtim = new ListTeamManager();
-			List<Team> teamList = vtim.getListTeam();
-			request.setAttribute("teamList", teamList);
-
+			ListTeamManager listTeamManager = new ListTeamManager();
+			ViewTeamDetailManager viewTeamDetailManager = new ViewTeamDetailManager();
+			List<ProjectType> projectTypeList = listTeamManager.getListProjectType();
+			List<Reviewer> reviewerList = viewTeamDetailManager.getListReviewer();		
+			mav.addObject("projectTypeList", projectTypeList);
+			mav.addObject("reviewerList", reviewerList);
 			return mav;
 
 		} else {

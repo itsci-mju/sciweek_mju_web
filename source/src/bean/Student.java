@@ -1,7 +1,5 @@
 package bean;
 
-import java.sql.Timestamp;
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,7 +12,6 @@ import lombok.Setter;
 public class Student {
 
 	private int student_id;
-	private Timestamp importdate ;
 	private String prefix;
 	private String firstname;
 	private String lastname;
@@ -24,5 +21,7 @@ public class Student {
 	private String password;
 
 	private School school;
+	
+	private Project project;
 
 }

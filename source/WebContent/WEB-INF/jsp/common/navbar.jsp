@@ -60,7 +60,6 @@
 			<nav class="navbar navbar-expand-sm navbar-dark container">
 				<ul class="navbar-nav">
 					<li class="nav-item active "><a href="index" class="nav-link"><span style="color: white;"><i class="fa fa-home">&nbsp;</i>หน้าแรก</span></a></li>			
-					<li class="nav-item active"><a href="doViewResult" class="nav-link"><span style="color: white;"><i class="fa-solid fa-trophy">&nbsp;</i>รางวัล</span></a></li>
 				</ul>
 				<div class="navbar-nav ml-auto">
 					<div class="hidden-lg hidden-md hidden-sm">
@@ -87,8 +86,7 @@
 			<nav class="navbar navbar-expand-sm navbar-dark container">
 				<ul class="navbar-nav">
 					<li class="nav-item active"><a href="index" class="nav-link"><span style="color: white;"><i class="fa fa-home">&nbsp;</i>หน้าแรก</span></a></li>
-					<li class="nav-item  active"><a href="doListProject" class="nav-link"><span style="color: white;"><i class="fa fa-th-list">&nbsp;</i>รายการโครงงานวิทยาศาสตร์</span></a></li>
-					<li class="nav-item active"><a href="doViewResult" class="nav-link"><span style="color: white;"><i class="fa-solid fa-trophy">&nbsp;</i>รางวัล</span></a></li>
+					<li class="nav-item active"><a href="doListProject" class="nav-link"><span style="color: white;"><i class="fa fa-th-list">&nbsp;</i>โครงงานวิทยาศาสตร์</span></a></li>
 				</ul>
 				<div class="navbar-nav ml-auto">
 					<div class="hidden-lg hidden-md hidden-sm">
@@ -102,7 +100,6 @@
 							<span style="color: white;"><i class="fa fa-user">&nbsp;</i>ผู้ใช้งานระบบ : <%=student.getPrefix() + "  " + student.getFirstname() + "  " + student.getLastname()%></span> 
 						</a>
 						<div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-							<a class="dropdown-item" href="getEditProfileStudent"><span style="color: black;"><i class="fa fa-address-card">&nbsp;</i>ข้อมูลส่วนตัว</span></a>
 							<a class="dropdown-item" href="verifylogout"><span style="color: black;"><i class="fa fa-sign-out">&nbsp;</i>ออกจากระบบ</span></a>
 						</div>				
 					</li>							
@@ -185,8 +182,8 @@
 					<li class="nav-item  active"><a href="doViewSchedule" class="nav-link"><span style="color: white;"><i class="fa-solid fa-calendar-days">&nbsp;</i>กำหนดการ</span></a></li>
 					<li class="nav-item  active"><a href="doViewProject" class="nav-link"><span style="color: white;"><i class="fa fa-th-list">&nbsp;</i>โครงงานวิทยาศาสตร์</span></a></li>
 					<li class="nav-item  active"><a href="doViewTeam" class="nav-link"><span style="color: white;"><i class="fa-solid fa-people-group">&nbsp;</i>กลุ่มประเมินโครงงานวิทยาศาสตร์</span></a></li>
-					<li class="nav-item  active"><a href="doViewNews" class="nav-link"><span style="color: white;"><i class="fa fa-newspaper-o">&nbsp;</i>ข่าวสาร</span></a></li>		
-					<li class="nav-item active"><a href="doViewResult" class="nav-link"><span style="color: white;"><i class="fa-solid fa-trophy">&nbsp;</i>รางวัล</span></a></li>										
+					<!-- <li class="nav-item  active"><a href="doViewNews" class="nav-link"><span style="color: white;"><i class="fa fa-newspaper-o">&nbsp;</i>ข่าวสาร</span></a></li> -->		
+					<li class="nav-item active"><a href=doViewAward class="nav-link"><span style="color: white;"><i class="fa-solid fa-trophy">&nbsp;</i>ประกาศรางวัล</span></a></li>										
 				</ul>
 				<div class="navbar-nav ml-auto">
 					<div class="hidden-lg hidden-md hidden-sm">

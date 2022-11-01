@@ -7,7 +7,7 @@ import java.sql.Statement;
 import java.util.List;
 import java.util.Vector;
 
-import bean.Years;
+import bean.Schedules;
 import resultset.ResultSetToClass;
 import util.ConnectionDB;
 
@@ -15,20 +15,20 @@ public class ListScheduleManager {
 	
 	ResultSetToClass resultSetToClass = new ResultSetToClass();
 	
-	public List<Years> getListYears() throws Exception {
+	public List<Schedules> getListSchedules() throws Exception {
 		ConnectionDB condb = new ConnectionDB();
 		Connection con = condb.getConnection();
 		Statement stmt = null;
-		List<Years> yearsList = new Vector<>();
+		List<Schedules> schedulesList = new Vector<>();
 		
 		try {
 			stmt = con.createStatement();
-			String sql = "SELECT * FROM years ";
+			String sql = "SELECT * FROM schedules ";
 			ResultSet rs = stmt.executeQuery(sql);
 
 			while (rs.next()) {	
 				
-				yearsList.add(resultSetToClass.setResultSetToYear(rs));
+				schedulesList.add(resultSetToClass.setResultSetToSchedules(rs));
 		
 			}
 
@@ -39,7 +39,7 @@ public class ListScheduleManager {
 			System.out.println("catch");
 			e.printStackTrace();
 		}
-		return yearsList;
+		return schedulesList;
 	}
 
 }

@@ -13,7 +13,7 @@ import org.springframework.web.servlet.ModelAndView;
 import bean.Admin;
 import bean.Reviewer;
 import bean.Project;
-import bean.Team;
+import bean.ProjectType;
 import manager.ViewTeamDetailManager;
 
 @Controller
@@ -23,13 +23,13 @@ public class ViewTeamDetailController {
 	public ModelAndView loadViewTeamDetail(HttpSession session, HttpServletRequest request) throws Exception{
 		Admin admin = (Admin) session.getAttribute("admin");
 		if (admin != null) {
-			Integer team_id = Integer.parseInt(request.getParameter("team_id"));
+			Integer projecttype_id = Integer.parseInt(request.getParameter("projecttype_id"));
 			ViewTeamDetailManager viewTeamDetailManager = new ViewTeamDetailManager();
-			Team team = viewTeamDetailManager.getTeamByID(team_id);
-			List<Reviewer> listreviewer = viewTeamDetailManager.getListReviewerByTeamID(team_id);
-			List<Project> listproject = viewTeamDetailManager.getListProjectByTeamID(team_id);
+			ProjectType projecttype = viewTeamDetailManager.getTeamByID(projecttype_id);
+			List<Reviewer> listreviewer = viewTeamDetailManager.getListReviewerByTeamID(projecttype_id);
+			List<Project> listproject = viewTeamDetailManager.getListProjectByTeamID(projecttype_id);
 			ModelAndView mav = new ModelAndView("ViewTeamDetail");
-			mav.addObject("team",team);
+			mav.addObject("projecttype",projecttype);
 			mav.addObject("listreviewer", listreviewer);
 			mav.addObject("listproject", listproject);
 			return mav;
@@ -45,23 +45,23 @@ public class ViewTeamDetailController {
 	public ModelAndView doDeleteReviewerByTeamID(HttpSession session, HttpServletRequest request) throws Exception {
 
 		Admin admin = (Admin) session.getAttribute("admin");
-		Integer team_id = Integer.parseInt(request.getParameter("team_id"));
+		Integer projecttype_id = Integer.parseInt(request.getParameter("projecttype_id"));
 		Integer reviewer_id = Integer.parseInt(request.getParameter("reviewer_id"));
 		if (admin != null) {
 			ModelAndView mav = new ModelAndView("ViewTeamDetail");
 			
 			ViewTeamDetailManager viewTeamDetailManager = new ViewTeamDetailManager();
 			
-			if (viewTeamDetailManager.isDeleteReviewerByTeamID(team_id,reviewer_id)) {
+			if (viewTeamDetailManager.isDeleteReviewerByTeamID(projecttype_id,reviewer_id)) {
 				mav.addObject("msg", "ลบข้อมูลสำเร็จแล้ว!!!! ");
 			} else {
 				mav.addObject("msg", "ลบข้อมูลไม่สำเร็จแล้ว!!!! ");
 			}
 
-			Team team = viewTeamDetailManager.getTeamByID(team_id);
-			List<Reviewer> listreviewer = viewTeamDetailManager.getListReviewerByTeamID(team_id);
-			List<Project> listproject = viewTeamDetailManager.getListProjectByTeamID(team_id);
-			mav.addObject("team",team);
+			ProjectType projecttype = viewTeamDetailManager.getTeamByID(projecttype_id);
+			List<Reviewer> listreviewer = viewTeamDetailManager.getListReviewerByTeamID(projecttype_id);
+			List<Project> listproject = viewTeamDetailManager.getListProjectByTeamID(projecttype_id);
+			mav.addObject("projecttype", projecttype);
 			mav.addObject("listreviewer", listreviewer);
 			mav.addObject("listproject", listproject);	
 			return mav;

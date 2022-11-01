@@ -3,8 +3,8 @@
 <%@ page import="java.util.*,manager.*,bean.*,java.text.*"%>
 <%
 Reviewer reviewer = null ;
-StudentProject sproject = null;
-List<StudentProject> listsproject = new Vector<>();
+Project project = null;
+List<Project> listproject = new Vector<>();
 Reviews reviews = new Reviews();
 
 try {
@@ -20,14 +20,13 @@ try {
 }
 
 try {
-	listsproject = (List<StudentProject>) request.getAttribute("listsproject");
+	listproject = (List<Project>) request.getAttribute("listproject");
 } catch (Exception e) {
 	e.printStackTrace();
 }
 
 try {
-	sproject = (StudentProject) request.getAttribute("sproject");
-	session.setAttribute("key",sproject.getProject().getProject_id());
+	project = (Project) request.getAttribute("project");
 } catch (Exception e) {
 	e.printStackTrace();
 }
@@ -50,7 +49,7 @@ try {
 <link href='https://fonts.googleapis.com/css?family=Kanit' rel='stylesheet' type='text/css'>
 <link rel="stylesheet" href="./css/web_css.css">
 </head>
-<body style="background-image: url('./image/hero-bg.png')">
+<body style="background-image: url('./image/hero-bg.png') ; background-repeat: no-repeat ; background-attachment: fixed ; background-size: 100% 100%">
 
 	<jsp:include page="common/navbar.jsp"></jsp:include>
 
@@ -73,7 +72,7 @@ try {
 								<input type="text" id="prefix" name="prefix"
 									class="form-control data"
 									value="<%=reviewer.getPrefix()%> <%=reviewer.getFirstname()%>  <%=reviewer.getLastname()%>"
-									style="background-color: white" readonly>
+									style="background-color: #ffffee" readonly>
 							</div>
 							<div class="col-sm-1">
 								<input type="hidden" id="prefix" name="prefix"
@@ -95,7 +94,7 @@ try {
 							<div class="col-sm-3">
 								<input type="text" id="student_id" name="student_id"
 									class="form-control data" value="<%=reviewer.getEmail()%>"
-									style="background-color: white" readonly>
+									style="background-color: #ffffee" readonly>
 							</div>
 						</div>
 
@@ -104,21 +103,21 @@ try {
 							<div class="col-sm-3">
 								<input type="text" id="faculty" name="faculty"
 									class="form-control data" value="<%=reviewer.getFaculty()%>"
-									style="background-color: white" readonly>
+									style="background-color: #ffffee" readonly>
 							</div>
 							<label class="col-sm-2 col-form-label text-right">สาขา </label>
 							<div class="col-sm-3">
 								<input type="text" id="major" name="major"
 									class="form-control data" value="<%=reviewer.getMajor()%>"
-									style="background-color: white" readonly>
+									style="background-color: #ffffee" readonly>
 							</div>
 						</div>
-						<%	String team_name = null ;
+						<%	String projecttype_name = null ;
 								
-										if (reviewer.getTeam().getTeam_name() == null) {
-											team_name = "ไม่มีกลุ่ม" ;
+										if (reviewer.getProjecttype().getProjecttype_name() == null) {
+											projecttype_name = "ไม่มีกลุ่ม" ;
 										} else { 
-											team_name = reviewer.getTeam().getTeam_name();
+											projecttype_name = reviewer.getProjecttype().getProjecttype_name();
 										}					
 								%>
 						<div class="form-group row">
@@ -126,10 +125,10 @@ try {
 							<div class="col-sm-4">
 								<input type="hidden" id="team_id" name="team_id"
 									class="form-control data"
-									value="<%=reviewer.getTeam().getTeam_id()%>"> <input
+									value="<%=reviewer.getProjecttype().getProjecttype_id()%>"> <input
 									type="text" id="team_name" name="team_name"
-									class="form-control data" value="<%=team_name%>"
-									style="background-color: white" readonly>
+									class="form-control data" value="<%=projecttype_name%>"
+									style="background-color: #ffffee" readonly>
 							</div>
 						</div>
 
@@ -138,7 +137,7 @@ try {
 							<div class="col-sm-3">
 								<input type="text" id="position" name="position"
 									class="form-control data" value="<%=reviewer.getPosition()%>"
-									style="background-color: white" readonly>
+									style="background-color: #ffffee" readonly>
 							</div>
 						</div>
 
@@ -164,11 +163,15 @@ try {
 			</thead>
 			<%
 				if (reviews.getReviews_id() != null ) {	
+					
+					String fmt_expreviewdate = new SimpleDateFormat("dd MMM yyyy", new Locale("th", "TH")).format(reviews.getReviewdate());
+					String fmt_expreviewtime = new SimpleDateFormat("HH:mm").format(reviews.getReviewdate()); 
+					
 			%>
 
 			<tbody>
 				<tr>
-					<td align="center"><%=reviews.getReviewdate()%></td>
+					<td align="center"><%=fmt_expreviewdate%> เวลา <%=fmt_expreviewtime%> น.</td>
 					<td><%=reviews.getProject().getProjectname()%></td>
 
 					<%
@@ -259,12 +262,16 @@ try {
 				</tr>
 			</thead>
 			<%
-				if (reviews.getReviews_id() != null ) {	
+				if (reviews.getReviews_id() != null ) {
+					
+					String fmt_expreviewdate = new SimpleDateFormat("dd MMM yyyy", new Locale("th", "TH")).format(reviews.getReviewdate());
+					String fmt_expreviewtime = new SimpleDateFormat("HH:mm").format(reviews.getReviewdate()); 
+					
 			%>
 
 			<tbody>
 				<tr>
-					<td align="center"><%=reviews.getReviewdate()%></td>
+					<td align="center"><%=fmt_expreviewdate%> เวลา <%=fmt_expreviewtime%> น.</td>
 					<td><%=reviews.getProject().getProjectname()%></td>
 
 					<%
@@ -357,11 +364,15 @@ try {
 			</thead>
 			<%
 				if (reviews.getReviews_id() != null ) {	
+					
+					String fmt_expreviewdate = new SimpleDateFormat("dd MMM yyyy", new Locale("th", "TH")).format(reviews.getReviewdate());
+					String fmt_expreviewtime = new SimpleDateFormat("HH:mm").format(reviews.getReviewdate()); 
+					
 			%>
 
 			<tbody>
 				<tr>
-					<td align="center"><%=reviews.getReviewdate()%></td>
+					<td align="center"><%=fmt_expreviewdate%> เวลา <%=fmt_expreviewtime%> น.</td>
 					<td><%=reviews.getProject().getProjectname()%></td>
 
 					<%

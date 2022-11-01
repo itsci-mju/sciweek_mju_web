@@ -18,8 +18,8 @@ import bean.Question;
 import bean.Report;
 import bean.Reviewer;
 import bean.Reviews;
-import bean.StudentProject;
-import bean.Years;
+import bean.Schedules;
+import bean.Student;
 import lombok.val;
 import manager.AnnounceResultManager;
 import manager.ListScienceProjectManager;
@@ -34,21 +34,27 @@ public class ReviseProjectController {
 	public ModelAndView doReviseProject(HttpSession session, HttpServletRequest request) throws Exception {
 		Reviewer reviewer = (Reviewer) session.getAttribute("reviewer");
 		if (reviewer != null) {
-			String project_id = request.getParameter("project_id");
+			
 			ReviseProjectManager reviseProjectManager = new ReviseProjectManager();
 			AnnounceResultManager announceResultManager = new AnnounceResultManager(); 
+			
+			String project_id = request.getParameter("project_id");
+			Integer state_project = Integer.parseInt(request.getParameter("state_project"));
+			
+			if (state_project == 3) {
+				reviseProjectManager.isUpdateState(project_id);
+			}
+			
 			Report report = reviseProjectManager.getReportByProjectID(project_id);
-			StudentProject sproject = reviseProjectManager.getStudentProjectByID(project_id);
-			List<StudentProject> listsproject = reviseProjectManager.getListScienceProject(project_id);
+			Student student = reviseProjectManager.getStudentProjectByID(project_id);
 			val reviews = reviseProjectManager.getReviewsByReviewerID(reviewer.getReviewer_id(),project_id);
-			Years years = announceResultManager.getDATE();
+			Schedules schedules = announceResultManager.getDATE();
 			ModelAndView mav = new ModelAndView("ReviseProject");
 			session.setAttribute("report", report);
 			mav.addObject("reviewer", reviewer);
-			mav.addObject("sproject", sproject);
-			mav.addObject("listsproject", listsproject);
+			mav.addObject("student", student);
 			mav.addObject("reviews", reviews);
-			mav.addObject("years", years);
+			mav.addObject("schedules", schedules);
 			return mav;
 		} else {
 			ModelAndView mav = new ModelAndView("LoginPage");
@@ -71,7 +77,8 @@ public class ReviseProjectController {
 		project.setProject_id(request.getParameter("project_id"));
 
 		Reviews reviews = new Reviews();
-		String reviews_id = request.getParameter("review_id");
+		String reviews_id = request.getParameter("reviews_id");
+		
 		reviews.setReviews_id(reviews_id);
 		reviews.setComments(request.getParameter("comments"));
 		reviews.setReviewer(reviewer);
@@ -91,16 +98,16 @@ public class ReviseProjectController {
 			answer.setAnswer(answers);
 			answer.setQuestion(new Question(questionId));
 			answer.setReview(reviews);
-			answer.setReviewer(reviewer);
-			answer.setProject(project);
 			reviseProjectManager.isAnswerRevise(answer);
+			
 		}
 
 		if (statusresult) {
-			int team_id = Integer.parseInt(request.getParameter("team_id"));
+			
+			int projecttype_id = Integer.parseInt(request.getParameter("projecttype_id"));
 			int reviewer_id = reviewer.getReviewer_id();
 			ListScienceProjectManager listScienceProjectManager = new ListScienceProjectManager();
-			List<StudentProject> studentProjectList = listScienceProjectManager.getListScienceProjectByTeamID(team_id);
+			List<Project> projectList = listScienceProjectManager.getListScienceProjectByTeamID(projecttype_id);
 			List<ProjectResponse> projectResponseList = listScienceProjectManager.getListProjectByReviewerID(reviewer_id);
 			
 			List<ReviewerResponse> reviewerResponseList = new ArrayList<>();
@@ -117,14 +124,15 @@ public class ReviseProjectController {
 					}
 				}
 			}
+			
 			AnnounceResultManager announceResultManager = new AnnounceResultManager();
-			Years years = announceResultManager.getDATE();
+			Schedules schedules = announceResultManager.getDATE();
 			ModelAndView mav = new ModelAndView("ListScienceProject");
 			mav.addObject("msg", "แก้ไขประเมินสำเร็จ!!!");
-			mav.addObject("studentProjectList", studentProjectList);
+			mav.addObject("projectList", projectList);
 			mav.addObject("reviewerResponseList", reviewerResponseList);
 			mav.addObject("projectResponseList", projectResponseList);
-			mav.addObject("years", years);
+			mav.addObject("schedules", schedules);
 			return mav;
 		} else {
 			ModelAndView mav = new ModelAndView("ReviseProject");

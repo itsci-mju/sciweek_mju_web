@@ -175,7 +175,7 @@ input[type=submit]:hover {
 		
 	}
 </script>
-<body <%if (error_msg) {%> onload="return result()" <%}%> style="background-image: url('./image/hero-bg.png')">
+<body <%if (error_msg) {%> onload="return result()" <%}%>>
 
 	<div class="container" style="margin-top: 50px;">	
 		<div class="row2">

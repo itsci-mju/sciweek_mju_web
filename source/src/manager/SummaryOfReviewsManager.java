@@ -13,6 +13,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import bean.Project;
+import bean.Reviewer;
 import lombok.val;
 import model.ProjectResponse;
 import model.ReviewerResponse;
@@ -23,7 +24,7 @@ public class SummaryOfReviewsManager {
 
 	ResultSetToClass resultSetToClass = new ResultSetToClass();
 
-	public List<ProjectResponse> getListReviewsByTeamID(Integer team_id) throws Exception {
+	public List<ProjectResponse> getListReviewsByTeamID(Integer projecttype_id) throws Exception {
 		ConnectionDB condb = new ConnectionDB();
 		Connection con = condb.getConnection();
 		Statement stmt = null;
@@ -33,31 +34,38 @@ public class SummaryOfReviewsManager {
 			stmt = con.createStatement();
 			String sql = " SELECT reviews.reviewdate "
 					+ " ,project.project_id "
-					+ ",project.projectname "
-					+ ",project.state_project "
-					+ ",project.award "
-					+ " ,concat('[',(group_concat(JSON_OBJECT('reviewerName',concat(reviewer.firstname),'score',reviews.totalscore))  ),']') AS reviewer_array "
+					+ " ,project.projectname "
+					+ " ,project.state_project "
+					+ " ,project.status_project "
+					+ " ,project.award "
+					+ " ,reviews.comments"
+					+ " ,concat('[',(group_concat(JSON_OBJECT('reviewerName',concat(reviewer.prefix,' ',reviewer.firstname,' ',reviewer.lastname),'score',reviews.totalscore,'comments',reviews.comments))  ),']') AS reviewer_array "
 					+ " ,sum(reviews.totalscore) AS totalscore "
+					+ " ,count(distinct reviews.reviewer_id) AS countReviewer"
 					+ " FROM reviews "
 					+ " LEFT JOIN reviewer on reviews.reviewer_id = reviewer.reviewer_id "
-					+ " LEFT JOIN team on reviewer.team_id = team.team_id "
 					+ " LEFT JOIN project on  reviews.project_id = project.project_id "
 					+ " LEFT JOIN projecttype on project.projecttype_id = projecttype.projecttype_id "
-					+ " WHERE reviewer.team_id = '"+ team_id + "' "
+					+ " LEFT JOIN advisor on project.advisor_id = advisor.advisor_id  "
+					+ " WHERE project.projecttype_id = '"+ projecttype_id + "' "
 					+ " GROUP BY project.project_id "
-					+ " ORDER BY project.award ASC "; // totalscore DESC ;
+					+ " ORDER BY totalscore DESC "; 
+			
 			ResultSet rs = stmt.executeQuery(sql);
 
 			while (rs.next()) {
+				
 				val projectResponse = new ProjectResponse();
 				projectResponse.setReviewDate(rs.getTimestamp("reviews.reviewdate"));
 				projectResponse.setProjectID(rs.getString("project.project_id"));
 				projectResponse.setProjectName(rs.getString("project.projectname"));
 				projectResponse.setStateProject(rs.getInt("project.state_project"));
+				projectResponse.setStatusProject(rs.getInt("project.status_project"));
 				projectResponse.setAwardProject(rs.getString("project.award"));
 				projectResponse.setReviewerResponseList(mapper.readValue(rs.getString("reviewer_array"),new TypeReference<List<ReviewerResponse>>() {}));
 				projectResponse.setTotalScore(rs.getDouble("totalscore"));
 				projectResponseList.add(projectResponse);
+				
 			}
 
 			con.close();
@@ -68,6 +76,74 @@ public class SummaryOfReviewsManager {
 			e.printStackTrace();
 		}
 		return projectResponseList;
+	}
+	
+	public Reviewer getCount(Integer projecttype_id) throws Exception {
+		ConnectionDB condb = new ConnectionDB();
+		Connection con = condb.getConnection();
+		Statement stmt = null;
+		Reviewer reviewer = new Reviewer();
+		
+		try {
+			stmt = con.createStatement();
+			String sql = " SELECT count(reviewer_id) AS countAll FROM reviewer "
+					+ " LEFT JOIN projecttype on reviewer.projecttype_id = projecttype.projecttype_id "
+					+ " WHERE reviewer.projecttype_id = '"+ projecttype_id +"' ";
+			ResultSet rs = stmt.executeQuery(sql);
+
+			while (rs.next()) {		
+				
+				reviewer.setCount(rs.getInt("countAll"));
+			
+			}
+			con.close();
+			stmt.close();
+			rs.close();
+		} catch (SQLException e) {
+			System.out.println("catch");
+			e.printStackTrace();
+		}
+		return reviewer;
+	}	
+
+	public boolean isEditSelectFinal(Integer state_project, Integer projecttype_id) {
+		ConnectionDB condb = new ConnectionDB();
+		Connection con = condb.getConnection();
+		
+		Boolean result = false;
+
+		try {
+			CallableStatement stmt = con.prepareCall("{call isEditSelectFinal(?,?)}");
+			stmt.setInt(1, state_project);		
+			stmt.setInt(2, projecttype_id);
+			stmt.execute();
+			result = true;
+			  
+			stmt.close();
+		} catch (SQLException er) {
+			er.printStackTrace();
+		}
+		return result;
+	}
+	
+	public boolean isEditDecideAward(Integer state_project, Integer projecttype_id) {
+		ConnectionDB condb = new ConnectionDB();
+		Connection con = condb.getConnection();
+		
+		Boolean result = false;
+
+		try {
+			CallableStatement stmt = con.prepareCall("{call isEditDecideAward(?,?)}");
+			stmt.setInt(1, state_project);		
+			stmt.setInt(2, projecttype_id);
+			stmt.execute();
+			result = true;
+			  
+			stmt.close();
+		} catch (SQLException er) {
+			er.printStackTrace();
+		}
+		return result;
 	}
 	
 	public boolean isUpdateAVGScore(String project_id,Double avgscore) {
@@ -91,7 +167,7 @@ public class SummaryOfReviewsManager {
 		return result;
 	}
 	
-	public boolean isFailedProject(Integer team_id, Integer state_project) {
+	public boolean isFailedProject(Integer projecttype_id, Integer state_project) {
 		ConnectionDB condb = new ConnectionDB();
 		Connection con = condb.getConnection();
 		
@@ -99,7 +175,7 @@ public class SummaryOfReviewsManager {
 
 		try {
 			CallableStatement stmt = con.prepareCall("{call isFailedProject(?,?)}");
-			stmt.setInt(1, team_id);		
+			stmt.setInt(1, projecttype_id);		
 			stmt.setInt(2, state_project);
 			stmt.execute();
 			result = true;
@@ -111,7 +187,7 @@ public class SummaryOfReviewsManager {
 		return result;
 	}
 	
-	public boolean isFailedProjectSecond(Integer team_id, Integer state_project) {
+	public boolean isFailedProjectSecond(Integer projecttype_id, Integer state_project) {
 		ConnectionDB condb = new ConnectionDB();
 		Connection con = condb.getConnection();
 		
@@ -119,8 +195,27 @@ public class SummaryOfReviewsManager {
 
 		try {
 			CallableStatement stmt = con.prepareCall("{call isFailedProjectSecond(?,?)}");
-			stmt.setInt(1, team_id);		
+			stmt.setInt(1, projecttype_id);		
 			stmt.setInt(2, state_project);
+			stmt.execute();
+			result = true;
+			  
+			stmt.close();
+		} catch (SQLException er) {
+			er.printStackTrace();
+		}
+		return result;
+	}
+	
+	public boolean isEditChooseProjectFirst(Project project) {
+		ConnectionDB condb = new ConnectionDB();
+		Connection con = condb.getConnection();
+		
+		Boolean result = false;
+
+		try {
+			CallableStatement stmt = con.prepareCall("{call isEditChooseProjectFirst(?)}");
+			stmt.setString(1, project.getProject_id());		
 			stmt.execute();
 			result = true;
 			  
@@ -256,7 +351,7 @@ public class SummaryOfReviewsManager {
 			stmt = con.createStatement();
 			String sql = " SELECT * FROM project "
 					+ "  LEFT JOIN projecttype ON project.projecttype_id = projecttype.projecttype_id"
-					+ "  LEFT JOIN team ON project.team_id = team.team_id"
+					+ "  LEFT JOIN advisor on project.advisor_id = advisor.advisor_id  "
 					+ " WHERE project.project_id = '"+ project_id +"' ";
 			ResultSet rs = stmt.executeQuery(sql);
 
@@ -285,7 +380,7 @@ public class SummaryOfReviewsManager {
 			stmt = con.createStatement();
 			String sql = " SELECT * FROM project "
 					+ "  LEFT JOIN projecttype ON project.projecttype_id = projecttype.projecttype_id"
-					+ "  LEFT JOIN team ON project.team_id = team.team_id"
+					+ "  LEFT JOIN advisor on project.advisor_id = advisor.advisor_id  "
 					+ " WHERE project.project_id IN ("+ String.join(",", projectidList) +" )";
 			ResultSet rs = stmt.executeQuery(sql);
 

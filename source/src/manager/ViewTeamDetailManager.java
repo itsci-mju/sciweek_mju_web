@@ -10,7 +10,7 @@ import java.util.Vector;
 
 import bean.Reviewer;
 import bean.Project;
-import bean.Team;
+import bean.ProjectType;
 import resultset.ResultSetToClass;
 import util.ConnectionDB;
 
@@ -28,7 +28,7 @@ public class ViewTeamDetailManager {
 			stmt = con.createStatement();
 			String sql = " SELECT * FROM project"	
 					+ "  LEFT JOIN projecttype ON project.projecttype_id = projecttype.projecttype_id  "
-					+ "  LEFT JOIN team ON project.team_id = team.team_id  "
+					+ "  LEFT JOIN advisor ON project.advisor_id = advisor.advisor_id "
 					+ "  ORDER BY project.project_id ";
 			ResultSet rs = stmt.executeQuery(sql);
 
@@ -58,7 +58,7 @@ public class ViewTeamDetailManager {
 			stmt = con.createStatement();
 			String sql = " SELECT * FROM project"	
 					+ "  LEFT JOIN projecttype ON project.projecttype_id = projecttype.projecttype_id  "
-					+ "  LEFT JOIN team ON project.team_id = team.team_id "
+					+ "  LEFT JOIN advisor ON project.advisor_id = advisor.advisor_id "
 					+ "  WHERE project.projecttype_name like '"+ projecttype_name +"' "
 					+ "  ORDER BY project.project_id ";
 			ResultSet rs = stmt.executeQuery(sql);
@@ -88,11 +88,13 @@ public class ViewTeamDetailManager {
 		try {
 			stmt = con.createStatement();
 			String sql = "SELECT * FROM reviewer "
-					+ "LEFT JOIN team ON reviewer.team_id = team.team_id";
+					+ "  LEFT JOIN projecttype ON reviewer.projecttype_id = projecttype.projecttype_id";
 			ResultSet rs = stmt.executeQuery(sql);
 
 			while (rs.next()) {
+				
 				listreviewer.add(resultSetToClass.setResultSetToReviewer(rs));
+				
 			}
 
 			con.close();
@@ -105,22 +107,21 @@ public class ViewTeamDetailManager {
 		return listreviewer;
 	}
 
-	public Team getTeamByID(Integer key) {
+	public ProjectType getTeamByID(Integer key) throws Exception {
 		ConnectionDB condb = new ConnectionDB();
 		Connection con = condb.getConnection();
 		Statement stmt = null;
-		Team team = new Team ();
+		ProjectType projecttype = new ProjectType ();
 		
 		try {
 
 			stmt = con.createStatement();
-			String sql = "SELECT * FROM team WHERE team_id like '"+ key +"' ";
+			String sql = "SELECT * FROM projecttype WHERE projecttype_id like '"+ key +"' ";
 			ResultSet rs = stmt.executeQuery(sql);
 
 			while (rs.next()) {
 							
-				team.setTeam_id(rs.getInt("team.team_id"));
-				team.setTeam_name(rs.getString("team.team_name"));
+				projecttype = resultSetToClass.setResultSetToProjectType(rs);
 									
 			}
 
@@ -131,7 +132,7 @@ public class ViewTeamDetailManager {
 			System.out.println("catch");
 			e.printStackTrace();
 		}
-		return team;
+		return projecttype;
 	}
 	
 	public List<Reviewer> getListReviewerByTeamID(Integer key) throws Exception {
@@ -142,12 +143,14 @@ public class ViewTeamDetailManager {
 		try {
 			stmt = con.createStatement();
 			String sql = " SELECT * FROM reviewer "
-					+ " LEFT JOIN team ON reviewer.team_id = team.team_id"
-					+ " WHERE reviewer.team_id like "+ key +" ";
+					+ " LEFT JOIN projecttype ON reviewer.projecttype_id = projecttype.projecttype_id"
+					+ " WHERE reviewer.projecttype_id like "+ key +" ";
 			ResultSet rs = stmt.executeQuery(sql);
 
 			while (rs.next()) {		
+				
 				listreviewer.add(resultSetToClass.setResultSetToReviewer(rs));
+				
 			}
 
 			con.close();
@@ -160,7 +163,7 @@ public class ViewTeamDetailManager {
 		return listreviewer;
 	}
 	
-	public List<Project> getListProjectByTeamID(Integer key) throws Exception {
+	public List<Project> getListProjectByTeamID(Integer projecttype_id) throws Exception {
 		ConnectionDB condb = new ConnectionDB();
 		Connection con = condb.getConnection();
 		Statement stmt = null;
@@ -170,12 +173,14 @@ public class ViewTeamDetailManager {
 			stmt = con.createStatement();
 			String sql = " SELECT * FROM project "
 					+ " LEFT JOIN projecttype ON project.projecttype_id = projecttype.projecttype_id"
-					+ " LEFT JOIN team ON project.team_id = team.team_id"
-					+ " WHERE project.team_id like "+ key +" ";
+					+ " LEFT JOIN advisor ON project.advisor_id = advisor.advisor_id"
+					+ " WHERE project.projecttype_id = "+ projecttype_id +" ";
 			ResultSet rs = stmt.executeQuery(sql);
 
 			while (rs.next()) {
+				
 				listproject.add(resultSetToClass.setResultSetToProject(rs));
+				
 			}
 
 			con.close();
@@ -188,7 +193,7 @@ public class ViewTeamDetailManager {
 		return listproject;
 	}
 	
-	public boolean isDeleteReviewerByTeamID(Integer team_id,Integer reviewer_id) {
+	public boolean isDeleteReviewerByTeamID(Integer projecttype_id,Integer reviewer_id) {
 		ConnectionDB condb = new ConnectionDB();
 		Connection con = condb.getConnection();
 
@@ -196,7 +201,7 @@ public class ViewTeamDetailManager {
 	
 			try {
 				CallableStatement stmt = con.prepareCall("{call isDeleteReviewerByTeamID(?,?)}");
-				stmt.setInt(1, team_id);
+				stmt.setInt(1, projecttype_id);
 				stmt.setInt(2, reviewer_id);
 				stmt.execute();
 				result = true;

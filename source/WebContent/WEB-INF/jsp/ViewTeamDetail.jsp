@@ -4,7 +4,7 @@
 <%@ page import="java.util.*,manager.*,bean.*,java.text.*"%>
 <%
 	Admin admin = null;
-	Team team = null;
+	ProjectType projecttype = null;
 	List<Project> listproject = new Vector<>();
 	List<Reviewer> listreviewer = new Vector<>();
 
@@ -15,8 +15,7 @@
 	}
 	
 	try {
-		team = (Team) request.getAttribute("team");
-		session.setAttribute("key",team.getTeam_id()); 
+		projecttype = (ProjectType) request.getAttribute("projecttype");
 	} catch (Exception e) {
 		e.printStackTrace();
 	}
@@ -52,7 +51,7 @@
 <link href='https://fonts.googleapis.com/css?family=Kanit' rel='stylesheet' type='text/css'>
 <link rel="stylesheet" href="./css/web_css.css">
 </head>
-<body style="background-image: url('./image/hero-bg.png')">
+<body style="background-image: url('./image/hero-bg.png') ; background-repeat: no-repeat ; background-attachment: fixed ; background-size: 100% 100%">
 	<jsp:include page="common/navbar.jsp"></jsp:include>
 		<div class="container" style="margin-top: 35px;">
 			<section id="content">
@@ -67,14 +66,14 @@
 								<div class="form-group row">
 									<label class="col-sm-2 col-form-label text-right">รหัสทีม</label>
 									<div class="col-sm-4">
-										<input type="text" name="team_id" id="team_id" class="form-control data" value="<%=team.getTeam_id()%>" disabled="disabled">
+										<input type="text" name="projecttype_id" id="projecttype_id" class="form-control data" value="<%=projecttype.getProjecttype_id()%>" style="background-color: #ffffee" disabled="disabled">
 									</div>
 								</div>
 								
 								<div class="form-group row">
 									<label class="col-sm-2 col-form-label text-right">ชื่อทีม</label>
 									<div class="col-sm-4">
-										<input type="text" name="team_name" id="team_name" class="form-control data" value="<%=team.getTeam_name()%>" disabled="disabled">
+										<input type="text" name="projecttype_name" id="projecttype_name" class="form-control data" value="<%=projecttype.getProjecttype_name()%>" style="background-color: #ffffee" disabled="disabled">
 									</div>
 								</div>
 								<br>
@@ -104,12 +103,7 @@
 										<tr>																		
 											<td><%=listreviewer.get(i).getReviewer_id()%></td>
 											<td><%=listreviewer.get(i).getPrefix() + "  " + listreviewer.get(i).getFirstname() + "  " + listreviewer.get(i).getLastname()%></td>
-											<td><%=listreviewer.get(i).getPosition()%></td>
-											<%-- <td>
-												<button name="button" class="btn btn-danger" onclick="window.location.href='doDeleteReviewerByTeamID?team_id=<%=listreviewer.get(i).getTeam().getTeam_id()%>&reviewer_id=<%=listreviewer.get(i).getReviewer_id()%>';">
-													<i class="fa-solid fa-trash-can"></i>
-												</button>
-											</td>	 --%>						
+											<td><%=listreviewer.get(i).getPosition()%></td>					
 										</tr>
 										<%
 											}
@@ -144,9 +138,7 @@
 										</tr>
 									</thead>
 									<tbody align="center">
-										<%
-											if (listreviewer.size() != 0) {
-										%>
+										<% if (listreviewer.size() != 0) { %>
 										<%
 											for (int i = 0; i < listreviewer.size(); i++) {
 												if (listreviewer.get(i).getPosition().equals("คณะกรรมการ")) {
@@ -154,12 +146,7 @@
 										<tr>										
 											<td><%=listreviewer.get(i).getReviewer_id()%></td>
 											<td><%=listreviewer.get(i).getPrefix() + "  " + listreviewer.get(i).getFirstname() + "  " + listreviewer.get(i).getLastname()%></td>	
-											<td><%=listreviewer.get(i).getPosition()%></td>
-											<%-- <td>
-												<button name="button" class="btn btn-danger" onclick="window.location.href='doDeleteReviewerByTeamID?team_id=<%=listreviewer.get(i).getTeam().getTeam_id()%>&reviewer_id=<%=listreviewer.get(i).getReviewer_id()%>';">
-													<i class="fa-solid fa-trash-can"></i>
-												</button>
-											</td>	 --%>							
+											<td><%=listreviewer.get(i).getPosition()%></td>						
 										</tr>
 										<%
 											}
@@ -230,7 +217,7 @@
 								</div>
 								<div class="form-group row">
 									<div class="col-sm-12 text-center">									
-										<a href="doDeleteTeam?team_id=<%=team.getTeam_id()%>"> 
+										<a href="doDeleteTeam?projecttype_id=<%=projecttype.getProjecttype_id()%>"> 
 											<input type="button" name="delete" id="delete" value="ลบข้อมูล" class="btn btn-danger" disabled="disabled" onclick="return confirm('คุณต้องการลบทีมนี้หรือไม่ ');">
 										</a>
 										<a class="btn btn-warning" href="doViewTeam" role="button">ยกเลิก</a>	

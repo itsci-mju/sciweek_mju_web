@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import bean.Admin;
-import bean.Years;
+import bean.Schedules;
 import manager.ListScheduleManager;
 
 @Controller
@@ -22,9 +22,9 @@ public class ListScheduleController {
 		Admin admin = (Admin) session.getAttribute("admin");
 		if (admin != null) {
 			ListScheduleManager listScheduleManager = new ListScheduleManager();
-			List<Years> yearsList = listScheduleManager.getListYears();
+			List<Schedules> schedulesList = listScheduleManager.getListSchedules();
 			ModelAndView mav = new ModelAndView("ListSchedule");
-			mav.addObject("yearsList", yearsList);
+			mav.addObject("schedulesList", schedulesList);
 			return mav;
 		} else {
 			ModelAndView mav = new ModelAndView("LoginPage");

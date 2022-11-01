@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import bean.Admin;
-import bean.Years;
+import bean.Schedules;
 import lombok.val;
 import manager.ViewScheduleDetailManager;
 
@@ -27,9 +27,9 @@ public class ViewScheduleDetailController {
 		if (admin != null) {
 			Integer yearsTemp = Integer.parseInt(request.getParameter("years"));
 			ViewScheduleDetailManager viewScheduleDetailManager = new ViewScheduleDetailManager();
-			Years years = viewScheduleDetailManager.getYearsByID(yearsTemp);
+			Schedules schedules = viewScheduleDetailManager.getSchedulesByID(yearsTemp);
 			ModelAndView mav = new ModelAndView("ViewScheduleDetail");
-			mav.addObject("years",years);
+			mav.addObject("schedules",schedules);
 			return mav;
 		} else {
 			ModelAndView mav = new ModelAndView("LoginPage");
@@ -66,7 +66,7 @@ public class ViewScheduleDetailController {
 			val fmt_expreviewdate =  simpleDateFormat.format(d_expreviewdate);
 			val fmt_announcedate =  simpleDateFormat.format(d_announcedate);
 
-			Years years = new Years();
+			Schedules schedules = new Schedules();
 			
 			int presentyears = Integer.parseInt(request.getParameter("years"));
 			Timestamp ts_uploaddate =  Timestamp.valueOf(fmt_uploaddate);
@@ -82,21 +82,21 @@ public class ViewScheduleDetailController {
 			System.out.println(ts_expreviewdate);
 			System.out.println(ts_announcedate);
 			
-			years.setYears(presentyears);
-			years.setUploaddate(ts_uploaddate);
-			years.setExpuploaddate(ts_expuploaddate);
-			years.setReviewdate(ts_reviewdate);
-			years.setExpreviewdate(ts_expreviewdate);
-			years.setAnnouncedate(ts_announcedate);		
+			schedules.setYears(presentyears);
+			schedules.setUploaddate(ts_uploaddate);
+			schedules.setExpuploaddate(ts_expuploaddate);
+			schedules.setReviewdate(ts_reviewdate);
+			schedules.setExpreviewdate(ts_expreviewdate);
+			schedules.setAnnouncedate(ts_announcedate);		
 
 			ModelAndView mav = new ModelAndView("Index");
-			if (viewScheduleDetailManager.isEditSchedule(years)) {
+			if (viewScheduleDetailManager.isEditSchedule(schedules)) {
 				mav.addObject("msg", "บันทึกข้อมูลสำเร็จ!!!!");
-				session.setAttribute("years", years);
+				session.setAttribute("schedules", schedules);
 			} else {
 				mav.addObject("msg", "บันทึกข้อมูลไม่สำเร็จ!!!!");
 			}
-			session.setAttribute("years", years);
+			session.setAttribute("schedules", schedules);
 			return mav;
 		} else {
 			ModelAndView mav = new ModelAndView("LoginPage");

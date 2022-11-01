@@ -72,7 +72,7 @@ public class ImportExcelManager {
 		Boolean result = false;
 
 		try {
-			CallableStatement stmt = con.prepareCall("{call isImportStudent(?,?,?,?,?,?,?,?,?)}");
+			CallableStatement stmt = con.prepareCall("{call isImportStudent(?,?,?,?,?,?,?,?,?,?)}");
 			stmt.setInt(1, student.getStudent_id());
 			stmt.setString(2, student.getPrefix());
 			stmt.setString(3, student.getFirstname());
@@ -82,6 +82,7 @@ public class ImportExcelManager {
 			stmt.setString(7, student.getEmail());
 			stmt.setString(8, student.getPassword()); 
 			stmt.setInt(9, student.getSchool().getSchool_id());
+			stmt.setString(10, student.getProject().getProject_id());
 							
 			stmt.execute();
 
@@ -122,15 +123,17 @@ public class ImportExcelManager {
 		Boolean result = false;
 
 		try {
-			CallableStatement stmt = con.prepareCall("{call isImportProject(?,?,?,?,?,?,?)}");
+			CallableStatement stmt = con.prepareCall("{call isImportProject(?,?,?,?,?,?,?,?,?)}");
 		
 			stmt.setString(1, project.getProject_id());
 			stmt.setString(2, project.getProjectname());
 			stmt.setString(3, project.getVideo());
 			stmt.setString(4, project.getAward());
 			stmt.setDouble(5, project.getAvgscore());	
-			stmt.setInt(6, project.getState_project());
-			stmt.setInt(7, project.getProjecttype().getProjecttype_id());
+			stmt.setInt(6, project.getStatus_project());
+			stmt.setInt(7, project.getState_project());
+			stmt.setInt(8, project.getProjecttype().getProjecttype_id());
+			stmt.setInt(9, project.getAdvisor().getAdvisor_id());
 
 					
 			stmt.execute();
@@ -170,19 +173,26 @@ public class ImportExcelManager {
 		return result;
 	}
 	
-	public boolean isImportStudentData(Student student, Project project, Advisor advisor) {
+	public boolean isAddReviewer(Reviewer reviewer) {
 		ConnectionDB condb = new ConnectionDB();
 		Connection con = condb.getConnection();
 		Boolean result = false;
 
 		try {
-			CallableStatement stmt = con.prepareCall("{call isImportStudentData(?,?,?)}");
-
-			stmt.setInt(1, student.getStudent_id());
-			stmt.setString(2, project.getProject_id());
-			stmt.setInt(3, advisor.getAdvisor_id());
-
-					
+			CallableStatement stmt = con.prepareCall("{call isAddReviewer(?,?,?,?,?,?,?,?,?,?,?,?)}");
+			stmt.setInt(1, reviewer.getReviewer_id());
+			stmt.setString(2, reviewer.getPrefix());
+			stmt.setString(3, reviewer.getFirstname());
+			stmt.setString(4, reviewer.getLastname());
+			stmt.setString(5, reviewer.getFaculty());
+			stmt.setString(6, reviewer.getMajor());
+			stmt.setString(7, reviewer.getPosition());
+			stmt.setString(8, reviewer.getLine());
+			stmt.setString(9, reviewer.getFacebook());
+			stmt.setString(10, reviewer.getEmail());
+			stmt.setString(11, reviewer.getPassword());
+			stmt.setInt(12, reviewer.getProjecttype().getProjecttype_id());
+			
 			stmt.execute();
 
 			result = true;
@@ -193,6 +203,7 @@ public class ImportExcelManager {
 		}
 		return result;
 	}
+
 	
 	public Student getStudentByID(Integer student_id) throws Exception {
 		ConnectionDB condb = new ConnectionDB();

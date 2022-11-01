@@ -5,9 +5,16 @@
 <%
 	Reviewer reviewer = null;
 	List<ProjectResponse> projectResponseList = null;
+	Reviewer reviewers = null;
 
 	try {
 		reviewer = (Reviewer) session.getAttribute("reviewer");
+	} catch (Exception e) {
+		e.printStackTrace();
+	}
+	
+	try {
+		reviewers = (Reviewer) request.getAttribute("reviewers");
 	} catch (Exception e) {
 		e.printStackTrace();
 	}
@@ -18,7 +25,7 @@
 		e.printStackTrace();
 	}
 	
-	List<ReviewerResponse> reviewerList = new ArrayList<>();
+ 	List<ReviewerResponse> reviewerList = new ArrayList<>();
 	for (ProjectResponse reviews : projectResponseList) {
 		if (reviewerList.size() == 0) {
 			reviewerList = reviews.getReviewerResponseList();
@@ -31,9 +38,10 @@
 				}
 			}
 		}
-	}
+	} 
 	
 	Integer state_project = 0 ;
+	Integer status_project = 0 ;
 	String disabled = null ;
 %>
 <!DOCTYPE html>
@@ -55,9 +63,10 @@
 <link rel="stylesheet" href="./css/web_css.css">
 </head>
 <body style="background-image: url('./image/hero-bg.png')">
-
 <%response.setContentType("application/vnd.ms-excel"); %> 
 <%response.setHeader("Content-Disposition", "inline; filename=ExportSummaryFile.xls"); %>
+
+	<jsp:include page="common/navbar.jsp"></jsp:include>
 
 	<div class="container" style="margin-top: 35px;">
 		<section id="content">
@@ -66,33 +75,27 @@
 					<div class="form-group row">
 						<div class="col-auto">
 							<h3><i class="fa-solid fa-square-poll-horizontal">&nbsp;</i>ผลสรุปคะแนนโครงงานวิทยาศาสตร์</h3>
-						</div>				
+						</div>
 					</div>					
 			</div>
 		</section>
 		<hr class="colorgraph">
 	</div>
 
-<form action="isChooseProject" name="frm" id="chooseproject" method="post">
+	<form action="isChooseProject" name="frm" id="chooseproject" method="post">
 	<input type="hidden" class="form-control" name="reviewer_id" id="reviewer_id" value="<%=reviewer.getReviewer_id()%>"> 
-	<input type="hidden" class="form-control" name="team_id" id="team_id" value="<%=reviewer.getTeam().getTeam_id()%>"> 
+	<input type="hidden" class="form-control" name="projecttype_id" id="projecttype_id" value="<%=reviewer.getProjecttype().getProjecttype_id()%>"> 
 		<div style="margin-left: 1%; margin-right: 1%;">
-			<br>
 			<table class="table table-bordered  table-hover" id=myTable>
 				<thead class="table-info" align="center">
-					<tr>	
-						<th style="white-space: nowrap" width="auto"></th>
-						<th style="white-space: nowrap">ลำดับ</th>
+					<tr>
+						<th style="white-space: nowrap" width="50"></th>
+						<th style="white-space: nowrap">อันดับ</th>
 						<th style="white-space: nowrap">วันเวลาประเมิน</th>
-						<th style="white-space: nowrap">ชื่อโครงงาน/สิ่งประดิษฐ์</th>
-						<%
-							for (ReviewerResponse reviewers : reviewerList) {
-						%>
-						<th style="white-space: nowrap"><%=reviewers.getReviewerName()%></th>
-						<%
-							}
-						%>
-						<th style="white-space: nowrap">รวมคะแนน 100 คะแนน</th>				
+						<th style="white-space: nowrap">รหัสโครงงาน</th>
+						<th style="white-space: nowrap">ชื่อโครงงาน/สิ่งประดิษฐ์</th>										
+						<th style="white-space: nowrap">คะแนนเฉลี่ยรวม</th>
+						<th style="white-space: nowrap">เพิ่มเติม</th>
 					</tr>
 				</thead>
 
@@ -101,8 +104,7 @@
 
 						for (int i = 0; i < projectResponseList.size(); i++) {
 
-							Double total = projectResponseList.get(i).getTotalScore()
-									/ projectResponseList.get(i).getReviewerResponseList().size();
+							Double total = projectResponseList.get(i).getTotalScore() / projectResponseList.get(i).getReviewerResponseList().size();
 							Double avgscore = (Math.floor(total * 100) / 100);
 
 							SummaryOfReviewsManager summaryOfReviewsManager = new SummaryOfReviewsManager();
@@ -115,20 +117,55 @@
 				<% 
 					if (reviewer != null && projectResponseList.get(i).getStateProject() == 1) { 
 						
+						int num = i + 1 ;
+						
+						String fmt_reviewsdate = new SimpleDateFormat("dd MMM yy", new Locale("th", "TH")).format(projectResponseList.get(i).getReviewDate());
+						String fmt_reviewstime = new SimpleDateFormat("HH:mm").format(projectResponseList.get(i).getReviewDate()); 
+						
 						state_project = projectResponseList.get(i).getStateProject() ;
+						status_project = projectResponseList.get(i).getStatusProject() ;
 				%>
 				
 				<input type="hidden" name="state_project" id="state_project" value="<%=projectResponseList.get(i).getStateProject()%>">
+				<input type="hidden" name="avgscore" id="avgscore" value="<%=avgscore%>">
 
 				<tbody>
 					<tr>
 						<td align="center"><input type="checkbox" id="chkproject" name="chkproject" value="<%=projectResponseList.get(i).getProjectID()%>"></td>
+						<% if (num == 1) { %>
+						<td style="background-color: #C6EFCE" align="center" ><%=num%></td>
+						<%} else if (num == 2) { %>
+						<td style="background-color: #B7DEE8" align="center" ><%=num%></td>
+						<%} else if (num == 3) { %>
+						<td style="background-color: #B8CCE4" align="center" ><%=num%></td>
+						<%} else if (num == 4) { %>
+						<td style="background-color: #CCC0DA" align="center" ><%=num%></td>
+						<%} else if (num == 5) { %>
+						<td style="background-color: #FFFFCC" align="center" ><%=num%></td>
+						<%} else if (num == 6) { %>
+						<td style="background-color: #FDE9D9" align="center" ><%=num%></td>
+						<%}  else if (num == 7) { %>
+						<td style="background-color: #FCD5B4" align="center" ><%=num%></td>
+						<%} else { %>
+						<td style="background-color: #FFC7CE" align="center" ><%=num%></td>
+						<% } %>		
+					 	<td align="center" width="175px"><%=fmt_reviewsdate%> เวลา <%=fmt_reviewstime%> น.</td>	
 						<td align="center" width="50px"><%=projectResponseList.get(i).getProjectID()%></td>
-						<td align="center" width="190px"><%=projectResponseList.get(i).getReviewDate()%></td>
-						<td align="left"><%=projectResponseList.get(i).getProjectName()%></td>
-						<% for (ReviewerResponse reviewerResponse : projectResponseList.get(i).getReviewerResponseList()) { %>
-						<td align="center" width="90px"><%=reviewerResponse.getScore()%></td>
-						<% } %>
+						<td align="left"  style="font-size: 14px"><%=projectResponseList.get(i).getProjectName()%>&nbsp;(&nbsp;<%=projectResponseList.get(i).getReviewerResponseList().size()%>&nbsp;/&nbsp;<%=reviewers.getCount()%>&nbsp;)</td>
+											
+					<%-- 	<% 
+						for (ReviewerResponse reviewerResponse : reviewerList) { 	
+							for(int k = 0 ; k < projectResponseList.get(i).getReviewerResponseList().size() ;k++){	%>
+							<%= k %>
+							<% if (projectResponseList.get(i).getReviewerResponseList().get(k).getReviewerName() == reviewerResponse.getReviewerName() ){%>
+							<td align="center" width="90px"><%=projectResponseList.get(i).getReviewerResponseList().get(k).getScore() %></td>
+							<% } %>
+							<% if (k == projectResponseList.get(i).getReviewerResponseList().size() ) {%>
+							<td align="center" width="90px">-</td>
+							<% } %>
+							<% } %>
+						<% } %> --%>
+													
 						<% if (total >= 80) { %>
 						<td style="background-color: #C6EFCE" align="center" width="70px"><%=avgscore%></td>
 						<% } else if (total >= 75) { %>
@@ -146,17 +183,48 @@
 						<% } else { %>
 						<td style="background-color: #FFC7CE" align="center" width="70px"><%=avgscore%></td>
 						<% } %>
+						<td align="center" width="75px"><a type="button" class="btn btn-success exploder"><span class="fa-solid fa-magnifying-glass"></span></a></td>
+					</tr>
+					<tr class="explode hide">
+						<td colspan="8" style="display: none;">
+							<table class="table table-bordered  table-hover">
+								<thead class="table-info" align="center">
+									<tr>
+										<th>ชื่อ - สกุลผู้ประเมิน</th>
+										<th>คะแนน</th>
+										<th>ความคิดเห็น</th>
+									</tr>
+								</thead>				
+								<tbody>
+									<%  for (ReviewerResponse reviewerResponse : projectResponseList.get(i).getReviewerResponseList()) { 	%>
+									<tr>
+										<td style="white-space: nowrap" width="275"><%=reviewerResponse.getReviewerName()%></td>
+										<td style="white-space: nowrap" align="center"  width="75"><%=reviewerResponse.getScore()%></td>
+										<td style="white-space: nowrap">&nbsp;<%=reviewerResponse.getComments()%></td>
+									</tr>		
+									<% } %>	
+									
+								</tbody>
+							</table>
+						</td>
 					</tr>
 				</tbody>
 				
-				<% } %>
+				<%
+					}
+				%>
 				
 				<!-- 2 -->
 				
-				<% 
-					if (reviewer != null && projectResponseList.get(i).getStateProject() == 2) { 
-						
-						state_project = projectResponseList.get(i).getStateProject() ;
+				<% if (reviewer != null && projectResponseList.get(i).getStateProject() == 2) {
+					
+						int num = i + 1;
+
+						String fmt_reviewsdate = new SimpleDateFormat("dd MMM yy", new Locale("th", "TH")).format(projectResponseList.get(i).getReviewDate());
+						String fmt_reviewstime = new SimpleDateFormat("HH:mm").format(projectResponseList.get(i).getReviewDate());
+
+						state_project = projectResponseList.get(i).getStateProject();
+						status_project = projectResponseList.get(i).getStatusProject();
 				%>
 				
 				<input type="hidden" name="state_project" id="state_project" value="<%=projectResponseList.get(i).getStateProject()%>">
@@ -170,12 +238,26 @@
 								<option value="รางวัลชนะเลิศอันดับที่ 3">รางวัลชนะเลิศอันดับที่ 3</option>
 								<option selected value="รางวัลชมเชย">รางวัลชมเชย</option>
 						</select></td>
+						<% if (num == 1) { %>
+						<td style="background-color: #C6EFCE" align="center" ><%=num%></td>
+						<%} else if (num == 2) { %>
+						<td style="background-color: #B7DEE8" align="center" ><%=num%></td>
+						<%} else if (num == 3) { %>
+						<td style="background-color: #B8CCE4" align="center" ><%=num%></td>
+						<%} else if (num == 4) { %>
+						<td style="background-color: #CCC0DA" align="center" ><%=num%></td>
+						<%} else if (num == 5) { %>
+						<td style="background-color: #FFFFCC" align="center" ><%=num%></td>
+						<%} else if (num == 6) { %>
+						<td style="background-color: #FDE9D9" align="center" ><%=num%></td>
+						<%}  else if (num == 7) { %>
+						<td style="background-color: #FCD5B4" align="center" ><%=num%></td>
+						<%} else { %>
+						<td style="background-color: #FFC7CE" align="center" ><%=num%></td>
+						<% } %>		
+						<td align="center" width="175px"><%=fmt_reviewsdate%> เวลา <%=fmt_reviewstime%> น.</td>
 						<td align="center" width="50px"><%=projectResponseList.get(i).getProjectID()%></td>
-						<td align="center" width="180px"><%=projectResponseList.get(i).getReviewDate()%></td>
-						<td align="left"><%=projectResponseList.get(i).getProjectName()%></td>
-						<% for (ReviewerResponse reviewerResponse : projectResponseList.get(i).getReviewerResponseList()) { %>
-						<td align="center" width="90px"><%=reviewerResponse.getScore()%></td>
-						<% } %>
+						<td align="left" style="font-size: 14px"><%=projectResponseList.get(i).getProjectName()%>&nbsp;(&nbsp;<%=projectResponseList.get(i).getReviewerResponseList().size()%>&nbsp;/&nbsp;<%=reviewers.getCount()%>&nbsp;)</td>		
 						<% if (total >= 80) { %>
 						<td style="background-color: #C6EFCE" align="center" width="70px"><%=avgscore%></td>
 						<% } else if (total >= 75) { %>
@@ -193,6 +275,29 @@
 						<% } else { %>
 						<td style="background-color: #FFC7CE" align="center" width="70px"><%=avgscore%></td>
 						<% } %>
+						<td align="center" width="75px"><a type="button" class="btn btn-success exploder"><span class="fa-solid fa-magnifying-glass"></span></a></td>
+					</tr>
+					<tr class="explode hide">
+						<td colspan="8" style="display: none;">
+							<table class="table table-bordered  table-hover">
+								<thead class="table-info" align="center">
+									<tr>
+										<th>ชื่อ - สกุลผู้ประเมิน</th>
+										<th>คะแนน</th>
+										<th>ความคิดเห็น</th>
+									</tr>
+								</thead>				
+								<tbody>
+									<%  for (ReviewerResponse reviewerResponse : projectResponseList.get(i).getReviewerResponseList()) { 	%>
+									<tr>
+										<td style="white-space: nowrap" width="275"><%=reviewerResponse.getReviewerName()%></td>
+										<td style="white-space: nowrap" align="center"  width="75"><%=reviewerResponse.getScore()%></td>
+										<td style="white-space: nowrap">&nbsp;<%=reviewerResponse.getComments()%></td>
+									</tr>		
+									<% } %>	
+								</tbody>
+							</table>
+						</td>
 					</tr>
 				</tbody>
 				
@@ -202,17 +307,38 @@
 				
 				<% if (reviewer != null && projectResponseList.get(i).getStateProject() == 3 ) { 
 					
+						int num = i + 1 ;
+						
+						String fmt_reviewsdate = new SimpleDateFormat("dd MMM yy", new Locale("th", "TH")).format(projectResponseList.get(i).getReviewDate());
+						String fmt_reviewstime = new SimpleDateFormat("HH:mm ").format(projectResponseList.get(i).getReviewDate()); 
+					
 						state_project = projectResponseList.get(i).getStateProject() ;
+						status_project = projectResponseList.get(i).getStatusProject() ;
 				%>
 
 				<tbody>
-					<tr>									
-						<td align="center" width="50px"><%=projectResponseList.get(i).getProjectID()%></td>
-						<td align="center" width="190px"><%=projectResponseList.get(i).getReviewDate()%></td>
-						<td align="left"><%=projectResponseList.get(i).getProjectName()%></td>
-						<% for (ReviewerResponse reviewerResponse : projectResponseList.get(i).getReviewerResponseList()) { %>
-						<td align="center" width="90px"><%=reviewerResponse.getScore()%></td>
+					<tr>			
+						<td align="center" width="175"><%=projectResponseList.get(i).getAwardProject()%></td>		
+						<% if (num == 1) { %>
+						<td style="background-color: #C6EFCE" align="center" ><%=num%></td>
+						<%} else if (num == 2) { %>
+						<td style="background-color: #B7DEE8" align="center" ><%=num%></td>
+						<%} else if (num == 3) { %>
+						<td style="background-color: #B8CCE4" align="center" ><%=num%></td>
+						<%} else if (num == 4) { %>
+						<td style="background-color: #CCC0DA" align="center" ><%=num%></td>
+						<%} else if (num == 5) { %>
+						<td style="background-color: #FFFFCC" align="center" ><%=num%></td>
+						<%} else if (num == 6) { %>
+						<td style="background-color: #FDE9D9" align="center" ><%=num%></td>
+						<%}  else if (num == 7) { %>
+						<td style="background-color: #FCD5B4" align="center" ><%=num%></td>
+						<%} else { %>
+						<td style="background-color: #FFC7CE" align="center" ><%=num%></td>
 						<% } %>
+						<td align="center" width="175px"><%=fmt_reviewsdate%> เวลา <%=fmt_reviewstime%> น.</td>		
+						<td align="center" width="50px"><%=projectResponseList.get(i).getProjectID()%></td>
+						<td align="left" style="font-size: 14px"><%=projectResponseList.get(i).getProjectName()%>&nbsp;(&nbsp;<%=projectResponseList.get(i).getReviewerResponseList().size()%>&nbsp;/&nbsp;<%=reviewers.getCount()%>&nbsp;)</td>
 						<% if (total >= 80) { %>
 						<td style="background-color: #C6EFCE" align="center" width="70px"><%=avgscore%></td>
 						<% } else if (total >= 75) { %>
@@ -230,7 +356,29 @@
 						<% } else { %>
 						<td style="background-color: #FFC7CE" align="center" width="70px"><%=avgscore%></td>
 						<% } %>
-						<td align="center" width="175"><%=projectResponseList.get(i).getAwardProject()%></td>			
+						<td align="center" width="75px"><a type="button" class="btn btn-success exploder"><span class="fa-solid fa-magnifying-glass"></span></a></td>			
+					</tr>
+					<tr class="explode hide">
+						<td colspan="8" style="display: none;">
+							<table class="table table-bordered  table-hover">
+								<thead class="table-info" align="center">
+									<tr>
+										<th>ชื่อ - สกุลผู้ประเมิน</th>
+										<th>คะแนน</th>
+										<th>ความคิดเห็น</th>
+									</tr>
+								</thead>				
+								<tbody>
+									<%  for (ReviewerResponse reviewerResponse : projectResponseList.get(i).getReviewerResponseList()) { 	%>
+									<tr>
+										<td style="white-space: nowrap" width="275"><%=reviewerResponse.getReviewerName()%></td>
+										<td style="white-space: nowrap" align="center"  width="75"><%=reviewerResponse.getScore()%></td>
+										<td style="white-space: nowrap">&nbsp;<%=reviewerResponse.getComments()%></td>
+									</tr>		
+									<% } %>		
+								</tbody>
+							</table>
+						</td>
 					</tr>
 				</tbody>
 					
@@ -253,20 +401,25 @@
 				%>
 			</table>		
 			<br>
-			
-			<% if (state_project != 3) { %>		
-			
 			<div class="form-group row">
 				<div class="col-sm-12 text-center">
-					<button type="submit" class="btn btn-success" OnClick="return validateForm(frm)">เลือก</button>
+					<% if (state_project != 3) { %>	
+						<button type="submit" class="btn btn-success" OnClick="return validateForm(frm)">เลือก</button>
+					<% } %>
+					<% if (state_project == 2) { %>	
+						<a class="btn btn-warning" href="isEditSelectFinal?state_project=<%=state_project%>" role="button" >แก้ไขการเลือกครั้งที่ 1</a>
+					<% } %>
+					<% if (state_project == 3 && status_project == 0) { %>	
+						<a class="btn btn-warning" href="isEditDecideAwards?state_project=<%=state_project%>" role="button" >แก้ไขการเลือกรางวัล</a>
+					<% } %>
+					<% if (state_project != 3) { %>	
 					<a class="btn btn-danger" href="index" role="button">ยกเลิก</a>
+					<% } %>
 				</div>
 			</div>
-			
-			<% } %>
-			
 		</div>
 	</form>
 
+	<jsp:include page="common/footer.jsp"></jsp:include>
 </body>
 </html>

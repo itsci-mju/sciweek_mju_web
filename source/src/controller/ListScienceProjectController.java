@@ -10,9 +10,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
+import bean.Project;
 import bean.Reviewer;
-import bean.StudentProject;
-import bean.Years;
+import bean.Schedules;
 import manager.AnnounceResultManager;
 import manager.ListScienceProjectManager;
 import model.ProjectResponse;
@@ -25,12 +25,13 @@ public class ListScienceProjectController {
 	public ModelAndView loadListScienceProjectPage(HttpSession session, HttpServletRequest request) throws Exception{
 		Reviewer reviewer = (Reviewer) session.getAttribute("reviewer");
 		if (reviewer != null) {		
-			int team_id = reviewer.getTeam().getTeam_id();
+			int projecttype_id = reviewer.getProjecttype().getProjecttype_id();
 			int reviewer_id = reviewer.getReviewer_id();
 			ListScienceProjectManager listScienceProjectManager = new ListScienceProjectManager();
 			AnnounceResultManager announceResultManager = new AnnounceResultManager();
+			Schedules schedules = announceResultManager.getDATE();
 			List<ProjectResponse> projectResponseList = listScienceProjectManager.getListProjectByReviewerID(reviewer_id);
-			
+			List<Project> projectList = listScienceProjectManager.getListScienceProjectByTeamID(projecttype_id);
 			List<ReviewerResponse> reviewerResponseList = new ArrayList<>();
 			for (ProjectResponse reviews : projectResponseList) {
 				if (reviewerResponseList.size() == 0) {
@@ -46,13 +47,11 @@ public class ListScienceProjectController {
 				}
 			}
 			
-			List<StudentProject> studentProjectList = listScienceProjectManager.getListScienceProjectByTeamID(team_id);
-			Years years = announceResultManager.getDATE();
 			ModelAndView mav = new ModelAndView("ListScienceProject");
 			mav.addObject("projectResponseList", projectResponseList);
 			mav.addObject("reviewerResponseList", reviewerResponseList);
-			mav.addObject("studentProjectList", studentProjectList);
-			mav.addObject("years", years);
+			mav.addObject("projectList", projectList);
+			mav.addObject("schedules", schedules);
 			return mav;
 		} else {
 			ModelAndView mav = new ModelAndView("LoginPage");

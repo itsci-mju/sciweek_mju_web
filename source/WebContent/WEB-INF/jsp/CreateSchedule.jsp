@@ -29,49 +29,72 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <link href='https://fonts.googleapis.com/css?family=Kanit' rel='stylesheet' type='text/css'>
 <link rel="stylesheet" href="./css/web_css.css">
+<link rel="stylesheet" href="./css/datepicker.css">
+<script type="text/javascript" src="./js/datepicker.js"></script>
 
 <script type="text/javascript">
+
 	function validateForm(frm) {
 
-		if (frm.team_name.value == "") {
-			alert("<!-- กรุณาเลือกกลุ่ม --> ");
+		if (frm.uploaddate.value == "") {
+			alert("<!-- กรุณาเลือกวันที่อัปโหลดเอกสารรายงาน --> ");
 			return false;
 		}
-
-		var checkBox = document.getElementById('chkreviewer');
-
-		if (checkBox.checked === false) {
-			alert("<!-- กรุณาเลือกประธานคณะกรรมการและคณะกรรมการ --> ");
+		
+		if (frm.expuploaddate.value == "") {
+			alert("<!-- กรุณาเลือกวันที่สิ้นสุดอัปโหลดเอกสารรายงาน --> ");
 			return false;
-		}
-
+		} else if (frm.expuploaddate.value <= frm.uploaddate.value) {
+			alert("<!-- กรุณาเลือกวันที่สิ้นสุดอัปโหลดเอกสารให้มากกว่าวันที่อัปโหลดเอกสารรายงาน --> ");
+			return false;
+		} 
+		
+		if (frm.reviewdate.value == "") {
+			alert("<!-- กรุณาเลือกวันที่เริ่มประเมินโครงงานวิทยาศาสตร์ --> ");
+			return false;
+		} else if (frm.reviewdate.value <= frm.expuploaddate.value) {
+			alert("<!-- กรุณาเลือกวันที่เริ่มประเมินโครงงานวิทยาศาสตร์ให้มากกว่าวันที่สิ้นสุดอัปโหลดเอกสารรายงาน --> ");
+			return false;
+		} 
+		
+		if (frm.expreviewdate.value == "") {
+			alert("<!-- กรุณาเลือกวันที่สิ้นสุดการประเมินโครงงานวิทยาศาสตร์ --> ");
+			return false;
+		} else if (frm.expreviewdate.value <= frm.reviewdate.value) {
+			alert("<!-- กรุณาเลือกวันที่สิ้นสุดการประเมินโครงงานวิทยาศาสตร์ให้มากกว่าวันที่เริ่มประเมินโครงงานวิทยาศาสตร์ --> ");
+			return false;
+		} 
+		
+		if (frm.announcedate.value == "") {
+			alert("<!-- กรุณาเลือกวันที่ประกาศผลรางวัลโครงงานวิทยาศาสตร์ --> ");
+			return false;
+		} else if (frm.announcedate.value <= frm.expreviewdate.value) {
+			alert("<!-- กรุณาเลือกวันที่ประกาศผลรางวัลโครงงานวิทยาศาสตร์ให้มากกว่าวันที่สิ้นสุดการประเมินโครงงานวิทยาศาสตร์ --> ");
+			return false;
+		} 
+		
 	}
 </script>
-<body style="background-image: url('./image/hero-bg.png')">
-	<jsp:include page="common/navbar.jsp"></jsp:include>
+<body  style="background-image: url('./image/hero-bg.png') ; background-repeat: no-repeat ; background-attachment: fixed ; background-size: 100% 100%">
 
+	<jsp:include page="common/navbar.jsp"></jsp:include>
+	
 	<div class="container" style="margin-top: 35px;">
 		<div class="row">
 			<div class="col-lg-12">
 				<h3><i class="fa-solid fa-calendar-days">&nbsp;</i>สร้างกำหนดการ</h3>
 				<hr class="colorgraph">
 				<br>
-				
-				<form action="isCreateSchedule" name="frm" id="frm" method="post">	
-				
+
+				<form action="isCreateSchedule" name="frm" id="frm" method="post">			
 					<div class="form-group row">
 						<label class="col-sm-3 col-form-label text-right">วันอัปโหลดเอกสารรายงาน</label>
 						<div class="col-sm-3">
-							<input type="datetime-local" class="form-control" id="uploaddate" name="uploaddate" required="required">
+							<input type="datetime-local" class="form-control" id="uploaddate" name="uploaddate" style="background-color: #ffffee" required="required">
 						</div>
-					</div>
-					
-					<br>
-					
-					<div class="form-group row">
 						<label class="col-sm-3 col-form-label text-right">วันสิ้นสุดอัปโหลดเอกสารรายงาน</label>
 						<div class="col-sm-3">
-							<input type="datetime-local" class="form-control" id="expuploaddate" name="expuploaddate" required="required">
+							<input type="datetime-local" class="form-control" id="expuploaddate" name="expuploaddate" style="background-color: #ffffee" required="required">
 						</div>
 					</div>
 					
@@ -80,25 +103,20 @@
 					<div class="form-group row">
 						<label class="col-sm-3 col-form-label text-right">วันเริ่มประเมินโครงงานวิทยาศาสตร์</label>
 						<div class="col-sm-3">
-							<input type="datetime-local" class="form-control" id="reviewdate" name="reviewdate" required="required">
+							<input type="datetime-local" class="form-control" id="reviewdate" name="reviewdate" style="background-color: #ffffee" required="required">
 						</div>
-					</div>
-					
-					<br>
-					
-					<div class="form-group row">
 						<label class="col-sm-3 col-form-label text-right">วันสิ้นสุดประเมินโครงงานวิทยาศาสตร์</label>
 						<div class="col-sm-3">
-							<input type="datetime-local" class="form-control" id="expreviewdate" name="expreviewdate" required="required">
+							<input type="datetime-local" class="form-control" id="expreviewdate" name="expreviewdate" style="background-color: #ffffee" required="required">
 						</div>
 					</div>
-				
-					<br>
+					
+					<br>		
 					
 					<div class="form-group row">
 						<label class="col-sm-3 col-form-label text-right">วันประกาศผลรางวัล</label>
 						<div class="col-sm-3">
-							<input type="datetime-local" class="form-control" id="announcedate" name="announcedate" required="required">
+							<input type="datetime-local" class="form-control" id="announcedate" name="announcedate" style="background-color: #ffffee" required="required">
 						</div>				
 					</div>
 

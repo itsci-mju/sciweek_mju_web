@@ -5,7 +5,7 @@
 <%@ page import="java.util.*,manager.*,bean.*,java.text.*,java.sql.Timestamp"%>
 <%
 	Student student = null;
-	Years years = null;
+	Schedules schedules = null;
 	Reviewer reviewer = null;
 	Admin admin = null;
 	String error = null; 
@@ -30,7 +30,7 @@
 	}
 	
 	try {
-		years = (Years) request.getAttribute("years");
+		schedules = (Schedules) request.getAttribute("schedules");
 	} catch (Exception e) {
 		
 	}
@@ -41,8 +41,6 @@
 		
 	}
 	
-	ListNewsManager listNewsManager= new ListNewsManager();
-	List<Pressrelease> listnews = listNewsManager.getlistNewsForshow();
 %>
 <!DOCTYPE html>
 <html>
@@ -63,8 +61,7 @@
 <link rel="stylesheet" href="./css/web_css.css">
 <link rel="stylesheet" href="./css/index_css.css">
 </head>
-
-<body style="background-image: url('./image/hero-bg.png')">
+<body  style="background-image: url('./image/hero-bg.png') ; background-repeat: no-repeat ; background-attachment: fixed ; background-size: 100% 100%">
 
 	<jsp:include page="common/navbar.jsp"></jsp:include>
 
@@ -82,15 +79,12 @@
 		</section>
 	</div>
 	
-	<%
+<%
 		if (student != null && errors == 1) {
 				
-			String fmt_expuploaddate = new SimpleDateFormat("dd/MM/yyyy").format(years.getExpuploaddate());
-			String fmt_expuploadtime = new SimpleDateFormat("HH:mm").format(years.getExpuploaddate()); 
+			String fmt_expuploaddate = new SimpleDateFormat("dd MMMM yyyy", new Locale("th", "TH")).format(schedules.getExpuploaddate());
+			String fmt_expuploadtime = new SimpleDateFormat("HH:mm").format(schedules.getExpuploaddate()); 
 	
-			System.out.println(fmt_expuploaddate);
-			System.out.println(fmt_expuploadtime);
-
 			error = "กรุณาอัปโหลดเอกสารรายงานและวิดีโอ";
 	%>
 	<section style="margin-top : -45px">
@@ -119,12 +113,9 @@
 	<% 
 		if (student != null && errors == 2) { 
 			
-			String fmt_expuploaddate = new SimpleDateFormat("dd/MM/yyyy").format(years.getExpuploaddate());
-			String fmt_expuploadtime = new SimpleDateFormat("HH:mm").format(years.getExpuploaddate()); 
+			String fmt_expuploaddate = new SimpleDateFormat("dd MMMM yyyy", new Locale("th", "TH")).format(schedules.getExpuploaddate());
+			String fmt_expuploadtime = new SimpleDateFormat("HH:mm").format(schedules.getExpuploaddate()); 
 	
-			System.out.println(fmt_expuploaddate);
-			System.out.println(fmt_expuploadtime);
-			
 			error = "กรุณาอัปโหลดวิดีโอ" ;	
 	%>
 	<section style="margin-top : -45px">
@@ -153,11 +144,8 @@
 	<% 
 		if (student != null && errors == 3) { 
 			
-			String fmt_expuploaddate = new SimpleDateFormat("dd/MM/yyyy").format(years.getExpuploaddate());
-			String fmt_expuploadtime = new SimpleDateFormat("HH:mm").format(years.getExpuploaddate()); 
-	
-			System.out.println(fmt_expuploaddate);
-			System.out.println(fmt_expuploadtime);
+			String fmt_expuploaddate = new SimpleDateFormat("dd MMMM yyyy", new Locale("th", "TH")).format(schedules.getExpuploaddate());
+			String fmt_expuploadtime = new SimpleDateFormat("HH:mm").format(schedules.getExpuploaddate()); 
 			
 			error = "กรุณาอัปโหลดเอกสารรายงาน" ;	
 	%>
@@ -196,27 +184,37 @@
 		</div>
 	</div>
 	<div style="background-image: url('./image/line_bg.gif')">
+	<%
+	
+	Date date = new Date();  
+	Timestamp timestamp = new Timestamp(date.getTime());  
+	SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+	
+	Calendar cal = Calendar.getInstance();
+	int presentyears = cal.get(Calendar.YEAR);
+	
+	ViewScheduleDetailManager viewScheduleDetailManager = new ViewScheduleDetailManager();
+	
+	Schedules schedule = viewScheduleDetailManager.getSchedulesByID(presentyears);
+		
+	%>
 		<br>
-		<h2 class="text-header text-center">ข่าวประชาสัมพันธ์และกิจกรรม</h2>
+		<h2 class="text-header text-center">ประกาศผลรางวัลการประกวด</h2>
 		<hr class="colorgraph">
+		<% if (schedule.getAnnouncedate() != null) { %>
+		
+		<% if (timestamp.after(schedule.getAnnouncedate())) { %>
 		<section class="section " id="blog" style="margin-top: -60px;">
-			<div class="container">
-				<%
-					String date = "";
-				%>
-				<%
-					for (int i = 0; i < listnews.size(); i++) {
-				%>
+			<div class="container">	
 				<div class="row">
-				
 					<div class="col-lg-4">
 						<div class="blog-grid">
 							<div class="blog-img">
 								<div class="date">
-									<%=date = new SimpleDateFormat("dd MMM yyyy", new Locale("th", "TH")).format(listnews.get(i).getCreatedate())%>
+									<i class="fa-solid fa-trophy">&nbsp;</i>
 								</div>
 
-								<img src="./news_img/<%=listnews.get(i).getNewsid()%>.png"
+								<img src="./news_img/Tn1.png"
 									width="350" height="308"
 									style="border: 1px solid #ddd; border-radius: 4px; padding: 5px; object-fit: cover; object-position: 100% 0; align: center;"
 									title="" alt="">
@@ -224,10 +222,10 @@
 							</div>
 							<div class="blog-info">
 								<div style="height: 96px;">
-									<b style="word-wrap: break-word;"> <%=listnews.get(i).getTitle()%></b>					
+									<b style="word-wrap: break-word;">ประกาศรางวัลหมวดมัธยมตอนต้นสาขาวิทยาศาสตร์กายภาพ </b>					
 								</div>
 								<div class="btn-bar">
-									<a href="ViewPressreleaseDetail?id=<%=listnews.get(i).getNewsid()%>" class="px-btn-arrow"> 
+									<a href="doViewResult?projecttype_id=1" class="px-btn-arrow"> 
 										<span>อ่านเพิ่มเติม</span> 
 										<i class="arrow"></i>
 									</a>
@@ -235,19 +233,15 @@
 							</div>
 						</div>
 					</div>
-					<%
-						i++;
-							if (i < listnews.size()) {
-					%>
 
 					<div class="col-lg-4">
 						<div class="blog-grid">
 							<div class="blog-img">
 								<div class="date">
-									<%=date = new SimpleDateFormat("dd MMM yyyy", new Locale("th", "TH")).format(listnews.get(i).getCreatedate())%>
+									<i class="fa-solid fa-trophy">&nbsp;</i>
 								</div>
 
-								<img src="./news_img/<%=listnews.get(i).getNewsid()%>.png"
+								<img src="./news_img/Tn2.png"
 									width="350" height="308"
 									style="border: 1px solid #ddd; border-radius: 4px; padding: 5px; object-fit: cover; object-position: 100% 0;"
 									title="" alt="">
@@ -255,11 +249,10 @@
 							</div>
 							<div class="blog-info">
 								<div style="height: 96px;">
-									<b style="word-wrap: break-word;"> <%=listnews.get(i).getTitle()%>
-									</b>
+									<b style="word-wrap: break-word;">ประกาศรางวัลหมวดมัธยมตอนต้นสาขาวิทยาศาสตร์ชีวภาพ </b>
 								</div>
 								<div class="btn-bar">
-									<a href="ViewPressreleaseDetail?id=<%=listnews.get(i).getNewsid()%>" class="px-btn-arrow"> 
+									<a href="doViewResult?projecttype_id=2" class="px-btn-arrow"> 
 										<span>อ่านเพิ่มเติม</span>
 										<i class="arrow"></i>
 									</a>
@@ -267,23 +260,15 @@
 							</div>
 						</div>
 					</div>
-					<%
-						}
-					%>
-
-					<%
-						i++;
-							if (i < listnews.size()) {
-					%>
-
+				
 					<div class="col-lg-4">
 						<div class="blog-grid">
 							<div class="blog-img">
 								<div class="date">
-									<%=date = new SimpleDateFormat("dd MMM yyyy", new Locale("th", "TH")).format(listnews.get(i).getCreatedate())%>
+									<i class="fa-solid fa-trophy">&nbsp;</i>
 								</div>
 
-								<img src="./news_img/<%=listnews.get(i).getNewsid()%>.png"
+								<img src="./news_img/Tn3.png"
 									width="350" height="308"
 									style="border: 1px solid #ddd; border-radius: 4px; padding: 5px; object-fit: cover; object-position: 100% 0;"
 									title="" alt="">
@@ -291,11 +276,10 @@
 							</div>
 							<div class="blog-info">
 								<div style="height: 96px;">
-									<b style="word-wrap: break-word;"> <%=listnews.get(i).getTitle()%>
-									</b>
+									<b style="word-wrap: break-word;">ประกาศผลรางวัลหมวดมัธยมตอนต้นสาขาวิทยาศาสตร์ประยุกต์</b>
 								</div>
 								<div class="btn-bar">
-									<a href="ViewPressreleaseDetail?id=<%=listnews.get(i).getNewsid()%>" class="px-btn-arrow"> 
+									<a href="doViewResult?projecttype_id=3" class="px-btn-arrow"> 
 										<span>อ่านเพิ่มเติม</span> 
 										<i class="arrow"></i>
 									</a>
@@ -303,11 +287,96 @@
 							</div>
 						</div>
 					</div>
-					<% } %>
 				</div>
-				<% } %>
 			</div>
+			
+			<div class="container">
+				<div class="row">
+					<div class="col-lg-4">
+						<div class="blog-grid">
+							<div class="blog-img">
+								<div class="date">
+									<i class="fa-solid fa-trophy">&nbsp;</i>
+								</div>
+
+								<img src="./news_img/Tn4.png"
+									width="350" height="308"
+									style="border: 1px solid #ddd; border-radius: 4px; padding: 5px; object-fit: cover; object-position: 100% 0; align: center;"
+									title="" alt="">
+
+							</div>
+							<div class="blog-info">
+								<div style="height: 96px;">
+									<b style="word-wrap: break-word;">ประกาศรางวัลหมวดมัธยมตอนปลายสาขาวิทยาศาสตร์กายภาพ</b>					
+								</div>
+								<div class="btn-bar">
+									<a href="doViewResult?projecttype_id=4" class="px-btn-arrow"> 
+										<span>อ่านเพิ่มเติม</span> 
+										<i class="arrow"></i>
+									</a>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="col-lg-4">
+						<div class="blog-grid">
+							<div class="blog-img">
+								<div class="date">
+									<i class="fa-solid fa-trophy">&nbsp;</i>
+								</div>
+
+								<img src="./news_img/Tn6.png"
+									width="350" height="308"
+									style="border: 1px solid #ddd; border-radius: 4px; padding: 5px; object-fit: cover; object-position: 100% 0;"
+									title="" alt="">
+
+							</div>
+							<div class="blog-info">
+								<div style="height: 96px;">
+									<b style="word-wrap: break-word;">ประกาศรางวัลหมวดมัธยมตอนปลายสาขาวิทยาศาสตร์ชีวภาพ</b>
+								</div>
+								<div class="btn-bar">
+									<a href="doViewResult?projecttype_id=5" class="px-btn-arrow"> 
+										<span>อ่านเพิ่มเติม</span>
+										<i class="arrow"></i>
+									</a>
+								</div>
+							</div>
+						</div>
+					</div>
+				
+					<div class="col-lg-4">
+						<div class="blog-grid">
+							<div class="blog-img">
+								<div class="date">
+									<i class="fa-solid fa-trophy">&nbsp;</i>
+								</div>
+
+								<img src="./news_img/Tn7.png"
+									width="350" height="308"
+									style="border: 1px solid #ddd; border-radius: 4px; padding: 5px; object-fit: cover; object-position: 100% 0;"
+									title="" alt="">
+
+							</div>
+							<div class="blog-info">
+								<div style="height: 96px;">
+									<b style="word-wrap: break-word;">ประกาศรางวัลมัธยมตอนปลายสาขาวิทยาศาสตร์ประยุกต์</b>
+								</div>
+								<div class="btn-bar">
+									<a href="doViewResult?projecttype_id=6" class="px-btn-arrow"> 
+										<span>อ่านเพิ่มเติม</span> 
+										<i class="arrow"></i>
+									</a>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>	
 		</section>
+		<% } %>		
+	<% } %>
 	</div>
 
 	<jsp:include page="common/footer.jsp"></jsp:include>

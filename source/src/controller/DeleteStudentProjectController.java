@@ -14,7 +14,6 @@ import bean.Admin;
 import bean.Advisor;
 import bean.Project;
 import bean.Student;
-import bean.StudentProject;
 import manager.DeleteStudentProjectManager;
 import manager.ListStudentProjectManager;
 
@@ -55,10 +54,10 @@ public class DeleteStudentProjectController {
 				deleteStudentProjectManager.isDeleteStudentProject(student, project, advisor);
 			}
 			
-			ListStudentProjectManager vpjm = new ListStudentProjectManager();
-			List<StudentProject> listsproject = vpjm.getListStudentProject();
+			ListStudentProjectManager listStudentProjectManager = new ListStudentProjectManager();
+			List<Project> listproject = listStudentProjectManager.getListStudentProject();
 			ModelAndView mav = new ModelAndView("ListStudentProject");
-			mav.addObject("listsproject", listsproject);
+			mav.addObject("listproject", listproject);
 
 			return mav;
 

@@ -15,7 +15,5 @@ public class Answer {
 	
 	private Question question;
 	private Reviews review;
-	private Reviewer reviewer;
-	private Project project;
 
 }

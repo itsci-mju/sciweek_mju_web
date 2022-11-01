@@ -11,6 +11,8 @@ public class ReviewerResponse {
 	
 	private String status;
 	
-	private Double score;
+	private Double score = 0.0 ;
+	
+	private String comments;
 	
 }

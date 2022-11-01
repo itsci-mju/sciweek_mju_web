@@ -1,7 +1,5 @@
 package controller;
 
-import java.util.List;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -10,8 +8,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
+import bean.Project;
 import bean.Student;
-import bean.StudentProject;
 import manager.ListProjectManager;
 
 @Controller
@@ -22,9 +20,9 @@ public class ListProjectController {
 		Student student = (Student) session.getAttribute("student");
 		if (student != null) {		
 			ListProjectManager listProjectManager = new ListProjectManager();
-			List<StudentProject> listsproject = listProjectManager.getListStudentProject(student.getStudent_id());
+			Project project = listProjectManager.getStudentProjectByID(student.getStudent_id());
 			ModelAndView mav = new ModelAndView("ListProject");
-			mav.addObject("listsproject", listsproject);
+			mav.addObject("project", project);
 			return mav;
 		} else {
 			ModelAndView mav = new ModelAndView("LoginPage");

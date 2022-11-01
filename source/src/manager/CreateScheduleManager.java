@@ -4,7 +4,7 @@ import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-import bean.Years;
+import bean.Schedules;
 import resultset.ResultSetToClass;
 import util.ConnectionDB;
 
@@ -12,19 +12,19 @@ public class CreateScheduleManager {
 	
 	ResultSetToClass resultSetToClass = new ResultSetToClass();
 	
-	public boolean isCreateSchedule(Years years) {
+	public boolean isCreateSchedule(Schedules schedules) {
 		ConnectionDB condb = new ConnectionDB();
 		Connection con = condb.getConnection();
 		Boolean result = false;
 
 		try {
 			CallableStatement stmt = con.prepareCall("{call isCreateSchedule(?,?,?,?,?,?)}");
-			stmt.setInt(1, years.getYears());
-			stmt.setTimestamp(2, years.getUploaddate());
-			stmt.setTimestamp(3, years.getExpuploaddate());
-			stmt.setTimestamp(4, years.getReviewdate());
-			stmt.setTimestamp(5, years.getExpreviewdate());
-			stmt.setTimestamp(6, years.getAnnouncedate());
+			stmt.setInt(1, schedules.getYears());
+			stmt.setTimestamp(2, schedules.getUploaddate());
+			stmt.setTimestamp(3, schedules.getExpuploaddate());
+			stmt.setTimestamp(4, schedules.getReviewdate());
+			stmt.setTimestamp(5, schedules.getExpreviewdate());
+			stmt.setTimestamp(6, schedules.getAnnouncedate());
 			stmt.execute();
 
 			result = true;

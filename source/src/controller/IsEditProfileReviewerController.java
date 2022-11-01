@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
+import bean.ProjectType;
 import bean.Reviewer;
-import bean.Team;
 import manager.IsEditProfileReviewerManager;
 
 @Controller
@@ -49,10 +49,10 @@ public class IsEditProfileReviewerController {
 			reviewerTemp.setEmail(request.getParameter("email"));
 			reviewerTemp.setPassword(request.getParameter("password"));
 			
-			Team team = new Team();
-			team.setTeam_id(Integer.parseInt(request.getParameter("team_id")));
-			team.setTeam_name(request.getParameter("team_name"));
-			reviewerTemp.setTeam(team);
+			ProjectType projecttype = new ProjectType();
+			projecttype.setProjecttype_id(Integer.parseInt(request.getParameter("projecttype_id")));
+			projecttype.setProjecttype_name(request.getParameter("projecttype_name"));
+			reviewerTemp.setProjecttype(projecttype);
 
 			IsEditProfileReviewerManager isEditProfileReviewerManager = new IsEditProfileReviewerManager();
 			ModelAndView mav = new ModelAndView("Index");

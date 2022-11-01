@@ -1,7 +1,5 @@
 package controller;
 
-import java.util.List;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -10,27 +8,21 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
-import bean.Report;
+import bean.Project;
 import bean.Student;
-import bean.StudentProject;
 import manager.ViewProjectDetailManager;
 
 @Controller
 public class ViewProjectDetailController {
 
-	@RequestMapping(value = "/ViewProjectDetail", method = RequestMethod.GET)
+	@RequestMapping(value = "/doViewProjectDetail", method = RequestMethod.POST)
 	public ModelAndView loadViewProjectDetail(HttpSession session, HttpServletRequest request) throws Exception {
 		Student student = (Student) session.getAttribute("student");
 		if (student != null) {
-			String project_id = request.getParameter("project_id");
 			ViewProjectDetailManager viewProjectDetailManager = new ViewProjectDetailManager();
-			Report report = viewProjectDetailManager.getReportByProjectID(project_id);
-			StudentProject studentProject = viewProjectDetailManager.getStudentProjectByID(project_id);
-			List<StudentProject> listsproject = viewProjectDetailManager.getListStudentProjectByProjectID(project_id);
+			Project project = viewProjectDetailManager.getStudentProjectByID(student.getStudent_id());
 			ModelAndView mav = new ModelAndView("ViewProjectDetail");
-			session.setAttribute("report", report);
-			mav.addObject("listsproject", listsproject);
-			mav.addObject("studentProject", studentProject);
+			mav.addObject("project", project);
 			return mav;
 		} else {
 			ModelAndView mav = new ModelAndView("LoginPage");

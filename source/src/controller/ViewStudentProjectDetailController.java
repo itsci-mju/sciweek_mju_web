@@ -11,8 +11,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import bean.Admin;
+import bean.Project;
 import bean.Report;
-import bean.StudentProject;
+import bean.Student;
 import manager.ReviewProjectManager;
 import manager.ViewStudentProjectDetailManager;
 
@@ -26,13 +27,13 @@ public class ViewStudentProjectDetailController {
 			String project_id = request.getParameter("project_id");
 			ViewStudentProjectDetailManager viewStudentProjectDetailManager = new ViewStudentProjectDetailManager();
 			ReviewProjectManager reviewProjectManager = new ReviewProjectManager();
-			StudentProject sproject = viewStudentProjectDetailManager.getStudentProjectByID(project_id);
+			Project project = viewStudentProjectDetailManager.getStudentProjectByID(project_id);
 			Report report = reviewProjectManager.getReportByProjectID(project_id);
-			List<StudentProject> listsproject = viewStudentProjectDetailManager.getListStudent(project_id);
+			List<Student> liststudent = viewStudentProjectDetailManager.getListStudent(project_id);
 			ModelAndView mav = new ModelAndView("ViewStudentProjectDetail");
-			mav.addObject("sproject",sproject);
+			mav.addObject("project",project);
 			session.setAttribute("report", report);
-			mav.addObject("listsproject",listsproject);
+			mav.addObject("liststudent",liststudent);
 			return mav;
 		} else {
 			ModelAndView mav = new ModelAndView("LoginPage");
